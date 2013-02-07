@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="ECO.Sample.Domain" assembly="ECO.Sample.Domain">
+  <class name="Session" table="Sessions">
+    <id name="Identity" column="ID_Session" />
+    <many-to-one name="Event" column="ID_Event" />
+    <property name="Title" />
+    <property name="Description" />
+    <property name="Level" />
+    <many-to-one name="Speaker" column="ID_Speaker" />
+  </class>
+</hibernate-mapping>

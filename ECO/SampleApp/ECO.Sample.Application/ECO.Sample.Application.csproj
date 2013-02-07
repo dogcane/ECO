@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DF43F470-514A-4492-8EA1-5E1FE252F657}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ECO.Sample.Application</RootNamespace>
+    <AssemblyName>ECO.Sample.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\DTO\EventDetail.cs" />
+    <Compile Include="Events\DTO\EventListItem.cs" />
+    <Compile Include="Events\DTO\SessionListItem.cs" />
+    <Compile Include="Events\IAddSessionToEventService.cs" />
+    <Compile Include="Events\IChangeEventService.cs" />
+    <Compile Include="Events\IDeleteEventService.cs" />
+    <Compile Include="Events\Impl\AddSessionToEventService.cs" />
+    <Compile Include="Events\Impl\ChangeEventService.cs" />
+    <Compile Include="Events\Impl\CreateEventService.cs" />
+    <Compile Include="Events\ICreateEventService.cs" />
+    <Compile Include="Events\Impl\DeleteEventService.cs" />
+    <Compile Include="Events\Impl\RemoveSessionFromEventService.cs" />
+    <Compile Include="Events\Impl\ShowEventDetailService.cs" />
+    <Compile Include="Events\Impl\ShowEventsService.cs" />
+    <Compile Include="Events\IRemoveSessionFromEventService.cs" />
+    <Compile Include="Events\IShowEventDetailService.cs" />
+    <Compile Include="Events\IShowEventsService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Speakers\DTO\SpeakerDetail.cs" />
+    <Compile Include="Speakers\DTO\SpeakerListItem.cs" />
+    <Compile Include="Speakers\IChangeSpeakerService.cs" />
+    <Compile Include="Speakers\ICreateSpeakerService.cs" />
+    <Compile Include="Speakers\IDeleteSpeakerService.cs" />
+    <Compile Include="Speakers\Impl\ChangeSpeakerService.cs" />
+    <Compile Include="Speakers\Impl\CreateSpeakerService.cs" />
+    <Compile Include="Speakers\Impl\DeleteSpeakerService.cs" />
+    <Compile Include="Speakers\Impl\ShowSpeakersService.cs" />
+    <Compile Include="Speakers\IShowSpeakersService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\ECO.Bender\ECO.Bender.csproj">
+      <Project>{F798F90C-BF08-4328-8A19-2AFE9B2CCA8C}</Project>
+      <Name>ECO.Bender</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\ECO\ECO.csproj">
+      <Project>{408550BA-FA42-4F2B-AFB9-7C63D885384F}</Project>
+      <Name>ECO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj">
+      <Project>{40E8A9BF-6B1E-4355-9372-87865210BF68}</Project>
+      <Name>ECO.Sample.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

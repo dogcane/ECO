@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="ECO.Data.IPersistenceUnit">
+    <Position X="1" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQQAAAAAAAwAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Data\IPersistenceUnit.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ECO.Data.IPersistenceContext">
+    <Position X="3.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAABAABAAAIAAAAAAAAAAIAAAAAAAAEAAACAAAA=</HashCode>
+      <FileName>Data\IPersistenceContext.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ECO.Data.IDataTransaction">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\IDataTransaction.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
