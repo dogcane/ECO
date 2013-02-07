@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using ECO;
+
+namespace ECO.Providers.InMemory
+{
+    public class InMemoryReadOnlyRepository<T, K> : InMemoryPersistenceManager<T,K>, IReadOnlyRepository<T, K>
+        where T : AggregateRoot<K>
+    {
+        #region IReadOnlyRepository<T,K> Membri di
+
+        public T Load(K identity)
+        {
+            T entity = default(T);
+            GetIdentityMap().TryGetValue(identity, out entity);
+            return entity;
+        }
+
+        #endregion
+
+        #region IEnumerable<T> Membri di
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return GetEntitySet().GetEnumerator();
+        }
+
+        #endregion
+
+        #region IEnumerable Membri di
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEntitySet().GetEnumerator();
+        }
+
+        #endregion
+
+        #region IQueryable Membri di
+
+        public Type ElementType
+        {
+            get { return GetEntitySet().AsQueryable().ElementType; }
+        }
+
+        public System.Linq.Expressions.Expression Expression
+        {
+            get { return GetEntitySet().AsQueryable().Expression; }
+        }
+
+        public IQueryProvider Provider
+        {
+            get { return GetEntitySet().AsQueryable().Provider; }
+        }
+
+        #endregion
+    }
+}

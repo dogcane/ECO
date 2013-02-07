@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ECO.Sample.Application.Events.DTO.EventListItem>
+
+@if (TempData.ContainsKey("ERROR")) {
+   <script language="javascript">
+        alert('@TempData["ERROR"]');
+   </script>
+}
+
+@{
+    ViewBag.Title = "List of events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            EventCode
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            StartDate
+        </th>
+        <th>
+            EndDate
+        </th>
+        <th>
+            NumberOfSessions
+        </th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfSessions)
+        </td>
+        <td>
+            @Html.ActionLink("Detail", "Detail", new { id = item.EventCode }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.EventCode }, new { onclick = "return confirm('Are you sure?')" })
+        </td>
+    </tr>
+}
+
+</table>
