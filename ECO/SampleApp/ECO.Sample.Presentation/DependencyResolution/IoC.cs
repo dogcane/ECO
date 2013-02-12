@@ -37,11 +37,13 @@ namespace ECO.Sample.Presentation
                     scan.TheCallingAssembly();
                     scan.WithDefaultConventions();
                 });
-                //x.For<IControllerFactory>().Add<SmControllerFactory>();
+#if INMEMORY
                 x.For<IEventRepository>().Add<EventMemoryRepository>(); //InMemory Stuff
                 x.For<ISpeakerRepository>().Add<SpeakerMemoryRepository>(); //InMemory Stuff
-                //x.For<IEventRepository>().Add<EventNHRepository>(); //NHibernate Stuff
-                //x.For<ISpeakerRepository>().Add<SpeakerNHRepository>(); //NHibernate Stuff
+#elif NHIBERNATE    
+                x.For<IEventRepository>().Add<EventNHRepository>(); //NHibernate Stuff
+                x.For<ISpeakerRepository>().Add<SpeakerNHRepository>(); //NHibernate Stuff
+#endif
                 x.For<IShowEventsService>().Add<ShowEventsService>();
                 x.For<ICreateEventService>().Add<CreateEventService>();
                 x.For<IShowEventDetailService>().Add<ShowEventDetailService>();

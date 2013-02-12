@@ -16,6 +16,9 @@ namespace ECO
     {
         #region Public_Properties
 
+        /// <summary>
+        /// Identifier of the entity
+        /// </summary>
         public virtual T Identity { get; protected set; }
 
         #endregion
@@ -61,7 +64,7 @@ namespace ECO
 
         public override int GetHashCode()
         {
-            return Identity.GetHashCode();
+            return Identity.GetHashCode() << 8 & typeof(T).GetHashCode();
         }
 
         #endregion

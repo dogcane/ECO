@@ -77,9 +77,6 @@
     <Compile Include="SpeakerRules.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\ECO.Bender\ECO.Bender.csproj">
       <Project>{F798F90C-BF08-4328-8A19-2AFE9B2CCA8C}</Project>
       <Name>ECO.Bender</Name>
