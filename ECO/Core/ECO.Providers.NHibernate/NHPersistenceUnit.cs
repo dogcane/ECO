@@ -39,30 +39,15 @@ namespace ECO.Providers.NHibernate
         protected override IPersistenceContext CreateContext()
         {
             nh.ISession session = null;
-            IDbConnection connection = ApplicationContext.GetContextData(string.Format("DBConnection_{0}", Name)) as IDbConnection;
             if (!string.IsNullOrEmpty(_InterceptorFullName))
             {
                 Type interceptorType = Type.GetType(_InterceptorFullName);
                 nh.IInterceptor interceptor = (nh.IInterceptor)Activator.CreateInstance(interceptorType);
-                if (connection != null)
-                {
-                    session = _SessionFactory.OpenSession(connection, interceptor);
-                }
-                else
-                {
-                    session = _SessionFactory.OpenSession(interceptor);
-                }
+                session = _SessionFactory.OpenSession(interceptor);
             }
             else
             {
-                if (connection != null)
-                {
-                    session = _SessionFactory.OpenSession(connection);
-                }
-                else
-                {
-                    session = _SessionFactory.OpenSession();
-                }
+                session = _SessionFactory.OpenSession();
             }
             return new NHPersistenceContext(session);
         }

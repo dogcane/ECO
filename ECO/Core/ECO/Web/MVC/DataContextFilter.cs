@@ -16,15 +16,17 @@ namespace ECO.Web.MVC
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            base.OnActionExecuting(filterContext);
             var dataContext = new DataContext();
             if (RequiredTransaction)
             {
                 dataContext.BeginTransaction(AutoCommitTransaction);
             }
-        }
+        }        
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
+            base.OnResultExecuted(filterContext);
             DataContext.Current.Close();
         }
     }

@@ -5,6 +5,7 @@ using System.Text;
 
 using ECO;
 using ECO.Configuration;
+using ECO.Resources;
 
 namespace ECO.Data
 {
@@ -73,7 +74,7 @@ namespace ECO.Data
                     }
                     catch (Exception ex)
                     {
-                        throw new ConfigurationErrorsException(string.Format("Il tipo '{0}' non è stato trovato nella configurazione di ECO", setting.Type), ex);
+                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
                     }
                 }
                 foreach (UnitListenerSettings setting in unit.Listeners)
@@ -85,7 +86,7 @@ namespace ECO.Data
                     }
                     catch (Exception ex)
                     {
-                        throw new ConfigurationErrorsException(string.Format("Il tipo '{0}' non è stato trovato nella configurazione di ECO", setting.Type), ex);
+                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
                     }
                 }
             }
@@ -113,7 +114,7 @@ namespace ECO.Data
             }
             else
             {
-                throw new ApplicationException();
+                throw new PersistenceUnitNotFound(name);
             }
         }
 

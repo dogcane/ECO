@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
+using AutoMapper;
+
 using ECO.Sample.Domain;
 
 namespace ECO.Sample.Application.Events.DTO

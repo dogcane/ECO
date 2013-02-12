@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IDENTITY_TYPE_NOT_MATCHED" xml:space="preserve">
     <value>The type of the identity attribute is different from the type defined by the entity '{0}'.</value>
@@ -123,7 +123,13 @@
   <data name="PERSISTENCE_CONTEXT_NOT_FOUND" xml:space="preserve">
     <value>The persistent context '{0}' is not registered.</value>
   </data>
+  <data name="PERSISTENCE_UNIT_NOT_FOUND" xml:space="preserve">
+    <value>The persistent unit '{0}' is not registered.</value>
+  </data>
   <data name="PERSISTENT_CLASS_NOT_FOUND" xml:space="preserve">
     <value>The persistent class '{0}' is not related to any persistence context.</value>
+  </data>
+  <data name="TYPE_LOAD_EXCEPTION" xml:space="preserve">
+    <value>There was an error during the activation of the type '{0}'.</value>
   </data>
 </root>
