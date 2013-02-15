@@ -272,6 +272,8 @@
     <Folder Include="Areas\Speakers\Controllers\" />
     <Folder Include="Areas\Speakers\Models\" />
     <Folder Include="Areas\Speakers\Views\Shared\" />
+    <Folder Include="Content\styles\css\" />
+    <Folder Include="Content\styles\images\" />
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
