@@ -9,18 +9,29 @@ namespace ECO
     {
         #region Public_Properties
 
+        /// <summary>
+        /// Version of the entity
+        /// </summary>
         public virtual int Version { get; protected set; }
 
         #endregion
 
         #region Ctor
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         protected VersionableEntity()
             : base()
         {
             Version = 1;
         }
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="version"></param>
         protected VersionableEntity(T id, int version)
             : base(id)
         {

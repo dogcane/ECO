@@ -13,12 +13,19 @@ namespace ECO
     {
         #region Ctor
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         protected AggregateRoot()
             : base()
         {
 
         }
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="identity"></param>
         protected AggregateRoot(T identity)
             : base(identity)
         {
