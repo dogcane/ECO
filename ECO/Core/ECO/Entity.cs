@@ -25,12 +25,19 @@ namespace ECO
 
         #region Ctor
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
         protected Entity()
             : base()
         {
             Identity = default(T);
         }
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="identity"></param>
         protected Entity(T identity)
             : base()
         {
@@ -41,11 +48,21 @@ namespace ECO
 
         #region Public_Methods
 
+        /// <summary>
+        /// Method that verify if another object is the same as the current entity
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as IEntity<T>);
         }
 
+        /// <summary>
+        /// Method that verify if another entitye is the same as the current entity
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public virtual bool Equals(IEntity<T> obj)
         {
             if (obj == null)
@@ -62,6 +79,10 @@ namespace ECO
             }
         }
 
+        /// <summary>
+        /// Method that returns the hash code for the current entity
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return Identity.GetHashCode() << 8 & typeof(T).GetHashCode();
