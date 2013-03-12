@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "List of speakers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/knockout/speakers")
+
+<!-- ko with: currentSpeaker -->
+<div class="editor">
+    <form name="speakerEditor">
+        <h1>Speaker Detail</h1>
+        <div class="field"><span>Speaker's name</span><input type="text" name="speakerName" data-bind="value: name" /></div>
+        <div class="field"><span>Speaker's surname</span><input type="text" name="speakerSurname" data-bind="value: surname" /></div>
+        <div class="field"><span>Speaker's description</span><input type="text" name="speakerDescription" data-bind="value: description" /></div>
+        <div class="field"><span>Speaker's age</span><input type="text" name="speakerAge" data-bind="value: age" /></div>
+        <div class="buttons">
+            <button data-bind="click: $root.Save">Save</button>
+            <button data-bind="click: $root.Abort">Abort</button>
+        </div>
+    </form>
+</div>
+<!-- /ko -->
+
+<!-- list -->
+<div data-bind="foreach: speakers">
+    <div class="speakerItem">
+        <span class="speakerName" data-bind="text: name">name</span>
+        <span class="speakerSurname" data-bind="text: surname">surname</span>
+        <div class="deleteSpeaker" data-bind="click: $root.Delete"></div>
+    </div>
+</div>
+<div class="speakerItemAdd" data-bind="click: Edit">
+    <span>Add Speaker</span>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            //TODO
+        });
+    </script>
+}
+
+

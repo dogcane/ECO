@@ -7,6 +7,7 @@ using ECO.Linq;
 
 using ECO.Sample.Domain;
 using ECO.Sample.Application.Events.DTO;
+using ECO.Sample.Application.DTO;
 
 namespace ECO.Sample.Application.Events.Impl
 {
@@ -29,7 +30,7 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IShowEventsService Membri di
 
-        public IQueryable<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, int? page, int? pageSize)
+        public PageableList<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, int page, int pageSize)
         {
             var query = _EventRepository.AsQueryable();
             if (fromDate.HasValue)
@@ -40,11 +41,13 @@ namespace ECO.Sample.Application.Events.Impl
             {
                 query = query.Where(entity => entity.Period.EndDate <= toDate.Value);
             }
-            if (page.HasValue && pageSize.HasValue)
+            return new PageableList<EventListItem>()
             {
-                query = query.Paged(page.Value, pageSize.Value);
-            }
-            return query.Select(item => EventListItem.From(item));
+                CurrentElements = query.Paged(page, pageSize).Select(item => EventListItem.From(item)),
+                PageSize = pageSize,
+                CurrentPage = page,
+                TotalElements = query.Count()
+            };
         }
 
         #endregion

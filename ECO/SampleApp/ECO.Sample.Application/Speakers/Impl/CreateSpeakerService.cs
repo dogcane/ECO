@@ -6,6 +6,7 @@ using System.Text;
 using ECO.Bender;
 
 using ECO.Sample.Domain;
+using ECO.Sample.Application.Speakers.DTO;
 
 namespace ECO.Sample.Application.Speakers.Impl
 {
@@ -28,14 +29,18 @@ namespace ECO.Sample.Application.Speakers.Impl
 
         #region Public_Methods
 
-        public OperationResult CreateNewSpeaker(string name, string surname, int age, string description)
+        public OperationResult<Guid> CreateNewSpeaker(SpeakerDetail speaker)
         {
-            OperationResult<Speaker> speaker = Speaker.Create(name, surname, description, age);
-            if (speaker.Success)
+            OperationResult<Speaker> speakerResult = Speaker.Create(speaker.Name, speaker.Surname, speaker.Description, speaker.Age);
+            if (speakerResult.Success)
             {
-                _SpeakerRepository.Add(speaker.Value);
+                _SpeakerRepository.Add(speakerResult.Value);
+                return OperationResult<Guid>.MakeSuccess(speakerResult.Value.Identity);
             }
-            return speaker;
+            else
+            {
+                return OperationResult<Guid>.MakeFailure(speakerResult.Errors);
+            }
         }
 
         #endregion

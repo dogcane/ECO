@@ -1,0 +1,207 @@
+﻿body {
+    background-color: #999999;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+    font-size: .75em;
+}
+a, a:hover, a:active, a:enabled {
+    text-decoration:none;
+}
+.clearFix {
+    clear:both;
+}
+
+#charmBar {
+    background-color:#2e2d2d;
+    padding:10px;
+}
+#charmBar h1 {
+    float:left;
+    color:#FFF;
+}
+a.charmButton {
+    background-position:50% 50%;
+    padding:5px;
+    float:right;
+    display:block;
+    height:50px;
+    width:50px;
+    font-size:0px;
+    margin-right:10px;
+}
+a#speakersButton {
+    background-color:#0026ff;
+    background-image:url(../images/appbar.people.png);    
+}
+a#eventsButton {
+    background-color:#ff006e;
+    background-image:url(../images/appbar.calendar.14.png);        
+}
+#container {
+    padding:20px;
+}
+
+/* events */
+div.eventItem {
+    background-image:url(../images/appbar.calendar.png);    
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-color:#FFF;
+    width:230px;
+    height:50px;
+    padding:10px;
+    float:left;
+    margin-left:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+}
+
+div.eventItem span.eventDescription {
+    margin-left:60px;
+    margin-top:10px;
+    display:block;
+    vertical-align:middle;
+    font-size:1.2em;
+    font-weight:bold;
+    color:#2e2d2d;
+}
+
+div.eventItem span.eventDate {    
+    margin-left:60px;
+    display:block;
+    font-size:1em;
+    font-style:italic;
+}
+
+div.eventItemAdd {    
+    float:left;
+    margin-left:10px;
+    background-image:url(../images/appbar.app.plus.png);    
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-color:#FFF;
+    width:230px;
+    height:50px;
+    padding:10px;
+    cursor:pointer;
+}
+
+div.eventItemAdd span {
+    margin-left:60px;
+    margin-top:16px;
+    display:block;
+    vertical-align:middle;
+    font-size:1.2em;
+    font-weight:bold;
+    color:#2e2d2d;
+}
+
+/* speakers */
+
+div.speakerItem {
+    background-image:url('../images/appbar.user.tie.png');    
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-color:#FFF;
+    width:230px;
+    height:50px;
+    padding:10px;
+    float:left;
+    margin-left:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+    position:relative;
+}
+
+div.speakerItem span.speakerName {
+    margin-left:60px;
+    margin-top:10px;
+    display:block;
+    vertical-align:middle;
+    font-size:1.2em;
+    color:#2e2d2d;
+}
+
+div.speakerItem span.speakerSurname {
+    margin-left:60px;
+    margin-top:2px;
+    display:block;
+    vertical-align:middle;
+    font-size:1.2em;
+    font-weight:bold;
+    color:#2e2d2d;
+    font-weight:bold;
+}
+
+div.speakerItem div.deleteSpeaker {
+    background-image:url('../images/appbar.location.delete.png');
+    background-repeat:no-repeat;
+    background-position:50% 50%;
+    height:46px;
+    width:46px;
+    position:absolute;
+    right:0px;
+    top:0px;
+}
+
+div.speakerItemAdd {    
+    float:left;
+    margin-left:10px;
+    background-image:url('../images/appbar.user.add.png');    
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-color:#FFF;
+    width:230px;
+    height:50px;
+    padding:10px;
+    cursor:pointer;
+}
+
+div.speakerItemAdd span {
+    margin-left:60px;
+    margin-top:16px;
+    display:block;
+    vertical-align:middle;
+    font-size:1.2em;
+    font-weight:bold;
+    color:#2e2d2d;
+}
+
+/* editor */
+
+div.editor {   
+    background-color:#FFF;
+    color:#2e2d2d;
+    padding:10px;
+    margin:10px 10px 20px 10px;
+}
+
+div.editor h1 {
+    border-bottom:1px solid #2e2d2d;
+    text-align:right;
+    margin-bottom:20px;
+    display:block;
+}
+
+div.editor div.field {
+    margin:10px 0px 5px 0px;
+}
+
+div.editor div.field span {
+    display:block;
+    width:200px;
+    float:left;
+}
+
+div.editor div.buttons {
+    border-top:1px solid #2e2d2d;
+    padding-top:10px;
+    margin-top:20px;
+}
+
+div.editor div.buttons button {
+    padding:5px;
+    border:1px solid #2e2d2d;
+    background-color:#999999;
+}

@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.Http;
 
 namespace ECO.Sample.Presentation.Areas.Events
 {
@@ -14,9 +15,16 @@ namespace ECO.Sample.Presentation.Areas.Events
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            ////Events API
+            //context.Routes.MapHttpRoute(
+            //    name: "Events List Api",
+            //    routeTemplate: "events/api/{id}",
+            //    defaults: new { controller = "EventApi", id = RouteParameter.Optional }
+            //);
+
             //List of events
             context.MapRoute(
-                "Events",
+                "EventsList",
                 "events", new { controller = "Event", action = "Index", area = "Events" });
 
             //Create new event
@@ -43,6 +51,8 @@ namespace ECO.Sample.Presentation.Areas.Events
             context.MapRoute(
                 "UpdateEventDates",
                 "events/{id}/updatedates", new { controller = "Event", action = "ChangeDates", area = "Events" });
+
+            
         }
     }
 }

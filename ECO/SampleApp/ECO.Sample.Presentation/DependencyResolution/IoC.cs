@@ -23,6 +23,8 @@ using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.Repositories;
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.Impl;
+using ECO.Sample.Application.Speakers;
+using ECO.Sample.Application.Speakers.Impl;
 
 namespace ECO.Sample.Presentation
 {
@@ -51,6 +53,10 @@ namespace ECO.Sample.Presentation
                 x.For<IDeleteEventService>().Add<DeleteEventService>();
                 x.For<IAddSessionToEventService>().Add<AddSessionToEventService>();
                 x.For<IRemoveSessionFromEventService>().Add<RemoveSessionFromEventService>();
+                x.For<IShowSpeakersService>().Add<ShowSpeakersService>();
+                x.For<ICreateSpeakerService>().Add<CreateSpeakerService>();                
+                x.For<IChangeSpeakerService>().Add<ChangeSpeakerService>();
+                x.For<IDeleteSpeakerService>().Add<DeleteSpeakerService>();
             });
             return ObjectFactory.Container;
         }
