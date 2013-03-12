@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ECO.Bender;
+using ECO.Sample.Application.Speakers.DTO;
 
 namespace ECO.Sample.Application.Speakers
 {
     public interface IChangeSpeakerService
     {
-        OperationResult ChangeInformation(Guid speakerCode, string name, string surname, int age, string description);
+        OperationResult ChangeInformation(SpeakerDetail speaker);
     }
 }

@@ -1,60 +1,43 @@
-﻿@model IEnumerable<ECO.Sample.Application.Events.DTO.EventListItem>
-
-@if (TempData.ContainsKey("ERROR")) {
-   <script language="javascript">
-        alert('@TempData["ERROR"]');
-   </script>
-}
-
-@{
+﻿@{
     ViewBag.Title = "List of events";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            EventCode
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            StartDate
-        </th>
-        <th>
-            EndDate
-        </th>
-        <th>
-            NumberOfSessions
-        </th>
-        <th>Actions</th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.EventCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfSessions)
-        </td>
-        <td>
-            @Html.ActionLink("Detail", "Detail", new { id = item.EventCode }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.EventCode }, new { onclick = "return confirm('Are you sure?')" })
-        </td>
-    </tr>
+@Scripts.Render("~/bundles/knockout/events")
+
+<!-- edit -->
+<div class="editor" data-bind="with: currentEvent, fadeVisible: currentEvent != null">
+    <form name="eventEditor">
+        <fieldset>
+            <legend>Event Detail</legend>
+            <span>Event's name</span><input type="text" name="eventName" data-bind="value: name" />
+            <span>Event's description</span><input type="text" name="eventDescription" data-bind="value: description" />
+            <span>Event's start date</span><input type="text" name="eventStart" data-bind="value: startDate" />
+            <span>Event's end date</span><input type="text" name="eventEnd" data-bind="value: endDate" />
+            <button data-bind="click: $root.SaveEvent">Save</button>
+            <button data-bind="click: $root.AbortEdit">Abort</button>
+        </fieldset>
+    </form>
+</div>
+
+<!-- list -->
+<div data-bind="foreach: events">
+    <div class="eventItem">
+        <span class="eventDescription" data-bind="text: name"></span>
+        <span class="eventDate" data-bind="text: startDate"></span>
+    </div>
+</div>
+<div class="eventItemAdd" data-bind="click: StartNew">
+    <span>Add Event</span>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+    $(function () {
+        $('input[name="eventStart"]').datepicker();
+        $('input[name="eventEnd"]').datepicker();
+    });
+</script>
 }
 
-</table>
+

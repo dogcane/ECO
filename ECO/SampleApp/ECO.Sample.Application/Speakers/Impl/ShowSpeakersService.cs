@@ -30,16 +30,12 @@ namespace ECO.Sample.Application.Speakers.Impl
 
         #region Public_Methods
 
-        public IQueryable<SpeakerListItem> ShowEvents(string nameOrSurname, int? page, int? pageSize)
+        public IQueryable<SpeakerListItem> ShowSpeakers(string nameOrSurname)
         {
             var query = _SpeakerRepository.AsQueryable();
             if (!string.IsNullOrEmpty(nameOrSurname))
             {
                 query = query.Where(entity => entity.Name.Contains(nameOrSurname) || entity.Surname.Contains(nameOrSurname));
-            }
-            if (page.HasValue && pageSize.HasValue)
-            {
-                query = query.Paged(page.Value, pageSize.Value);
             }
             return query.Select(item => SpeakerListItem.From(item));
         }

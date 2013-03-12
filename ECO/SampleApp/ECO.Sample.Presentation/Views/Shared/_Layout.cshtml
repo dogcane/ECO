@@ -5,33 +5,24 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/themes/base/css")    
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/jqgrid")
     @Scripts.Render("~/bundles/modernizr")
-</head>
-<body>	
-    <div class="page">
-        <div id="header">
-            <div id="title">
-                <h1>
-                    Community Events Manager : @ViewBag.Title
-                </h1>
-            </div>
-            <div id="logindisplay">
-                <br />
-            </div>
-            <div id="menucontainer">
-                <ul id="menu">    
-                    <li>@Html.ActionLink("Events", "Index", "Event", new { Area = "Events" }, null)</li>               
-                </ul>
-            </div>
-        </div>
-        <div id="main">
-            @RenderBody()
-        </div>
-    </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqgrid")
+    @Scripts.Render("~/bundles/knockout")
     @RenderSection("scripts", required: false)
+</head>
+<body>
+    <div id="charmBar">
+        <h1>Community Events Manager - @ViewBag.Title</h1>
+        @Html.ActionLink("Events", "Index", "Event", new { Area = "Events" }, new { id = "eventsButton", @class = "charmButton", title = "Go to events" })
+        @Html.ActionLink("Speakers", "Index", "Speaker", new { Area = "Speakers" }, new { id = "speakersButton", @class = "charmButton", title = "Go to speakers" })        
+        <div class="clearFix"></div>
+    </div>
+    <div id="container">
+        @RenderBody()
+    </div>    
 </body>
 </html>

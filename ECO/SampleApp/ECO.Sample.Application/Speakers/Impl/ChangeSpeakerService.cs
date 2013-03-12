@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ECO.Bender;
 
 using ECO.Sample.Domain;
+using ECO.Sample.Application.Speakers.DTO;
 
 namespace ECO.Sample.Application.Speakers.Impl
 {
@@ -29,10 +30,10 @@ namespace ECO.Sample.Application.Speakers.Impl
 
         #region Public_Methods
 
-        public OperationResult ChangeInformation(Guid speakerCode, string name, string surname, int age, string description)
+        public OperationResult ChangeInformation(SpeakerDetail speaker)
         {
-            Speaker speaker = _SpeakerRepository.Load(speakerCode);
-            return speaker.ChangeInformation(name, surname, description, age);
+            Speaker speakerEntity = _SpeakerRepository.Load(speaker.SpeakerCode);
+            return speakerEntity.ChangeInformation(speaker.Name, speaker.Surname, speaker.Description, speaker.Age);
         }
 
         #endregion

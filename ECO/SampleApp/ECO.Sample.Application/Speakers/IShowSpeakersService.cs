@@ -9,6 +9,6 @@ namespace ECO.Sample.Application.Speakers
 {
     public interface IShowSpeakersService
     {
-        IQueryable<SpeakerListItem> ShowEvents(string nameOrSurname, int? page, int? pageSize);
+        IQueryable<SpeakerListItem> ShowSpeakers(string nameOrSurname);
     }
 }

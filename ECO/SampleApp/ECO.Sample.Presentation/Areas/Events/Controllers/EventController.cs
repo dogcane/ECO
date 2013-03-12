@@ -43,12 +43,10 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             _AddSessionToEventService = addSessionToEventService;
             _RemoveSessionFromEventService = removeSessionFromEventService;
         }
-
-        [DataContextFilter]        
-        public ActionResult Index(DateTime? start, DateTime? end, int? page, int? pageSize)
+       
+        public ActionResult Index()
         {
-            var model = _ShowEventsService.ShowEvents(start, end, page, pageSize);
-            return View(model);
+            return View();
         }
 
         [DataContextFilter]

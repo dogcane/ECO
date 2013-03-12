@@ -16,8 +16,8 @@ namespace ECO.Sample.Presentation
             routes.MapRoute(
                 "Default", // Route name
                 "", // URL with parameters
-                new { controller = "Event", action = "Index" }
-            ).DataTokens.Add("area", "events");
+                new { controller = "Speaker", action = "Index" }
+            ).DataTokens.Add("area", "speakers");
         }
     }
 }
