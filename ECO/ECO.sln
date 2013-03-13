@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Web
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{94C9423D-4BD2-495A-8FDC-72974CC574A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}"
@@ -46,6 +46,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.MongoDB", "Core\ECO.Providers.MongoDB\ECO.Providers.MongoDB.csproj", "{9DA9C8E5-6D68-4534-BFC1-9361FE956F4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.Presentation", "SampleApp\ECO.Sample.Presentation\ECO.Sample.Presentation.csproj", "{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F724E0DE-FAE8-41E1-9166-DB48FCBFCD80}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -179,8 +186,5 @@ Global
 		{136ACB8E-ADE7-4AE2-B440-F4454BF21B57} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{40E8A9BF-6B1E-4355-9372-87865210BF68} = {BD6544C0-DE77-4CBB-825F-08B485161398}
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7} = {05AD202B-FF8D-404E-83E1-AA0F97A6F588}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
