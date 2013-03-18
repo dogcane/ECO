@@ -17,6 +17,8 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
     {
         private IShowSpeakersService _ShowSpeakersService;
 
+        private IGetSpeakerService _GetSpeakerService;
+
         private ICreateSpeakerService _CreateSpeakerService;
 
         private IChangeSpeakerService _ChangeSpeakerService;
@@ -25,12 +27,14 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         public SpeakerApiController(
             IShowSpeakersService showSpeakersService,
+            IGetSpeakerService getSpeakerService,
             ICreateSpeakerService createSpeakerService,
             IChangeSpeakerService changeSpeakerService,
             IDeleteSpeakerService deleteSpeakerService
             )
         {
             _ShowSpeakersService = showSpeakersService;
+            _GetSpeakerService = getSpeakerService;
             _CreateSpeakerService = createSpeakerService;
             _ChangeSpeakerService = changeSpeakerService;
             _DeleteSpeakerService = deleteSpeakerService;
@@ -38,9 +42,16 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         // GET speakers/api
         [DataContextApiFilter]
-        public IQueryable<SpeakerListItem> Get([FromBody]string nameOrSurname)
+        public IQueryable<SpeakerListItem> Get(string nameOrSurname)
         {
             return _ShowSpeakersService.ShowSpeakers(nameOrSurname);
+        }
+
+        // GET speakers/api/{guid}
+        [DataContextApiFilter]
+        public OperationResult<SpeakerDetail> Get(Guid id)
+        {
+            return _GetSpeakerService.GetSpeaker(id);
         }
 
         // POST speakers/api
@@ -52,9 +63,8 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         // PUT speakers/api/{guid}
         [DataContextApiFilter]
-        public OperationResult Post(Guid id, [FromBody]SpeakerDetail speaker)
+        public OperationResult Put([FromBody]SpeakerDetail speaker)
         {
-            speaker.SpeakerCode = id;
             return _ChangeSpeakerService.ChangeInformation(speaker);
         }
 

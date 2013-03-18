@@ -54,6 +54,7 @@ namespace ECO.Sample.Presentation
                 x.For<IAddSessionToEventService>().Add<AddSessionToEventService>();
                 x.For<IRemoveSessionFromEventService>().Add<RemoveSessionFromEventService>();
                 x.For<IShowSpeakersService>().Add<ShowSpeakersService>();
+                x.For<IGetSpeakerService>().Add<GetSpeakersService>();
                 x.For<ICreateSpeakerService>().Add<CreateSpeakerService>();                
                 x.For<IChangeSpeakerService>().Add<ChangeSpeakerService>();
                 x.For<IDeleteSpeakerService>().Add<DeleteSpeakerService>();

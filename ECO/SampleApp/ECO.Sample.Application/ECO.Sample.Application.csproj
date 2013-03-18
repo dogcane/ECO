@@ -103,7 +103,9 @@
     <Compile Include="Speakers\IChangeSpeakerService.cs" />
     <Compile Include="Speakers\ICreateSpeakerService.cs" />
     <Compile Include="Speakers\IDeleteSpeakerService.cs" />
+    <Compile Include="Speakers\IGetSpeakerService.cs" />
     <Compile Include="Speakers\Impl\ChangeSpeakerService.cs" />
+    <Compile Include="Speakers\Impl\GetSpeakersService.cs" />
     <Compile Include="Speakers\Impl\CreateSpeakerService.cs" />
     <Compile Include="Speakers\Impl\DeleteSpeakerService.cs" />
     <Compile Include="Speakers\Impl\ShowSpeakersService.cs" />
