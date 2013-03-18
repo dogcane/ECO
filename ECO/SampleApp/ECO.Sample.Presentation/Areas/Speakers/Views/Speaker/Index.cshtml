@@ -12,7 +12,7 @@
         <div class="field"><span>Speaker's name</span><input type="text" name="speakerName" data-bind="value: name" /></div>
         <div class="field"><span>Speaker's surname</span><input type="text" name="speakerSurname" data-bind="value: surname" /></div>
         <div class="field"><span>Speaker's description</span><input type="text" name="speakerDescription" data-bind="value: description" /></div>
-        <div class="field"><span>Speaker's age</span><input type="text" name="speakerAge" data-bind="value: age" /></div>
+        <div class="field"><span>Speaker's age</span><input type="number" name="speakerAge" data-bind="value: age" /></div>
         <div class="buttons">
             <button data-bind="click: $root.Save">Save</button>
             <button data-bind="click: $root.Abort">Abort</button>
@@ -36,7 +36,7 @@
 @section scripts {
     <script type="text/javascript">
         $(function () {
-            //TODO
+            $('input[name="speakerAge"]').spinner();
         });
     </script>
 }

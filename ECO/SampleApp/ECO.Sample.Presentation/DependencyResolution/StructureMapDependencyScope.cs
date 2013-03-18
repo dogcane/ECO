@@ -86,16 +86,9 @@ namespace ECO.Sample.Presentation.DependencyResolution
                 return null;
             }
 
-            try
-            {
-                return serviceType.IsAbstract || serviceType.IsInterface
-                           ? this.Container.TryGetInstance(serviceType)
-                           : this.Container.GetInstance(serviceType);
-            }
-            catch
-            {
-                return null;
-            }
+            return serviceType.IsAbstract || serviceType.IsInterface
+                       ? this.Container.TryGetInstance(serviceType)
+                       : this.Container.GetInstance(serviceType);
         }
 
         /// <summary>
