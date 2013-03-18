@@ -13,6 +13,17 @@ function SpeakerEditViewModel(code, name, surname, description, age) {
     self.description = ko.observable(description);
     self.age = ko.observable(age);
 
+    self.currentListItem = null;
+    self.setCurrentListItem = function (data) {
+        self.currentListItem = data;
+    };
+    self.refreshCurrentListItem = function () {
+        if (self.currentListItem != null) {
+            self.currentListItem.name(self.name());
+            self.currentListItem.surname(self.surname());
+        }
+    };
+
     self.isNewSpeaker = ko.computed(function () {
         return self.code() == '';
     });
@@ -74,6 +85,22 @@ function SpeakersListViewModel() {
         });
     };
 
+    self.Update = function (data) {
+        $.ajax({
+            url: '/speakers/api/' + data.code(),
+            type: 'GET',
+            dataType: 'json'
+        })
+       .done(function (result) {
+           if (result.Success) {
+               self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age));
+               self.currentSpeaker().setCurrentListItem(data);
+           } else {
+               alert('Error');
+           }
+       })
+    }
+
     self.__Create = function () {
         $.ajax({
             url: '/speakers/api',
@@ -102,10 +129,11 @@ function SpeakersListViewModel() {
 
     self.__Update = function () {
         $.ajax({
-            url: '/speakers/api/' + self.currentEvent().code(),
+            url: '/speakers/api',
             type: 'PUT',
             dataType: 'json',
             data: {
+                SpeakerCode : self.currentSpeaker().code(),
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),
@@ -114,7 +142,7 @@ function SpeakersListViewModel() {
         })
         .done(function (result) {
             if (result.Success) {
-                self.speakers.push(self.currentSpeaker().toListItem());
+                self.currentSpeaker().refreshCurrentListItem();
                 self.currentSpeaker(null);
             } else {
                 alert('Error');

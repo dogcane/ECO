@@ -23,10 +23,10 @@
 
 <!-- list -->
 <div data-bind="foreach: speakers">
-    <div class="speakerItem">
+    <div class="speakerItem"data-bind="click: $root.Update">
         <span class="speakerName" data-bind="text: name">name</span>
-        <span class="speakerSurname" data-bind="text: surname">surname</span>
-        <div class="deleteSpeaker" data-bind="click: $root.Delete"></div>
+        <span class="speakerSurname" data-bind="text: surname">surname</span>        
+        <div class="deleteSpeaker" data-bind="click: $root.Delete, clickBubble: false"></div>
     </div>
 </div>
 <div class="speakerItemAdd" data-bind="click: Edit">
