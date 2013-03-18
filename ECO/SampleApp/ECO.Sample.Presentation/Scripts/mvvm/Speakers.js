@@ -68,6 +68,7 @@ function SpeakersListViewModel() {
     };
 
     self.Delete = function (data) {
+        self.currentSpeaker(null);
         $.ajax({
             url: '/speakers/api/' + data.code(),
             type: 'DELETE',

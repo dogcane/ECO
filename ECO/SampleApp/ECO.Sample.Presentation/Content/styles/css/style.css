@@ -188,7 +188,7 @@ div.editor div.field {
     margin:10px 0px 5px 0px;
 }
 
-div.editor div.field span {
+div.editor div.field span:first-child {
     display:block;
     width:200px;
     float:left;
