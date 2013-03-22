@@ -54,6 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MongoPersistenceContext.cs" />
+    <Compile Include="MongoPersistenceManager.cs" />
+    <Compile Include="MongoPersistenceUnit.cs" />
+    <Compile Include="MongoReadOnlyRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
