@@ -1,4 +1,4 @@
-﻿function SpeakerListItem(code, name, surname) {
+﻿function SpeakerListItemViewModel(code, name, surname) {
     var self = this;
     self.code = ko.observable(code);
     self.name = ko.observable(name);
@@ -6,12 +6,28 @@
 }
 
 function SpeakerEditViewModel(code, name, surname, description, age) {
-    var self = this;
+    var self = this;    
+    //CODE
     self.code = ko.observable(code);
+    //NAME
     self.name = ko.observable(name);
+    self.nameError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //SURNAME
     self.surname = ko.observable(surname);
+    self.surnameError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //DESCRIPTION
     self.description = ko.observable(description);
+    self.descriptionError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //AGE
     self.age = ko.observable(age);
+    self.ageError = ko.observable(new ErrorMessageViewModel(false, ''));
+
+    var errorMapping = {
+        'Name': self.nameError,
+        'Surname': self.surnameError,
+        'Description': self.descriptionError,
+        'Age': self.ageError
+    };
 
     self.currentListItem = null;
     self.setCurrentListItem = function (data) {
@@ -29,7 +45,17 @@ function SpeakerEditViewModel(code, name, surname, description, age) {
     });
 
     self.toListItem = function () {
-        return new SpeakerListItem(self.code(), self.name(), self.surname());
+        return new SpeakerListItemViewModel(self.code(), self.name(), self.surname());
+    };
+
+    self.resetErrors = function () {
+        $.each(errorMapping, function () {
+            this(new ErrorMessageViewModel(false, ''));
+        });
+    };
+
+    self.setError = function (context, message) {
+        errorMapping[context](new ErrorMessageViewModel(true, message));        
     };
 }
 
@@ -46,16 +72,16 @@ function SpeakersListViewModel() {
         })
         .done(function (data) {
             $.each(data, function (index, speaker) {
-                self.speakers.push(new SpeakerListItem(speaker.SpeakerCode, speaker.Name, speaker.Surname));
+                self.speakers.push(new SpeakerListItemViewModel(speaker.SpeakerCode, speaker.Name, speaker.Surname));
             });
         })
     };
 
     self.Save = function () {
         if (self.currentSpeaker().isNewSpeaker()) {
-            self.__Create();
+            __Create();
         } else {
-            self.__Update();
+            __Update();
         }
     };
 
@@ -102,7 +128,7 @@ function SpeakersListViewModel() {
        })
     }
 
-    self.__Create = function () {
+    function __Create() {
         $.ajax({
             url: '/speakers/api',
             type: 'POST',
@@ -120,7 +146,10 @@ function SpeakersListViewModel() {
                 self.speakers.push(self.currentSpeaker().toListItem());
                 self.currentSpeaker(null);
             } else {
-                alert('Error');
+                self.currentSpeaker().resetErrors();
+                $.each(result.Errors, function () {
+                    self.currentSpeaker().setError(this.Context, this.Description);
+                });
             }
         })
         .fail(function (jqXHR, textStatus) {
@@ -128,7 +157,7 @@ function SpeakersListViewModel() {
         })
     };
 
-    self.__Update = function () {
+    function __Update() {
         $.ajax({
             url: '/speakers/api',
             type: 'PUT',

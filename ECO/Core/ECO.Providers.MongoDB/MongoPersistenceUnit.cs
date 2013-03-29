@@ -16,6 +16,8 @@ namespace ECO.Providers.MongoDB
 
         private MongoDatabase _Database;
 
+        private IDictionary<string, string> _CollectionsByTypes;
+
         #endregion
 
         #region Methods
@@ -28,7 +30,7 @@ namespace ECO.Providers.MongoDB
 
         protected override IPersistenceContext CreateContext()
         {
-            return new MongoPersistenceContext(_Database);
+            return new MongoPersistenceContext(_Database, _CollectionsByTypes);
         }
 
         #endregion

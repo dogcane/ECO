@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using ECO;
 using ECO.Data;
 
+using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 
 namespace ECO.Providers.MongoDB
@@ -23,13 +25,16 @@ namespace ECO.Providers.MongoDB
 
         public MongoDatabase Database { get; protected set; }
 
+        public IDictionary<string, string> CollectionsByTypes { get; protected set; }
+
         #endregion
 
         #region Ctor
 
-        public MongoPersistenceContext(MongoDatabase database)
+        public MongoPersistenceContext(MongoDatabase database, IDictionary<string, string> collectionsByTypes)
         {
             Database = database;
+            CollectionsByTypes = collectionsByTypes;
         }
 
         #endregion
@@ -38,22 +43,22 @@ namespace ECO.Providers.MongoDB
 
         public void Attach<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            
+            //Not needed
         }
 
         public void Detach<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            
+            //Not needed
         }
 
         public void Refresh<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            
+            entity = Database.GetCollection<T>(typeof(T).Name).FindOneAs<T>(Query<T>.EQ(e => e.Identity, entity.Identity));
         }
 
         public PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            throw new NotImplementedException();
+            return PersistenceState.Unknown;
         }
 
         public IDataTransaction BeginTransaction()
@@ -63,7 +68,7 @@ namespace ECO.Providers.MongoDB
 
         public void Close()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SaveChanges()
