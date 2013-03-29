@@ -33,11 +33,12 @@ namespace ECO.Sample.Presentation
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/Scripts/knockout*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/knockout/events").Include(
+            bundles.Add(new ScriptBundle("~/bundles/events").Include(
                         "~/Scripts/mvvm/Events.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/knockout/speakers").Include(
-                        "~/Scripts/mvvm/Speakers.js"));
+            bundles.Add(new ScriptBundle("~/bundles/speakers").Include(
+                        "~/Scripts/mvvm/Speakers.js",
+                        "~/Scripts/i18n/Speakers.js"));
 
             //BundleTable.EnableOptimizations = true;
 

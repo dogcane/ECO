@@ -188,6 +188,12 @@ div.editor div.field {
     margin:10px 0px 5px 0px;
 }
 
+div.editor div.field input.error {
+    border:1px solid #FF0000;
+    background-color:#d48d8d;
+    color:#FF0000;
+}
+
 div.editor div.field span:first-child {
     display:block;
     width:200px;

@@ -24,3 +24,29 @@ ko.bindingHandlers.fadeVisible = {
         ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
     }
 };
+
+ko.bindingHandlers.error = {
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        if (value != null) {
+            var isInError = value.IsInError;
+            var message = value.Message;
+            if (message) {
+                $(element).attr('title', message);
+            } else {
+                $(element).attr('title', '');
+            }
+            if (isInError) {
+                $(element).addClass('error');
+            } else {
+                $(element).removeClass('error');
+            }
+        }
+    }
+};
+
+function ErrorMessageViewModel(isInError, message) {
+    var self = this;
+    self.IsInError = isInError;
+    self.Message = message;
+}

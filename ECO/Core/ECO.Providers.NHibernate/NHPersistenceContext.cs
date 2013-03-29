@@ -86,7 +86,7 @@ namespace ECO.Providers.NHibernate
             {
                 _Session.Lock(entity, nh.LockMode.None);
             }
-            catch (nh.NonUniqueObjectException) //Fix della madonna
+            catch (nh.NonUniqueObjectException)
             {
                 entity = _Session.Load<T>(entity.Identity);
             }
