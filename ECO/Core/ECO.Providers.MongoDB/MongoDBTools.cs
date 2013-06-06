@@ -13,7 +13,12 @@ namespace ECO.Providers.MongoDB
     {
         public static MongoCollection SafeGetCollectionForType<T>(this MongoDatabase database)
         {
-            return null;
+            Type currentType = typeof(T);
+            while(!currentType.BaseType.Equals(typeof(Entity<>)))
+            {
+                currentType = currentType.BaseType;
+            }
+            return database.GetCollection(currentType.Name);
         }
     }
 }

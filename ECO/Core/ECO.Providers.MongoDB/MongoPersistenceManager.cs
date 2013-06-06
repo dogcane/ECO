@@ -9,15 +9,31 @@ using MongoDB.Driver;
 
 namespace ECO.Providers.MongoDB
 {
-    public class MongoPersistenceManager<T, K> : PersistenceManagerBase<T, K>
+    public abstract class MongoPersistenceManager<T, K> : PersistenceManagerBase<T, K>
         where T : IAggregateRoot<K>
     {
+        #region Ctor
+
+        protected MongoPersistenceManager()
+        {
+            ConfigureMapping();
+        }
+
+        #endregion
+
         #region Protected_Methods
 
         protected MongoDatabase GetCurrentDatabase()
         {
             return (GetCurrentContext() as MongoPersistenceContext).Database;
         }
+
+        protected MongoCollection GetCurrentCollection()
+        {
+            return GetCurrentDatabase().SafeGetCollectionForType<T>();
+        }
+
+        protected abstract void ConfigureMapping();
 
         #endregion
     }
