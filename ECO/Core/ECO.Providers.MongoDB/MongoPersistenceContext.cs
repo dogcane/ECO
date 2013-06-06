@@ -68,17 +68,17 @@ namespace ECO.Providers.MongoDB
 
         public void Close()
         {
-            
+            //Not needed
         }
 
         public void SaveChanges()
         {
-            
+            //Not needed
         }
 
         public void Dispose()
         {
-            
+            //Not needed
         }
 
         #endregion

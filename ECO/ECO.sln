@@ -54,9 +54,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F724E0
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.Infrastructure.DAL.MongoDB", "SampleApp\ECO.Sample.Infrastructure.DAL.MongoDB\ECO.Sample.Infrastructure.DAL.MongoDB.csproj", "{7287AACE-EDF7-48FB-A880-735B72EC1EA9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs11
 		SccLocalPath0 = .
@@ -108,6 +110,10 @@ Global
 		SccProjectTopLevelParentUniqueName12 = ECO.sln
 		SccProjectName12 = SampleApp/ECO.Sample.Presentation
 		SccLocalPath12 = SampleApp\\ECO.Sample.Presentation
+		SccProjectUniqueName13 = SampleApp\\ECO.Sample.Infrastructure.DAL.MongoDB\\ECO.Sample.Infrastructure.DAL.MongoDB.csproj
+		SccProjectTopLevelParentUniqueName13 = ECO.sln
+		SccProjectName13 = SampleApp/ECO.Sample.Infrastructure.DAL.MongoDB
+		SccLocalPath13 = SampleApp\\ECO.Sample.Infrastructure.DAL.MongoDB
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ECO2.vsmdi
@@ -165,6 +171,10 @@ Global
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7287AACE-EDF7-48FB-A880-735B72EC1EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7287AACE-EDF7-48FB-A880-735B72EC1EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7287AACE-EDF7-48FB-A880-735B72EC1EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7287AACE-EDF7-48FB-A880-735B72EC1EA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +194,7 @@ Global
 		{676480D8-0856-461C-B541-F6D462F44471} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{19325985-D5FE-4F24-AA82-00FB4AC4652F} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{136ACB8E-ADE7-4AE2-B440-F4454BF21B57} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{7287AACE-EDF7-48FB-A880-735B72EC1EA9} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{40E8A9BF-6B1E-4355-9372-87865210BF68} = {BD6544C0-DE77-4CBB-825F-08B485161398}
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7} = {05AD202B-FF8D-404E-83E1-AA0F97A6F588}
 	EndGlobalSection

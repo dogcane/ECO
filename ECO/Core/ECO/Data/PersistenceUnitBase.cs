@@ -32,7 +32,7 @@ namespace ECO.Data
 
         protected abstract IPersistenceContext CreateContext();
 
-        protected virtual void OnInitialize(IDictionary<string, string> extededAttributes)
+        protected virtual void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
             
         }

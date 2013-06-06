@@ -11,14 +11,14 @@ using MongoDB.Driver.Linq;
 
 namespace ECO.Providers.MongoDB
 {
-    public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
+    public abstract class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
         where T : AggregateRoot<K>
     {
         #region IReadOnlyRepository<T,K> Members
 
         public T Load(K identity)
         {
-            throw new NotImplementedException();
+            return GetCurrentCollection().FindOneAs<T>(Query<T>.EQ(e => e.Identity, identity));
         }
 
         #endregion
@@ -27,7 +27,7 @@ namespace ECO.Providers.MongoDB
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetCurrentCollection().AsQueryable<T>().GetEnumerator();
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace ECO.Providers.MongoDB
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetCurrentCollection().AsQueryable<T>().GetEnumerator();
         }
 
         #endregion
@@ -45,17 +45,17 @@ namespace ECO.Providers.MongoDB
 
         public Type ElementType
         {
-            get { throw new NotImplementedException(); }
+            get { return GetCurrentCollection().AsQueryable<T>().ElementType; }
         }
 
         public System.Linq.Expressions.Expression Expression
         {
-            get { throw new NotImplementedException(); }
+            get { return GetCurrentCollection().AsQueryable<T>().Expression; }
         }
 
         public IQueryProvider Provider
         {
-            get { throw new NotImplementedException(); }
+            get { return GetCurrentCollection().AsQueryable<T>().Provider; }
         }
 
         #endregion
