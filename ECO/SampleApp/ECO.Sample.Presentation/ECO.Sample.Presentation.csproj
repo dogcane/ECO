@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;INMEMORY</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MONGO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -310,6 +310,10 @@
       <Project>{7ce573ff-159f-49d9-97f8-26cc54c95dac}</Project>
       <Name>ECO.Providers.InMemory</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\ECO.Providers.MongoDB\ECO.Providers.MongoDB.csproj">
+      <Project>{9da9c8e5-6d68-4534-bfc1-9361fe956f4c}</Project>
+      <Name>ECO.Providers.MongoDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj">
       <Project>{3e6a81ba-2fe1-4acf-ab70-248c8f844983}</Project>
       <Name>ECO.Providers.NHibernate</Name>
@@ -329,6 +333,10 @@
     <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj">
       <Project>{676480d8-0856-461c-b541-f6d462f44471}</Project>
       <Name>ECO.Sample.Infrastructure.DAL.InMemory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.MongoDB\ECO.Sample.Infrastructure.DAL.MongoDB.csproj">
+      <Project>{7287aace-edf7-48fb-a880-735b72ec1ea9}</Project>
+      <Name>ECO.Sample.Infrastructure.DAL.MongoDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.NHibernate\ECO.Sample.Infrastructure.DAL.NHibernate.csproj">
       <Project>{136acb8e-ade7-4ae2-b440-f4454bf21b57}</Project>

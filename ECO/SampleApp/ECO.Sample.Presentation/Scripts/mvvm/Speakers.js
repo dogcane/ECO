@@ -55,7 +55,7 @@ function SpeakerEditViewModel(code, name, surname, description, age) {
     };
 
     self.setError = function (context, message) {
-        errorMapping[context](new ErrorMessageViewModel(true, message));        
+        errorMapping[context](new ErrorMessageViewModel(true, speakerResources.getResource(message)));
     };
 }
 

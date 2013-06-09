@@ -26,6 +26,11 @@ namespace ECO.Data
             }
         }
 
+        public IEnumerable<Type> Classes
+        {
+            get { return _Classes; }
+        }
+
         #endregion
 
         #region Protected_Methods
