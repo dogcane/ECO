@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using MongoDB;
 using MongoDB.Driver;
+using MongoDB.Bson.Serialization;
+using System.Reflection;
 
 namespace ECO.Providers.MongoDB
 {
@@ -13,12 +15,16 @@ namespace ECO.Providers.MongoDB
     {
         public static MongoCollection SafeGetCollectionForType<T>(this MongoDatabase database)
         {
-            Type currentType = typeof(T);
-            while(!currentType.BaseType.Equals(typeof(Entity<>)))
-            {
-                currentType = currentType.BaseType;
-            }
-            return database.GetCollection(currentType.Name);
+            return database.GetCollection(typeof(T).Name);
+        }
+
+        public static void MapECOIdentity<T, K>(this BsonClassMap<T> bsonClassMap, IIdGenerator generator)
+            where T : IAggregateRoot<K>
+        {
+            bsonClassMap.AutoMap();
+            var idmap = new BsonMemberMap(bsonClassMap, typeof(T).GetProperty("Identity"));
+            bsonClassMap.SetIdMember(idmap);
+            bsonClassMap.SetIgnoreExtraElements(true);
         }
     }
 }

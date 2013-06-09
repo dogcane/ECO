@@ -18,7 +18,7 @@ namespace ECO.Providers.MongoDB
 
         public T Load(K identity)
         {
-            return GetCurrentCollection().FindOneAs<T>(Query<T>.EQ(e => e.Identity, identity));
+            return GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
         }
 
         #endregion

@@ -33,7 +33,10 @@ namespace ECO.Providers.MongoDB
             return GetCurrentDatabase().SafeGetCollectionForType<T>();
         }
 
-        protected abstract void ConfigureMapping();
+        protected virtual void ConfigureMapping()
+        {
+
+        }
 
         #endregion
     }

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 
 using ECO.Data;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 
 namespace ECO.Providers.MongoDB
 {
@@ -41,6 +43,9 @@ namespace ECO.Providers.MongoDB
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DATABASE_ATTRIBUTE));
             }
+            ConventionPack conventions = new ConventionPack();
+            conventions.Add(new ECOMapConvention());
+            ConventionRegistry.Register("ECO", conventions, type => type.GetProperty("Identity") != null);
             _MongoDatabase = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);
