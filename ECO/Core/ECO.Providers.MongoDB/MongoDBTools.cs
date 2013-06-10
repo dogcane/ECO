@@ -17,14 +17,5 @@ namespace ECO.Providers.MongoDB
         {
             return database.GetCollection(typeof(T).Name);
         }
-
-        public static void MapECOIdentity<T, K>(this BsonClassMap<T> bsonClassMap, IIdGenerator generator)
-            where T : IAggregateRoot<K>
-        {
-            bsonClassMap.AutoMap();
-            var idmap = new BsonMemberMap(bsonClassMap, typeof(T).GetProperty("Identity"));
-            bsonClassMap.SetIdMember(idmap);
-            bsonClassMap.SetIgnoreExtraElements(true);
-        }
     }
 }
