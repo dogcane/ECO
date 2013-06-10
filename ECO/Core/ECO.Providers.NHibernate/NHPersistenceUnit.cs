@@ -34,26 +34,6 @@ namespace ECO.Providers.NHibernate
 
         #endregion
 
-        #region Protected_Methods
-
-        protected override IPersistenceContext CreateContext()
-        {
-            nh.ISession session = null;
-            if (!string.IsNullOrEmpty(_InterceptorFullName))
-            {
-                Type interceptorType = Type.GetType(_InterceptorFullName);
-                nh.IInterceptor interceptor = (nh.IInterceptor)Activator.CreateInstance(interceptorType);
-                session = _SessionFactory.OpenSession(interceptor);
-            }
-            else
-            {
-                session = _SessionFactory.OpenSession();
-            }
-            return new NHPersistenceContext(session);
-        }
-
-        #endregion
-
         #region ~Ctor
 
         public NHPersistenceUnit()
@@ -65,6 +45,11 @@ namespace ECO.Providers.NHibernate
         #endregion
 
         #region Protected_Methods
+
+        protected virtual void OnSetup(nh.ISessionFactory sessionFactory)
+        {
+
+        }
 
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
@@ -84,6 +69,22 @@ namespace ECO.Providers.NHibernate
             _SessionFactory = new nhcfg.Configuration()
                 .Configure(_ConfigPath)
                 .BuildSessionFactory();
+        }
+
+        protected override IPersistenceContext CreateContext()
+        {
+            nh.ISession session = null;
+            if (!string.IsNullOrEmpty(_InterceptorFullName))
+            {
+                Type interceptorType = Type.GetType(_InterceptorFullName);
+                nh.IInterceptor interceptor = (nh.IInterceptor)Activator.CreateInstance(interceptorType);
+                session = _SessionFactory.OpenSession(interceptor);
+            }
+            else
+            {
+                session = _SessionFactory.OpenSession();
+            }
+            return new NHPersistenceContext(session);
         }
 
         #endregion

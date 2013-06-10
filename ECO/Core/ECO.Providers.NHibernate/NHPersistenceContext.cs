@@ -12,31 +12,12 @@ namespace ECO.Providers.NHibernate
 {
     public class NHPersistenceContext : IPersistenceContext
     {
-        #region Private_Fields
-
-        private nh.ISession _Session;
-
-        private NHDataTransaction _Transaction;
-
-        #endregion
 
         #region Public_Properties
 
-        public nh.ISession Session
-        {
-            get
-            {
-                return _Session;
-            }
-        }
+        public nh.ISession Session { get; private set; }
 
-        public IDataTransaction Transaction
-        {
-            get
-            {
-                return _Transaction;
-            }
-        }
+        public IDataTransaction Transaction { get; private set; }
 
         #endregion
 
@@ -44,7 +25,7 @@ namespace ECO.Providers.NHibernate
 
         public NHPersistenceContext(nh.ISession session)
         {
-            _Session = session;
+            Session = session;
         }
 
         ~NHPersistenceContext()
@@ -61,19 +42,19 @@ namespace ECO.Providers.NHibernate
         {
             if (isDisposing)
             {
-                if (_Transaction != null)
+                if (Transaction != null)
                 {
-                    _Transaction.Dispose();
+                    Transaction.Dispose();
                 }
                 else
                 {
-                    _Session.Flush();
+                    Session.Flush();
                 }
-                _Session.Close();
+                Session.Close();
                 GC.SuppressFinalize(this);
             }
-            _Transaction = null;
-            _Session = null;
+            Transaction = null;
+            Session = null;
         }
 
         #endregion
@@ -84,27 +65,27 @@ namespace ECO.Providers.NHibernate
         {
             try
             {
-                _Session.Lock(entity, nh.LockMode.None);
+                Session.Lock(entity, nh.LockMode.None);
             }
             catch (nh.NonUniqueObjectException)
             {
-                entity = _Session.Load<T>(entity.Identity);
+                entity = Session.Load<T>(entity.Identity);
             }
         }
 
         public void Detach<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            _Session.Evict(entity);
+            Session.Evict(entity);
         }
 
         public void Refresh<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            _Session.Refresh(entity);
+            Session.Refresh(entity);
         }
 
         public PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>
         {
-            if (_Session.Contains(entity))
+            if (Session.Contains(entity))
             {
                 return PersistenceState.Persistent;
             }
@@ -116,7 +97,7 @@ namespace ECO.Providers.NHibernate
 
         public IDataTransaction BeginTransaction()
         {
-            _Transaction = new NHDataTransaction(this);
+            Transaction = new NHDataTransaction(this);
             return Transaction;
         }
 
@@ -127,8 +108,8 @@ namespace ECO.Providers.NHibernate
 
         public void SaveChanges()
         {
-            _Session.Flush();
-            _Session.Clear();
+            Session.Flush();
+            Session.Clear();
         }
 
         #endregion

@@ -46,8 +46,8 @@ namespace ECO.Sample.Presentation
                 x.For<IEventRepository>().Add<EventNHRepository>(); //NHibernate Stuff
                 x.For<ISpeakerRepository>().Add<SpeakerNHRepository>(); //NHibernate Stuff
 #elif MONGO
-                x.For<IEventRepository>().Singleton().Add<EventMongoRepository>(); //Mongo Stuff
-                x.For<ISpeakerRepository>().Singleton().Add<SpeakerMongoRepository>(); //Mongo Stuff
+                x.For<IEventRepository>().Add<EventMongoRepository>(); //Mongo Stuff
+                x.For<ISpeakerRepository>().Add<SpeakerMongoRepository>(); //Mongo Stuff
 #endif
                 x.For<IShowEventsService>().Add<ShowEventsService>();
                 x.For<ICreateEventService>().Add<CreateEventService>();

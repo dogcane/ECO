@@ -23,18 +23,15 @@ namespace ECO.Providers.MongoDB
             get { throw new NotSupportedException(); }
         }
 
-        public MongoDatabase Database { get; protected set; }
-
-        public IDictionary<string, string> CollectionsByTypes { get; protected set; }
+        public MongoDatabase Database { get; private set; }
 
         #endregion
 
         #region Ctor
 
-        public MongoPersistenceContext(MongoDatabase database, IDictionary<string, string> collectionsByTypes)
+        public MongoPersistenceContext(MongoDatabase database)
         {
             Database = database;
-            CollectionsByTypes = collectionsByTypes;
         }
 
         #endregion

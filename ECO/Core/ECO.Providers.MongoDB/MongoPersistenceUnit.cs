@@ -24,13 +24,16 @@ namespace ECO.Providers.MongoDB
 
         #region Fields
 
-        private MongoDatabase _MongoDatabase;
-
-        private IDictionary<string, string> _CollectionsByTypes;
+        private MongoDatabase _Database;
 
         #endregion
 
-        #region Methods
+        #region Protected_Methods
+
+        protected virtual void OnSetup(MongoDatabase database)
+        {
+
+        }    
 
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
@@ -46,14 +49,15 @@ namespace ECO.Providers.MongoDB
             ConventionPack conventions = new ConventionPack();
             conventions.Add(new ECOMapConvention());
             ConventionRegistry.Register("ECO", conventions, type => type.GetProperty("Identity") != null);
-            _MongoDatabase = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
+            _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);
+            OnSetup(_Database);
         }
 
         protected override IPersistenceContext CreateContext()
         {
-            return new MongoPersistenceContext(_MongoDatabase, _CollectionsByTypes);
+            return new MongoPersistenceContext(_Database);
         }
 
         #endregion
