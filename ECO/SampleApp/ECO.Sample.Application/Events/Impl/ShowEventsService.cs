@@ -30,7 +30,7 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IShowEventsService Membri di
 
-        public PageableList<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, int page, int pageSize)
+        public IQueryable<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, string eventName)
         {
             var query = _EventRepository.AsQueryable();
             if (fromDate.HasValue)
@@ -41,13 +41,11 @@ namespace ECO.Sample.Application.Events.Impl
             {
                 query = query.Where(entity => entity.Period.EndDate <= toDate.Value);
             }
-            return new PageableList<EventListItem>()
+            if (!string.IsNullOrEmpty(eventName))
             {
-                CurrentElements = query.Paged(page, pageSize).Select(item => EventListItem.From(item)),
-                PageSize = pageSize,
-                CurrentPage = page,
-                TotalElements = query.Count()
-            };
+                query = query.Where(entity => entity.Name.Contains(eventName));
+            }
+            return query.Select(item => EventListItem.From(item));
         }
 
         #endregion

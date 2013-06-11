@@ -3,10 +3,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Scripts.Render("~/bundles/knockout/events")
+@Scripts.Render("~/bundles/events")
 
-<!-- edit -->
-<div class="editor" data-bind="with: currentEvent, fadeVisible: currentEvent != null">
+<!-- ko with: currentEvent -->
+<div class="editor">
     <form name="eventEditor">
         <fieldset>
             <legend>Event Detail</legend>
@@ -19,6 +19,7 @@
         </fieldset>
     </form>
 </div>
+<!-- /ko -->
 
 <!-- list -->
 <div data-bind="foreach: events">
