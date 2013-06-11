@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MONGO</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;INMEMORY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -251,8 +251,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Areas\Events\Views\Event\Create.cshtml" />
-    <Content Include="Areas\Events\Views\Event\Detail.cshtml" />
     <Content Include="Areas\Events\Views\Event\Index.cshtml" />
     <Content Include="nhconfig.xml" />
     <Content Include="Areas\Speakers\Views\Speaker\Index.cshtml" />
@@ -352,10 +350,6 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Event_Messages.Designer.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Events\Views\Event\App_LocalResources\Create.cshtml.resx" />
-    <Content Include="Areas\Events\Views\Event\App_LocalResources\Detail.cshtml.resx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

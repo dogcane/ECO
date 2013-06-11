@@ -12,6 +12,6 @@ namespace ECO.Sample.Application.Events
 {
     public interface IShowEventsService
     {
-        PageableList<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, int page, int pageSize);
+        IQueryable<EventListItem> ShowEvents(DateTime? fromDate, DateTime? toDate, string eventName);
     }
 }
