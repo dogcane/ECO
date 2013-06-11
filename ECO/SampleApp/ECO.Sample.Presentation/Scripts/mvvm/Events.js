@@ -28,46 +28,125 @@ function EventsListViewModel() {
 
     self.LoadData = function () {
         $.ajax({
-            url: '/events/api/?start=&end=&page=1&pageSize=100',
+            url: '/events/api/?start=&end=&eventName=',
             type: 'GET',
+            dataType: 'json'
+        })
+        .done(function (data) {
+            $.each(data, function (index, event) {
+                self.events.push(new EventListItemViewModel(event.EventCode, event.Name, event.StartDate, event.EndDate, event.NumberOfSessions));
+            });
+        })
+    };
+
+    self.Save = function () {
+        if (self.currentEvent().isNewSpeaker()) {
+            __Create();
+        } else {
+            __Update();
+        }
+    };    
+
+    self.Edit = function (data) {
+        self.currentEvent(new EventEditViewModel('', '', '', new Date(), new Date()));
+    };
+
+    self.Abort = function () {
+        self.currentEvent(null);
+    };
+
+    self.Delete = function (data) {
+        self.currentEvent(null);
+        $.ajax({
+            url: '/events/api/' + data.code(),
+            type: 'DELETE',
+            dataType: 'json'
+        })
+        .done(function (result) {
+            if (result.Success) {
+                self.speakers.remove(data);
+            } else {
+                alert('Error');
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
+        })
+    };
+
+    self.Update = function (data) {
+        $.ajax({
+            url: '/events/api/' + data.code(),
+            type: 'GET',
+            dataType: 'json'
+        })
+        .done(function (result) {
+            if (result.Success) {
+                self.currentEvent(new EventEditViewModel(result.Value.EventCode, result.Value.Name, result.Value.Description, result.Value.StartDate, result.Value.EndDate));
+                self.currentEvent().setCurrentListItem(data);
+            } else {
+                alert('Error');
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
+        })
+    }
+    function __Create() {
+        $.ajax({
+            url: '/events/api',
+            type: 'POST',
             dataType: 'json',
-            success: function (data) {
-                $.each(data.CurrentElements, function (index, event) {
-                    self.events.push(new EventListItemViewModel(event.EventCode, event.Name, event.StartDate, event.EndDate, event.NumberOfSessions));
+            data: {
+                Name: self.currentEvent().name(),
+                Description: self.currentEvent().description(),
+                StartDate: self.currentEvent().startDate(),
+                EndDate: self.currentEvent().endDate()
+            }
+        })
+        .done(function (result) {
+            if (result.Success) {
+                self.currentEvent().code(result.Value);
+                self.speakers.push(self.currentEvent().toListItem());
+                self.currentEvent(null);
+            } else {
+                self.currentEvent().resetErrors();
+                $.each(result.Errors, function () {
+                    self.currentEvent().setError(this.Context, this.Description);
                 });
             }
         })
-    };
-
-    self.SaveEvent = function () {
-        $.ajax({
-            url: self.currentEvent().isNewEvent() ? '/events/api' : '/events/api/' + self.currentEvent().code(),
-            type: self.currentEvent().isNewEvent() ? 'POST' : 'PUT',
-            dataType: 'json',
-            data: {
-                name: self.currentEvent().name(),
-                description: self.currentEvent().description(),
-                startDate: self.currentEvent().startDate(),
-                endDate: self.currentEvent().endDate()
-            },
-            success: function (data) {
-                self.events.push(self.currentEvent());
-                self.currentEvent(null);
-            }
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
         })
     };
 
-    self.StartNew = function (data) {
-        var d = new Date();
-        var month = d.getMonth() + 1;
-        var day = d.getDate();
-        var todayDate = (day < 10 ? '0' : '') + day +'/' + (month < 10 ? '0' : '') + month + '/' + d.getFullYear();
-        self.currentEvent(new EventEditViewModel('', '', '', todayDate, todayDate));
+    function __Update() {
+        $.ajax({
+            url: '/events/api',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                EventCode: self.currentEvent().code(),
+                Name: self.currentEvent().name(),
+                Description: self.currentEvent().description(),
+                StartDate: self.currentEvent().startDate(),
+                EndDate: self.currentEvent().endDate()
+            }
+        })
+        .done(function (result) {
+            if (result.Success) {
+                self.currentEvent().refreshCurrentListItem();
+                self.currentEvent(null);
+            } else {
+                alert('Error');
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
+        })
     };
 
-    self.AbortEdit = function () {
-        self.currentEvent(null);
-    };
 }
 
 $(document).ready(function () {
