@@ -255,6 +255,7 @@
     <Content Include="nhconfig.xml" />
     <Content Include="Areas\Speakers\Views\Speaker\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\i18n\Events.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />

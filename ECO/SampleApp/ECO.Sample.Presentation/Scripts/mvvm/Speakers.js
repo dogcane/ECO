@@ -6,7 +6,7 @@
 }
 
 function SpeakerEditViewModel(code, name, surname, description, age) {
-    var self = this;    
+    var self = this;
     //CODE
     self.code = ko.observable(code);
     //NAME
@@ -75,6 +75,9 @@ function SpeakersListViewModel() {
                 self.speakers.push(new SpeakerListItemViewModel(speaker.SpeakerCode, speaker.Name, speaker.Surname));
             });
         })
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
+        })
     };
 
     self.Save = function () {
@@ -108,8 +111,8 @@ function SpeakersListViewModel() {
             }
         })
         .fail(function (jqXHR, textStatus) {
-            alert(jqXHR.statusText);
-        });
+            alert(textStatus);
+        })
     };
 
     self.Update = function (data) {
@@ -118,14 +121,17 @@ function SpeakersListViewModel() {
             type: 'GET',
             dataType: 'json'
         })
-       .done(function (result) {
-           if (result.Success) {
-               self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age));
-               self.currentSpeaker().setCurrentListItem(data);
-           } else {
-               alert('Error');
-           }
-       })
+        .done(function (result) {
+            if (result.Success) {
+                self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age));
+                self.currentSpeaker().setCurrentListItem(data);
+            } else {
+                alert('Error');
+            }
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert(textStatus);
+        })
     }
 
     function __Create() {
@@ -163,7 +169,7 @@ function SpeakersListViewModel() {
             type: 'PUT',
             dataType: 'json',
             data: {
-                SpeakerCode : self.currentSpeaker().code(),
+                SpeakerCode: self.currentSpeaker().code(),
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),

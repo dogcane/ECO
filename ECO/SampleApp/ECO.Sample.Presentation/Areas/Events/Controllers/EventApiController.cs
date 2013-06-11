@@ -43,9 +43,9 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
         // GET api/event
         [DataContextApiFilter]
-        public PageableList<EventListItem> Get(DateTime? start, DateTime? end, int page, int pageSize)
+        public IQueryable<EventListItem> Get(DateTime? start, DateTime? end, string eventName)
         {
-            return _ShowEventsService.ShowEvents(start, end, page, pageSize);
+            return _ShowEventsService.ShowEvents(start, end, eventName);
         }
 
         // GET api/event/5
