@@ -22,6 +22,12 @@ namespace ECO
         void Add(T item);
 
         /// <summary>
+        /// Method that update the entity in the repository
+        /// </summary>
+        /// <param name="item"></param>
+        void Update(T item);
+
+        /// <summary>
         /// Method that removes the entity from the repository
         /// </summary>
         /// <param name="item"></param>

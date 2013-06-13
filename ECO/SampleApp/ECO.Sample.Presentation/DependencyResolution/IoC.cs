@@ -45,7 +45,7 @@ namespace ECO.Sample.Presentation
 #elif NHIBERNATE    
                 x.For<IEventRepository>().Add<EventNHRepository>(); //NHibernate Stuff
                 x.For<ISpeakerRepository>().Add<SpeakerNHRepository>(); //NHibernate Stuff
-#elif MONGO
+#elif MONGODB
                 x.For<IEventRepository>().Add<EventMongoRepository>(); //Mongo Stuff
                 x.For<ISpeakerRepository>().Add<SpeakerMongoRepository>(); //Mongo Stuff
 #endif
