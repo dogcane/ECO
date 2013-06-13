@@ -17,6 +17,12 @@ namespace ECO.Providers.InMemory
             GetIdentityMap().Add(item.Identity, item);
             GetEntitySet().Add(item);
         }
+
+        public void Update(T item)
+        {
+            //NOTHING
+        }
+
         public void Remove(T item)
         {
             GetIdentityMap().Remove(item.Identity);

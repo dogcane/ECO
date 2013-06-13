@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using MongoDB.Bson.Serialization.Conventions;
 using System.Reflection;
+
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization.Conventions;
 
 namespace ECO.Providers.MongoDB
 {
@@ -18,8 +20,7 @@ namespace ECO.Providers.MongoDB
 
         public void Apply(global::MongoDB.Bson.Serialization.BsonClassMap classMap)
         {
-            classMap.SetIdMember(new global::MongoDB.Bson.Serialization.BsonMemberMap(classMap, classMap.ClassType.GetProperty("Identity")));
-            classMap.SetIgnoreExtraElements(true);
+            classMap.MapIdMember(classMap.ClassType.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly));
         }
     }
 }

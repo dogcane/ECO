@@ -21,6 +21,11 @@ namespace ECO.Providers.MongoDB
             GetCurrentCollection().Save(item);
         }
 
+        public void Update(T item)
+        {
+            GetCurrentCollection().Save(item);
+        }
+
         public void Remove(T item)
         {
             GetCurrentCollection().Remove(Query<T>.EQ(e => e.Identity, item.Identity));

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 using MongoDB.Driver;
-
-using ECO.Data;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+
+using ECO.Data;
 
 namespace ECO.Providers.MongoDB
 {
@@ -48,7 +49,7 @@ namespace ECO.Providers.MongoDB
             }
             ConventionPack conventions = new ConventionPack();
             conventions.Add(new ECOMapConvention());
-            ConventionRegistry.Register("ECO", conventions, type => type.GetProperty("Identity") != null);
+            ConventionRegistry.Register("ECO", conventions, type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null);
             _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);

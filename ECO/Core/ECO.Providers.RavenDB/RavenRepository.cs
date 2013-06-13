@@ -20,6 +20,12 @@ namespace ECO.Providers.RavenDB
         {
             GetCurrentSession().Store(item);
         }
+
+        public void Update(T item)
+        {
+            GetCurrentSession().Store(item);
+        }
+
         public void Remove(T item)
         {
             GetCurrentSession().Delete(item);

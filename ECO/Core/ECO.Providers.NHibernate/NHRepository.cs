@@ -22,6 +22,12 @@ namespace ECO.Providers.NHibernate
         {
             GetCurrentSession().Save(item);
         }
+
+        public void Update(T item)
+        {
+            GetCurrentSession().Update(item);
+        }
+
         public void Remove(T item)
         {
             GetCurrentSession().Delete(item);
