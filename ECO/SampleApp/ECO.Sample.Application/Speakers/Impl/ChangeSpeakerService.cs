@@ -33,7 +33,9 @@ namespace ECO.Sample.Application.Speakers.Impl
         public OperationResult ChangeInformation(SpeakerDetail speaker)
         {
             Speaker speakerEntity = _SpeakerRepository.Load(speaker.SpeakerCode);
-            return speakerEntity.ChangeInformation(speaker.Name, speaker.Surname, speaker.Description, speaker.Age);
+            return speakerEntity
+                .ChangeInformation(speaker.Name, speaker.Surname, speaker.Description, speaker.Age)
+                .IfSuccess(() => _SpeakerRepository.Update(speakerEntity));
         }
 
         #endregion

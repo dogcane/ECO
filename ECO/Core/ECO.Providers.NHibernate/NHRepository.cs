@@ -25,7 +25,7 @@ namespace ECO.Providers.NHibernate
 
         public void Update(T item)
         {
-            GetCurrentSession().Update(item);
+            GetCurrentSession().Update(item); //Not necessary with auto-dirty-check
         }
 
         public void Remove(T item)
