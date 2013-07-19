@@ -25,6 +25,8 @@ namespace ECO.Providers.MongoDB
 
         public MongoDatabase Database { get; private set; }
 
+        public MongoIdentityMap IdentityMap { get; private set; }
+
         #endregion
 
         #region Ctor
@@ -32,6 +34,7 @@ namespace ECO.Providers.MongoDB
         public MongoPersistenceContext(MongoDatabase database)
         {
             Database = database;
+            IdentityMap = new MongoIdentityMap();
         }
 
         #endregion
