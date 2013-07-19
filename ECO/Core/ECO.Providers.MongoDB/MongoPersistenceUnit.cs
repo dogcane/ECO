@@ -47,9 +47,9 @@ namespace ECO.Providers.MongoDB
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DATABASE_ATTRIBUTE));
             }
-            ConventionPack conventions = new ConventionPack();
-            conventions.Add(new ECOMapConvention());
-            ConventionRegistry.Register("ECO", conventions, type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null);
+            ConventionRegistry.Register("ECO-Identity",
+                new ConventionPack() { new ECOMapConvention() },
+                type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null);
             _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);

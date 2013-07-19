@@ -15,6 +15,6 @@ namespace ECO.Sample.Infrastructure.Repositories
 {
     public class SpeakerMongoRepository : MongoRepository<Speaker, Guid>, ISpeakerRepository
     {
-        
+
     }
 }

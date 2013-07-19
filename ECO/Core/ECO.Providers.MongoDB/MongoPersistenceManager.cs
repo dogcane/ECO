@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using ECO.Data;
-
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace ECO.Providers.MongoDB
@@ -35,7 +34,7 @@ namespace ECO.Providers.MongoDB
 
         protected virtual void ConfigureMapping()
         {
-
+            //BsonSerializer.RegisterSerializer(typeof(T), ECOSerializer.Instance);
         }
 
         #endregion

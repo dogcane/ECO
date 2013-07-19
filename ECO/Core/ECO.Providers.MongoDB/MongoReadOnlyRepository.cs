@@ -18,7 +18,12 @@ namespace ECO.Providers.MongoDB
 
         public T Load(K identity)
         {
-            return GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
+            T entity = ((MongoPersistenceContext)GetCurrentContext()).IdentityMap[identity] as T; //Identity Map optimization
+            if (entity == null)
+            {
+                entity = GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
+            }
+            return entity;
         }
 
         #endregion

@@ -15,11 +15,11 @@ namespace ECO.Providers.MongoDB
     {
         public string Name
         {
-            get { return "ECOIdentity"; }
+            get { return "ECOMapConvention"; }
         }
 
         public void Apply(global::MongoDB.Bson.Serialization.BsonClassMap classMap)
-        {
+        {            
             classMap.MapIdMember(classMap.ClassType.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly));
         }
     }

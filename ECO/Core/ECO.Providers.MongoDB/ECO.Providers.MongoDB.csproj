@@ -54,7 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ECOMapConvention.cs" />
+    <Compile Include="ECOSerializer.cs" />
     <Compile Include="MongoDBTools.cs" />
+    <Compile Include="MongoIdentityMap.cs" />
     <Compile Include="MongoPersistenceContext.cs" />
     <Compile Include="MongoPersistenceManager.cs" />
     <Compile Include="MongoPersistenceUnit.cs" />
