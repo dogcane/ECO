@@ -1,6 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Http;
 
+using AttributeRouting;
+using AttributeRouting.Web.Http;
+using AttributeRouting.Helpers;
+
 namespace ECO.Sample.Presentation.Areas.Speakers
 {
     public class SpeakersAreaRegistration : AreaRegistration
@@ -15,13 +19,6 @@ namespace ECO.Sample.Presentation.Areas.Speakers
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            //Speakers API
-            context.Routes.MapHttpRoute(
-                name: "Speakers Api",
-                routeTemplate: "speakers/api/{id}",
-                defaults: new { controller = "SpeakerApi", id = RouteParameter.Optional }
-            );
-
             //Default Speakers Controllers
             context.MapRoute(
                 "Speakers_default",

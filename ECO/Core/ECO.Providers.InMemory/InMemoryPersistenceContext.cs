@@ -26,7 +26,7 @@ namespace ECO.Providers.InMemory
         public object this[string indexer]
         {
             get
-            {
+            {                
                 object storageValue;
                 _InMemoryStorage.TryGetValue(indexer, out storageValue);
                 return storageValue;

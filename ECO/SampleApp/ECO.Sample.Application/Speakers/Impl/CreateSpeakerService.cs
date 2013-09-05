@@ -31,7 +31,7 @@ namespace ECO.Sample.Application.Speakers.Impl
 
         public OperationResult<Guid> CreateNewSpeaker(SpeakerDetail speaker)
         {
-            OperationResult<Speaker> speakerResult = Speaker.Create(speaker.Name, speaker.Surname, speaker.Description, speaker.Age);
+            var speakerResult = Speaker.Create(speaker.Name, speaker.Surname, speaker.Description, speaker.Age);
             if (speakerResult.Success)
             {
                 _SpeakerRepository.Add(speakerResult.Value);

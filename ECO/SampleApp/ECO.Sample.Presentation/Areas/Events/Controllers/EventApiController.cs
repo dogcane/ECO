@@ -1,17 +1,19 @@
-﻿using ECO.Data;
-using ECO.Sample.Application.DTO;
+﻿using System;
+using System.Linq;
+using System.Web.Http;
+
+using ECO.Web.MVC;
+
+using AttributeRouting;
+using AttributeRouting.Web.Http;
+
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.DTO;
-using ECO.Web.MVC;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
+    [RouteArea("events")]
+    [RoutePrefix("api")]
     public class EventApiController : ApiController
     {
         private IShowEventsService _ShowEventsService;
@@ -41,24 +43,25 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             _RemoveSessionFromEventService = removeSessionFromEventService;
         }
 
-        // GET api/event
         [DataContextApiFilter]
-        public IQueryable<EventListItem> Get(DateTime? start, DateTime? end, string eventName)
+        [HttpGet, GET("QuerystringParamConstraints?{start:datetime}&{end:datetime}")]
+        public IQueryable<EventListItem> GetEvents(DateTime? start, DateTime? end, string eventName)
         {
             return _ShowEventsService.ShowEvents(start, end, eventName);
         }
 
-        // GET api/event/5
         [DataContextApiFilter]
-        public EventDetail Get(Guid eventCode)
+        [HttpGet, GET("{id:guid}")]
+        public EventDetail GetEventById(Guid eventCode)
         {
             return _ShowEventDetailService.ShowDetail(eventCode);
         }
 
-        // POST api/event
-        public void Post([FromBody]string name, [FromBody]string description, [FromBody]DateTime startDate, [FromBody]DateTime endDate)
+        [DataContextApiFilter]
+        [HttpPost, POST("")]
+        public void CreateEvent([FromBody]EventDetail @event)
         {
-            var result = _CreateEventService.CreateNewEvent(name, description, startDate, endDate);
+            var result = _CreateEventService.CreateNewEvent(@event);
         }
 
         // PUT api/event/5

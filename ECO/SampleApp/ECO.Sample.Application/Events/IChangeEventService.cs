@@ -9,8 +9,6 @@ namespace ECO.Sample.Application.Events
 {
     public interface IChangeEventService
     {
-        OperationResult ChangeInformation(Guid eventCode, string name, string description);
-
-        OperationResult ChangeDates(Guid eventCode, DateTime startDate, DateTime endDate);
+        OperationResult ChangeInformation(Guid eventCode, string name, string description, DateTime startDate, DateTime endDate);
     }
 }

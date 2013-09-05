@@ -10,6 +10,28 @@
     }
 };
 
+ko.bindingHandlers.spinner = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var options = allBindingsAccessor().spinnerOptions || {};
+        $(element).spinner(options);
+        ko.utils.registerEventHandler(element, "spinchange", function () {
+            var observable = valueAccessor();
+            observable($(element).spinner("value"));
+        });
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $(element).spinner("destroy");
+        });
+
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        current = $(element).spinner("value");
+        if (value !== current) {
+            $(element).spinner("value", value);
+        }
+    }
+};
+
 // Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
 // Could be stored in a separate utility library
 ko.bindingHandlers.fadeVisible = {
