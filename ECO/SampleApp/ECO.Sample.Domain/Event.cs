@@ -69,27 +69,18 @@ namespace ECO.Sample.Domain
 
         #region Public_Methods
 
-        public virtual OperationResult ChangePeriod(Period period)
-        {
-            return OperationResult
-                .Begin()
-                .CheckEventPeriod(period)
-                .IfSuccess(() =>
-                {
-                    Period = period;
-                });
-        }
-
-        public virtual OperationResult ChangeInformation(string name, string description)
+        public virtual OperationResult ChangeInformation(string name, string description, Period period)
         {
             return OperationResult
                 .Begin()
                 .CheckEventName(name)
                 .CheckEventDescription(description)
+                .CheckEventPeriod(period)
                 .IfSuccess(() =>
                 {
                     Name = name;
                     Description = description;
+                    Period = period;
                 });
         }
 

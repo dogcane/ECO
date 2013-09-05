@@ -41,7 +41,30 @@ a#eventsButton {
 #container {
     padding:20px;
 }
-
+#actionBar {
+    background-color:#2e2d2d;
+    padding:10px;
+    position:fixed;
+    bottom:0px;
+    width:100%;
+}
+#actionBar form.searchForm input {
+    float:left;
+    margin-right:10px;
+}
+#actionBar form.searchForm button.searchButton {
+    float:left;
+    padding:0px;
+    margin:0px;
+    border:1px solid #000000;
+    background-color:#ffffff;
+    background-image:url(../images/appbar.magnify.png);
+    background-size: 30px 30px;
+    background-position:center;
+    width:20px;
+    height:20px;
+    cursor:pointer;
+}
 /* events */
 div.eventItem {
     background-image:url(../images/appbar.calendar.png);    

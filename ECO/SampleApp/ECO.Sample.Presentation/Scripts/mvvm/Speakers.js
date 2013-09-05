@@ -63,14 +63,16 @@ function SpeakersListViewModel() {
     var self = this;
     self.speakers = ko.observableArray([]);
     self.currentSpeaker = ko.observable(null);
+    self.NameOrSurnameFilter = ko.observable("");
 
     self.Load = function () {
         $.ajax({
-            url: '/speakers/api/?nameOrSurname=',
+            url: '/speakers/api?nameOrSurname=' + self.NameOrSurnameFilter(),
             type: 'GET',
             dataType: 'json'
         })
         .done(function (data) {
+            self.speakers.removeAll();
             $.each(data, function (index, speaker) {
                 self.speakers.push(new SpeakerListItemViewModel(speaker.SpeakerCode, speaker.Name, speaker.Surname));
             });
@@ -163,7 +165,7 @@ function SpeakersListViewModel() {
         })
     };
 
-    function __Update() {
+    function __Update() {        
         $.ajax({
             url: '/speakers/api',
             type: 'PUT',
@@ -181,11 +183,15 @@ function SpeakersListViewModel() {
                 self.currentSpeaker().refreshCurrentListItem();
                 self.currentSpeaker(null);
             } else {
-                alert('Error');
+                self.currentSpeaker().resetErrors();
+                $.each(result.Errors, function () {
+                    self.currentSpeaker().setError(this.Context, this.Description);
+                });
             }
         })
         .fail(function (jqXHR, textStatus) {
             alert(textStatus);
+            alert(jqXHR.status);
         })
     };
 }

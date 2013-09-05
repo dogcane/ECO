@@ -6,6 +6,7 @@ using System.Text;
 using ECO.Bender;
 
 using ECO.Sample.Domain;
+using ECO.Sample.Application.Events.DTO;
 
 namespace ECO.Sample.Application.Events.Impl
 {
@@ -28,18 +29,18 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IServizioCreaEvento Membri di
 
-        public OperationResult CreateNewEvent(string name, string description, DateTime startDate, DateTime endDate)
+        public OperationResult<Guid> CreateNewEvent(EventDetail @event)
         {
-            return Event
-                .Create(name, description, new Period(startDate, endDate))
-                .IfSuccess<Event>(@event =>
-                {
-                    _EventRepository.Add(@event);
-                })
-                .IfFailed<Event>(result =>
-                {
-                        result.TranslateContext("Period.StartDate", "StartDate");
-                });
+            var eventResult = Event.Create(@event.Name, @event.Description, new Period(@event.StartDate, @event.EndDate));
+            if (eventResult.Success)
+            {
+                _EventRepository.Add(eventResult.Value);
+                return OperationResult<Guid>.MakeSuccess(eventResult.Value.Identity);
+            }
+            else
+            {
+                return OperationResult<Guid>.MakeFailure(eventResult.Errors).TranslateContext("Period.StartDate", "StartDate");
+            }
         }
 
         #endregion

@@ -28,18 +28,10 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IChangeEventService Membri di
 
-        public OperationResult ChangeInformation(Guid eventCode, string name, string description)
+        public OperationResult ChangeInformation(Guid eventCode, string name, string description, DateTime startDate, DateTime endDate)
         {
             Event @event = _EventRepository.Load(eventCode);
-            return @event.ChangeInformation(name, description);
-        }
-
-        public OperationResult ChangeDates(Guid eventCode, DateTime startDate, DateTime endDate)
-        {
-            Event @event = _EventRepository.Load(eventCode);
-            return @event
-                .ChangePeriod(new Period(startDate, endDate))
-                .TranslateContext("Period.StartDate", "StartDate");
+            return @event.ChangeInformation(name, description, new Period(startDate, endDate));
         }
 
         #endregion

@@ -5,10 +5,12 @@ using System.Text;
 
 using ECO.Bender;
 
+using ECO.Sample.Application.Events.DTO;
+
 namespace ECO.Sample.Application.Events
 {
     public interface ICreateEventService
     {
-        OperationResult CreateNewEvent(string name, string description, DateTime startDate, DateTime endDate);
+        OperationResult<Guid> CreateNewEvent(EventDetail @event);
     }
 }
