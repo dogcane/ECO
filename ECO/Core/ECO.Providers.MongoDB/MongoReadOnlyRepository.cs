@@ -11,15 +11,19 @@ using MongoDB.Driver.Linq;
 
 namespace ECO.Providers.MongoDB
 {
-    public abstract class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
-        where T : AggregateRoot<K>
+    public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
+        where T : IAggregateRoot<K>
     {
         #region IReadOnlyRepository<T,K> Members
 
         public T Load(K identity)
         {
-            T entity = ((MongoPersistenceContext)GetCurrentContext()).IdentityMap[identity] as T; //Identity Map optimization
-            if (entity == null)
+            T entity = default(T);
+            if (((MongoPersistenceContext)GetCurrentContext()).IdentityMap.ContainsKey(identity))
+            {
+                entity = (T)((MongoPersistenceContext)GetCurrentContext()).IdentityMap[identity];
+            }
+            if (default(T).Equals(entity))
             {
                 entity = GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
             }

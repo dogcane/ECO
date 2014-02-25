@@ -105,7 +105,10 @@ namespace ECO.Data
             _Listeners.Remove(listener);
         }
 
-        #endregion
+        public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;
 
+        public abstract IRepository<T, K> BuildRepository<T, K>() where T : IAggregateRoot<K>;
+
+        #endregion
     }
 }

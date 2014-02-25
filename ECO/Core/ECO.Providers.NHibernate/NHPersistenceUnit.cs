@@ -85,6 +85,16 @@ namespace ECO.Providers.NHibernate
                 session = _SessionFactory.OpenSession();
             }
             return new NHPersistenceContext(session);
+        }        
+
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>()
+        {
+            return new NHReadOnlyRepository<T, K>();
+        }
+
+        public override IRepository<T, K> BuildRepository<T, K>()
+        {
+            return new NHRepository<T, K>();
         }
 
         #endregion

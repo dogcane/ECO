@@ -11,7 +11,7 @@ namespace ECO.Bender
 
         public T Value { get; private set; }
 
-        internal OperationResult Result { get; private set; }
+        public OperationResult Result { get; private set; }
 
         internal string Context { get; private set; }
 

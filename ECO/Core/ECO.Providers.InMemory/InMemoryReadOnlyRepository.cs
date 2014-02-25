@@ -8,7 +8,7 @@ using ECO;
 namespace ECO.Providers.InMemory
 {
     public class InMemoryReadOnlyRepository<T, K> : InMemoryPersistenceManager<T,K>, IReadOnlyRepository<T, K>
-        where T : AggregateRoot<K>
+        where T : IAggregateRoot<K>
     {
         #region IReadOnlyRepository<T,K> Membri di
 

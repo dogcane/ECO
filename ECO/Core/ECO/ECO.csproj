@@ -65,6 +65,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -88,6 +89,7 @@
     <Compile Include="Context\ApplicationContext.cs" />
     <Compile Include="Context\HttpContextProvider.cs" />
     <Compile Include="Context\IContextProvider.cs" />
+    <Compile Include="Context\WcfInstanceContext .cs" />
     <Compile Include="Context\ThreadStaticContext.cs" />
     <Compile Include="Data\EntityExtensions.cs" />
     <Compile Include="Data\IDataTransaction.cs" />
@@ -126,6 +128,7 @@
     </Compile>
     <Compile Include="VersionableAggregateRoot.cs" />
     <Compile Include="VersionableEntity.cs" />
+    <Compile Include="WCF\DataContextAttribute.cs" />
     <Compile Include="Web\ContextLifeCicleModule.cs" />
     <Compile Include="Web\MVC\DataContextApiFilter.cs" />
     <Compile Include="Web\MVC\DataContextFilter.cs" />
@@ -172,6 +175,7 @@
   <ItemGroup>
     <None Include="Schema\ECOConfiguration.xsd" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

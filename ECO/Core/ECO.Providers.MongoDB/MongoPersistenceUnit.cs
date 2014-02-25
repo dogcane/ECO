@@ -59,6 +59,16 @@ namespace ECO.Providers.MongoDB
         protected override IPersistenceContext CreateContext()
         {
             return new MongoPersistenceContext(_Database);
+        }        
+
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>()
+        {
+            return new MongoReadOnlyRepository<T, K>();
+        }
+
+        public override IRepository<T, K> BuildRepository<T, K>()
+        {
+            return new MongoRepository<T, K>();
         }
 
         #endregion
