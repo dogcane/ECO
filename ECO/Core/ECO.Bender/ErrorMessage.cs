@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace ECO.Bender
 {
+    [DataContract]
     public struct ErrorMessage : IEquatable<ErrorMessage>
     {
         #region Properties
 
+        [DataMember]
         public string Context { get; private set; }
 
+        [DataMember]
         public string Description { get; private set; }
 
         #endregion

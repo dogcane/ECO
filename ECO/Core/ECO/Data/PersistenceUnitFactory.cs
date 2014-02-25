@@ -118,6 +118,11 @@ namespace ECO.Data
             }
         }
 
+        public IPersistenceUnit GetPersistenceUnit<T>()
+        {
+            return GetPersistenceUnit(typeof(T));
+        }
+
         public IPersistenceUnit GetPersistenceUnit(Type entityType)
         {
             if (_Classes.ContainsKey(entityType))

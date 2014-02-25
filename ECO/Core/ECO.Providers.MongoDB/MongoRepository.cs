@@ -11,8 +11,8 @@ using MongoDB.Driver.Linq;
 
 namespace ECO.Providers.MongoDB
 {
-    public abstract class MongoRepository<T, K> : MongoReadOnlyRepository<T, K>, IRepository<T, K>
-        where T : AggregateRoot<K>
+    public class MongoRepository<T, K> : MongoReadOnlyRepository<T, K>, IRepository<T, K>
+        where T : IAggregateRoot<K>
     {
         #region IRepository<T,K> Members
 

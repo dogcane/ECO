@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace ECO.Bender
@@ -8,6 +9,8 @@ namespace ECO.Bender
     /// <summary>
     /// Rappresenta il risultato di un operazione
     /// </summary>
+    [Serializable]
+    [DataContract]
     public struct OperationResult
     {
         #region Fields
@@ -21,17 +24,21 @@ namespace ECO.Bender
         /// <summary>
         /// Indica se l'operazione ha avuto successo o meno
         /// </summary>
+        [DataMember]
         public bool Success
         {
             get { return _Errors.Count == 0; }
+            private set { }
         }
 
         /// <summary>
         /// Elenco degli errori che si sono verificati durante l'esecuzione dell'operazione
         /// </summary>
+        [DataMember]
         public IEnumerable<ErrorMessage> Errors
         {
             get { return _Errors; }
+            private set { }
         }        
 
         #endregion
@@ -55,6 +62,11 @@ namespace ECO.Bender
         public static OperationResult MakeSuccess()
         {
             return new OperationResult(Enumerable.Empty<ErrorMessage>());
+        }
+
+        public static OperationResult MakeFailure(params ErrorMessage[] errors)
+        {
+            return new OperationResult(errors);
         }
 
         public static OperationResult MakeFailure(IEnumerable<ErrorMessage> errors)

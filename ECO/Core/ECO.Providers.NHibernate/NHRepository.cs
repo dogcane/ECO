@@ -13,7 +13,7 @@ using nhm = NHibernate.Metadata;
 
 namespace ECO.Providers.NHibernate
 {
-    public abstract class NHRepository<T, K> : NHReadOnlyRepository<T, K>, IRepository<T, K>
+    public class NHRepository<T, K> : NHReadOnlyRepository<T, K>, IRepository<T, K>
         where T : IAggregateRoot<K>
     {
         #region IRepository<T> Membri di

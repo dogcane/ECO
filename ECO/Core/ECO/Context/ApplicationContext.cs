@@ -17,6 +17,10 @@ namespace ECO.Context
                 {
                     return new HttpContextProvider();
                 }
+                else if (System.ServiceModel.OperationContext.Current != null)
+                {
+                    return new WcfContextProvider();
+                }
                 else
                 {
                     return new ThreadStaticContext();

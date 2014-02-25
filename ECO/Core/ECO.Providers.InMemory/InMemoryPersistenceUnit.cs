@@ -17,6 +17,16 @@ namespace ECO.Providers.InMemory
             return new InMemoryPersistenceContext();
         }
 
-        #endregion
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>()
+        {
+            return new InMemoryReadOnlyRepository<T, K>();
+        }
+
+        public override IRepository<T, K> BuildRepository<T, K>()
+        {
+            return new InMemoryRepository<T, K>();
+        }
+
+        #endregion        
     }
 }

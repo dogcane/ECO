@@ -59,6 +59,22 @@ namespace ECO.Data
         /// <param name="listener"></param>
         void RemoveUnitListener(IPersistenceUnitListener listener);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        IRepository<T, K> BuildRepository<T, K>() where T : IAggregateRoot<K>;
+
         #endregion
     }
 }
