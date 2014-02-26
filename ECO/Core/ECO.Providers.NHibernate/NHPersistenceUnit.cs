@@ -46,11 +46,6 @@ namespace ECO.Providers.NHibernate
 
         #region Protected_Methods
 
-        protected virtual void OnSetup(nh.ISessionFactory sessionFactory)
-        {
-
-        }
-
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
             base.OnInitialize(extendedAttributes);
