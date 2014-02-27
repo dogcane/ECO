@@ -65,7 +65,7 @@ namespace ECO.Data
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="K"></typeparam>
         /// <returns></returns>
-        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;
+        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;        
 
         /// <summary>
         /// 

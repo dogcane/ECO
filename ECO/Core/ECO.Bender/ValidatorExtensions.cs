@@ -127,16 +127,35 @@ namespace ECO.Bender
 
         public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx)
         {
-            return StringMatch(checker, regEx, checker.Context, checker.Description);
+            return StringMatch(checker, regEx, false);
+        }
+
+        public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx, bool adminNullOrEmpty)
+        {
+            return StringMatch(checker, regEx, adminNullOrEmpty, checker.Context, checker.Description);
         }
 
         public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx, string description)
         {
-            return StringMatch(checker, regEx, checker.Context, description);
+            return StringMatch(checker, regEx, false, description);
+        }
+
+        public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx, bool adminNullOrEmpty, string description)
+        {
+            return StringMatch(checker, regEx, adminNullOrEmpty, checker.Context, description);
         }
 
         public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx, string context, string message)
-        {            
+        {
+            return StringMatch(checker, regEx, false, context, message);
+        }
+
+        public static ValueChecker<string> StringMatch(this ValueChecker<string> checker, string regEx, bool adminNullOrEmpty, string context, string message)
+        {
+            if (adminNullOrEmpty && string.IsNullOrEmpty(checker.Value))
+            {
+                return checker;
+            }
             if (!Regex.IsMatch(checker.Value, regEx))
             {
                 checker.AppendError(context, message);
