@@ -61,7 +61,20 @@ namespace ECO.Providers.NHibernate
 
         public void Commit()
         {
-            Transaction.Commit();
+            try
+            {
+                Context.Session.Flush();
+                Transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (Transaction != null)
+                {
+                    Transaction.Rollback();
+                    Transaction.Dispose();
+                }
+                throw ex;
+            }
         }
 
         public void Rollback()
