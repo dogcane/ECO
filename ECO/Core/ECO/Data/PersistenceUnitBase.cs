@@ -85,24 +85,38 @@ namespace ECO.Data
             return context;
         }
 
-        public void AddClass(Type classType)
+        public IPersistenceUnit AddClass(Type classType)
         {
             _Classes.Add(classType);
+            return this;
         }
 
-        public void RemoveClass(Type classType)
+        public IPersistenceUnit AddClass<T, K>() where T : IAggregateRoot<K>
+        {
+            return AddClass(typeof(T));
+        }
+
+        public IPersistenceUnit RemoveClass(Type classType)
         {
             _Classes.Remove(classType);
+            return this;
         }
 
-        public void AddUnitListener(IPersistenceUnitListener listener)
+        public IPersistenceUnit RemoveClass<T, K>() where T : IAggregateRoot<K>
+        {
+            return RemoveClass(typeof(T));
+        }
+
+        public IPersistenceUnit AddUnitListener(IPersistenceUnitListener listener)
         {
             _Listeners.Add(listener);
+            return this;
         }
 
-        public void RemoveUnitListener(IPersistenceUnitListener listener)
+        public IPersistenceUnit RemoveUnitListener(IPersistenceUnitListener listener)
         {
             _Listeners.Remove(listener);
+            return this;
         }
 
         public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;

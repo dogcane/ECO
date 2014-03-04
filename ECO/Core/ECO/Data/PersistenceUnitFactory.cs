@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Text;
 using ECO;
 using ECO.Configuration;
 using ECO.Resources;
+using System.Reflection;
 
 namespace ECO.Data
 {
@@ -49,46 +51,53 @@ namespace ECO.Data
 
         private PersistenceUnitFactory()
         {
-            LoadConfig();
+            TryLoadConfig();
         }
 
         #endregion
 
         #region Private_Methods
 
-        private void LoadConfig()
+        private void TryLoadConfig()
         {
             ECOSettings settings = ConfigurationManager.GetSection("eco") as ECOSettings;
-            foreach (PersistenceUnitSettings unit in settings.Data.PersistenceUnits)
+            if (settings != null)
             {
-                IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
-                MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
-                _Units.Add(unit.Name, MyUnit);
-                foreach (ClassSettings setting in unit.Classes)
+                foreach (PersistenceUnitSettings unit in settings.Data.PersistenceUnits)
                 {
-                    try
+                    IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
+                    MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
+                    _Units.Add(unit.Name, MyUnit);                    
+                    foreach (ClassSettings setting in unit.Classes)
                     {
-                        Type type = Type.GetType(setting.Type);
-                        _Classes.Add(type, MyUnit);
-                        MyUnit.AddClass(type);
+                        try
+                        {
+                            Type type = Type.GetType(setting.Type);
+                            _Classes.Add(type, MyUnit);
+                            MyUnit.AddClass(type);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
+                        }
                     }
-                    catch (Exception ex)
+                    foreach (UnitListenerSettings setting in unit.Listeners)
                     {
-                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
+                        try
+                        {
+                            IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(setting.Type)) as IPersistenceUnitListener;
+                            MyUnit.AddUnitListener(listener);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
+                        }
                     }
                 }
-                foreach (UnitListenerSettings setting in unit.Listeners)
-                {
-                    try
-                    {
-                        IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(setting.Type)) as IPersistenceUnitListener;
-                        MyUnit.AddUnitListener(listener);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
-                    }
-                }
+            }
+            else
+            {
+                throw new ConfigurationErrorsException(Errors.CONFIG_NOT_FOUND);
             }
         }
 
@@ -105,6 +114,25 @@ namespace ECO.Data
         #endregion
 
         #region Public_Methods
+
+        public IPersistenceUnit BuildPersistenceUnit<T>(string name) where T : IPersistenceUnit
+        {
+            return BuildPersistenceUnit<T>(name, null);
+        }
+
+        public IPersistenceUnit BuildPersistenceUnit<T>(string name, IDictionary<string, string> extendedAttributes) where T : IPersistenceUnit
+        {
+            if (!_Units.ContainsKey(name))
+            {
+                IPersistenceUnit MyUnit = Activator.CreateInstance<T>();
+                if (extendedAttributes != null && extendedAttributes.Count > 0)
+                {
+                    MyUnit.Initialize(name, extendedAttributes);
+                }
+                _Units.Add(name, MyUnit);
+            }
+            return _Units[name];
+        }
 
         public IPersistenceUnit GetPersistenceUnit(string name)
         {
@@ -127,6 +155,12 @@ namespace ECO.Data
         {
             if (_Classes.ContainsKey(entityType))
             {
+                return _Classes[entityType];
+            }
+            else if (entityType.GetCustomAttributes<PersistenceContextAttribute>().Any())
+            {
+                PersistenceContextAttribute attribute = entityType.GetCustomAttribute<PersistenceContextAttribute>();
+                _Classes.Add(entityType, GetPersistenceUnit(attribute.PersistenceContextName));
                 return _Classes[entityType];
             }
             else

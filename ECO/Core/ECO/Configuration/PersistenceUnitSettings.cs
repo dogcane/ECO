@@ -11,7 +11,7 @@ namespace ECO.Configuration
 
         private static ConfigurationProperty _NameProperty;
 
-        private static ConfigurationProperty _TypeProperty;
+        private static ConfigurationProperty _TypeProperty;        
 
         private static ConfigurationProperty _ListenersProperty;
 
@@ -39,7 +39,7 @@ namespace ECO.Configuration
             {
                 return (string)this[_TypeProperty];
             }
-        }
+        }        
 
         [ConfigurationProperty("listeners", IsRequired = false)]
         public UnitListenerSettingsCollection Listeners
@@ -75,7 +75,7 @@ namespace ECO.Configuration
         static PersistenceUnitSettings()
         {
             _NameProperty = new ConfigurationProperty("name", typeof(string));
-            _TypeProperty = new ConfigurationProperty("type", typeof(string));
+            _TypeProperty = new ConfigurationProperty("type", typeof(string));            
             _ListenersProperty = new ConfigurationProperty("listeners", typeof(UnitListenerSettingsCollection));
             _ClassesProperty = new ConfigurationProperty("classes", typeof(ClassSettingsCollection));
             _AttributesProperty = new ConfigurationProperty("attributes", typeof(AttributeSettingsCollection));

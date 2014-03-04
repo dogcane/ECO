@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--configurazione di ECO-->
   <eco>    
-    <data>
+    <data autoScanClasses="true">
       <persistence-units>
         <persistence-unit name="PersistentUnitName" type="PertistentUnitType">
           <listeners>
