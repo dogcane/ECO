@@ -24,10 +24,10 @@ namespace ECO.Integrations.CastleWindsor
                 .UsingFactoryMethod((IKernel kernel, CreationContext ctx) =>
                 {                        
                         Type T = ctx.GenericArguments[0];
-                        Type K = ctx.GenericArguments[1];                       
+                        Type K = ctx.GenericArguments[1];
                         IPersistenceUnit persistentUnit = ECO.Data.PersistenceUnitFactory.Instance.GetPersistenceUnit(T);
                         Type P = persistentUnit.GetType();
-                        MethodInfo buildRepositoryMethod = P.GetMethod("BuildRepository").MakeGenericMethod(T, K);                                            
+                        MethodInfo buildRepositoryMethod = P.GetMethod("BuildRepository").MakeGenericMethod(T, K);
                         return buildRepositoryMethod.Invoke(persistentUnit, null);
                 }),
                 Component.For(typeof(IReadOnlyRepository<,>))

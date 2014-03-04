@@ -39,25 +39,37 @@ namespace ECO.Data
         /// Add a class type to the current persistence unit
         /// </summary>
         /// <param name="classType"></param>
-        void AddClass(Type classType);
+        IPersistenceUnit AddClass(Type classType);
+
+        /// <summary>
+        /// Add a class type to the current persistence unit
+        /// </summary>
+        /// <param name="classType"></param>
+        IPersistenceUnit AddClass<T,K>() where T : IAggregateRoot<K>;
 
         /// <summary>
         /// Remove a class type from the current persistence unit
         /// </summary>
         /// <param name="classType"></param>
-        void RemoveClass(Type classType);
+        IPersistenceUnit RemoveClass(Type classType);
+
+        /// <summary>
+        /// Remove a class type from the current persistence unit
+        /// </summary>
+        /// <param name="classType"></param>
+        IPersistenceUnit RemoveClass<T, K>() where T : IAggregateRoot<K>;
 
         /// <summary>
         /// Add a listener to the current persistence unit
         /// </summary>
         /// <param name="listener"></param>
-        void AddUnitListener(IPersistenceUnitListener listener);
+        IPersistenceUnit AddUnitListener(IPersistenceUnitListener listener);
 
         /// <summary>
         /// Remove a listener from the current persistence unit
         /// </summary>
         /// <param name="listener"></param>
-        void RemoveUnitListener(IPersistenceUnitListener listener);
+        IPersistenceUnit RemoveUnitListener(IPersistenceUnitListener listener);
 
         /// <summary>
         /// 
