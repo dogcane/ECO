@@ -4,16 +4,12 @@ using System.Web.Http;
 
 using ECO.Web.MVC;
 
-using AttributeRouting;
-using AttributeRouting.Web.Http;
-
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.DTO;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
-    [RouteArea("events")]
-    [RoutePrefix("api")]
+    [RoutePrefix("events/api")]
     public class EventApiController : ApiController
     {
         private IShowEventsService _ShowEventsService;
@@ -44,21 +40,24 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         }
 
         [DataContextApiFilter]
-        [HttpGet, GET("QuerystringParamConstraints?{start:datetime}&{end:datetime}")]
+        [HttpGet]
+        [Route()]
         public IQueryable<EventListItem> GetEvents(DateTime? start, DateTime? end, string eventName)
         {
             return _ShowEventsService.ShowEvents(start, end, eventName);
         }
 
         [DataContextApiFilter]
-        [HttpGet, GET("{id:guid}")]
+        [HttpGet]
+        [Route("{id:guid}")]
         public EventDetail GetEventById(Guid eventCode)
         {
             return _ShowEventDetailService.ShowDetail(eventCode);
         }
 
         [DataContextApiFilter]
-        [HttpPost, POST("")]
+        [HttpPost]
+        [Route("")]
         public void CreateEvent([FromBody]EventDetail @event)
         {
             var result = _CreateEventService.CreateNewEvent(@event);

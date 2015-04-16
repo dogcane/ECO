@@ -1,10 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Http;
 
-using AttributeRouting;
-using AttributeRouting.Web.Http;
-using AttributeRouting.Helpers;
-
 namespace ECO.Sample.Presentation.Areas.Speakers
 {
     public class SpeakersAreaRegistration : AreaRegistration
