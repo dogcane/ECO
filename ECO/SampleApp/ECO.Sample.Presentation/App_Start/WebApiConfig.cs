@@ -9,7 +9,8 @@ namespace ECO.Sample.Presentation
     {
         public static void Register(HttpConfiguration config)
         {
-         
+            // Web API routes
+            config.MapHttpAttributeRoutes();
         }
     }
 }

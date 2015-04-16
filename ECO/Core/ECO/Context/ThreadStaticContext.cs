@@ -10,7 +10,7 @@ namespace ECO.Context
         #region Fields
 
         [ThreadStatic]
-        private IDictionary<string, object> _ThreadContext;
+        private static IDictionary<string, object> _ThreadContext;
 
         #endregion
 

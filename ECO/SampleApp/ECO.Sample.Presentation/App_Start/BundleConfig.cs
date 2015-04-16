@@ -28,7 +28,7 @@ namespace ECO.Sample.Presentation
                 "~/Content/styles/css/style.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-                        "~/Content/themes/base/jquery.ui.all.css"));
+                        "~/Content/themes/base/all.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/Scripts/knockout*"));

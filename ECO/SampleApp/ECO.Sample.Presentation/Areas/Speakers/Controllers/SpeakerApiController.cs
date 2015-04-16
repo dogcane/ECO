@@ -8,16 +8,13 @@ using System.Web.Http;
 using ECO.Bender;
 using ECO.Web.MVC;
 
-using AttributeRouting;
-using AttributeRouting.Web.Http;
 
 using ECO.Sample.Application.Speakers;
 using ECO.Sample.Application.Speakers.DTO;
 
 namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 {
-    [RouteArea("speakers")]
-    [RoutePrefix("api")]
+    [RoutePrefix("speakers/api")]
     public class SpeakerApiController : ApiController
     {
         private IShowSpeakersService _ShowSpeakersService;
@@ -46,14 +43,16 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
         }
 
         [DataContextApiFilter]        
-        [HttpGet, GET("")]        
+        [HttpGet]        
+        [Route()]
         public IQueryable<SpeakerListItem> GetSpeakers(string nameOrSurname)
         {
             return _ShowSpeakersService.ShowSpeakers(nameOrSurname);
         }
 
         [DataContextApiFilter]
-        [HttpGet, GET("{id:guid}")]
+        [HttpGet]
+        [Route("{id:guid}")]
         public OperationResult<SpeakerDetail> GetSpeakerById(Guid id)
         {
             var result = _GetSpeakerService.GetSpeaker(id);
@@ -65,14 +64,16 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
         }
 
         [DataContextApiFilter]
-        [HttpPost, POST("")]
+        [HttpPost]
+        [Route()]
         public OperationResult<Guid> CreateSpeaker([FromBody]SpeakerDetail speaker)
         {
             return _CreateSpeakerService.CreateNewSpeaker(speaker);
         }
 
         [DataContextApiFilter]
-        [HttpPut, PUT("")]
+        [HttpPut]
+        [Route()]
         public OperationResult UpdateSpeaker([FromBody]SpeakerDetail speaker)
         {
             var result = _GetSpeakerService.GetSpeaker(speaker.SpeakerCode);
@@ -84,7 +85,8 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
         }
 
         [DataContextApiFilter]
-        [HttpDelete, DELETE("{id:guid}")]
+        [HttpDelete]
+        [Route("{id:guid}")]
         public OperationResult DeleteSpeaker(Guid id)
         {
             var result = _GetSpeakerService.GetSpeaker(id);
