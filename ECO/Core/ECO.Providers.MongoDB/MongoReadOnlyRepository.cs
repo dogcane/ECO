@@ -19,11 +19,13 @@ namespace ECO.Providers.MongoDB
         public T Load(K identity)
         {
             T entity = default(T);
+            bool founded = false;
             if (((MongoPersistenceContext)GetCurrentContext()).IdentityMap.ContainsKey(identity))
             {
                 entity = (T)((MongoPersistenceContext)GetCurrentContext()).IdentityMap[identity];
+                founded = true;
             }
-            if (default(T).Equals(entity))
+            if (!founded)
             {
                 entity = GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
             }
