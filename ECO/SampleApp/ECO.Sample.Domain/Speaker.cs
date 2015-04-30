@@ -20,7 +20,7 @@ namespace ECO.Sample.Domain
 
         public virtual int Age { get; protected set; }
 
-        public DateTime SpeakerSince { get; protected set; }
+        public DateTime? SpeakerSince { get; protected set; }
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace ECO.Sample.Domain
 
         #region Factory_Methods
 
-        public static OperationResult<Speaker> Create(string name, string surname, string description, int age, DateTime speakerSince)
+        public static OperationResult<Speaker> Create(string name, string surname, string description, int age, DateTime? speakerSince)
         {
             return OperationResult
                 .Begin()
@@ -54,7 +54,7 @@ namespace ECO.Sample.Domain
 
         #region Public_Methods
 
-        public virtual OperationResult ChangeInformation(string name, string surname, string description, int age, DateTime speakerSince)
+        public virtual OperationResult ChangeInformation(string name, string surname, string description, int age, DateTime? speakerSince)
         {
             return OperationResult
                 .Begin()

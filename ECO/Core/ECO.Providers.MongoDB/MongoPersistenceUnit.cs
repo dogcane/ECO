@@ -27,10 +27,22 @@ namespace ECO.Providers.MongoDB
 
         #endregion
 
+        #region Private_Structs
+
+        private struct SerializersUse
+        {
+            public bool IdentityMap;
+            public bool DateTimeUtc;
+        }
+
+        #endregion
+
         #region Fields
 
         private MongoDatabase _Database;
 
+        private SerializersUse _SerializersUse;
+        
         #endregion
 
         #region Protected_Methods
@@ -43,6 +55,7 @@ namespace ECO.Providers.MongoDB
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
             base.OnInitialize(extendedAttributes);
+            _SerializersUse = new SerializersUse();
             if (!extendedAttributes.ContainsKey(CONNECTIONSTRING_ATTRIBUTE))
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", CONNECTIONSTRING_ATTRIBUTE));
@@ -51,31 +64,24 @@ namespace ECO.Providers.MongoDB
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DATABASE_ATTRIBUTE));
             }
-            bool enableDatetimeUtcSerializer = false;
             if (extendedAttributes.ContainsKey(SERIALIZERS_DATETIME_ATTRIBUTE))
             {
-                enableDatetimeUtcSerializer = "1".Equals(extendedAttributes[SERIALIZERS_DATETIME_ATTRIBUTE]);
+                _SerializersUse.DateTimeUtc = "1".Equals(extendedAttributes[SERIALIZERS_DATETIME_ATTRIBUTE]);
             }
-            bool enableIdentityMapSerializer = false;
             if (extendedAttributes.ContainsKey(SERIALIZERS_IDENTITYMAP_ATTRIBUTE))
             {
-                enableIdentityMapSerializer = "1".Equals(extendedAttributes[SERIALIZERS_IDENTITYMAP_ATTRIBUTE]);
+                _SerializersUse.IdentityMap = "1".Equals(extendedAttributes[SERIALIZERS_IDENTITYMAP_ATTRIBUTE]);
             }
             ConventionRegistry.Register("ECO-Identity",
-                new ConventionPack() { new ECOMapConvention() },
+                new ConventionPack() { new Conventions.ECOMapConvention() },
                 type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null);
             _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);
-            if (enableDatetimeUtcSerializer)
+            if (_SerializersUse.DateTimeUtc)
             {
                 BsonSerializer.RegisterSerializer(typeof(DateTime), new Serializers.DateTimeUtcSerializer());
-                BsonSerializer.RegisterSerializer(typeof(DateTime?), new Serializers.DateTimeUtcSerializer());
-            }
-            if (enableIdentityMapSerializer)
-            {
-                throw new NotImplementedException("TO DO");
-            }
+            }            
             OnSetup(_Database);
         }
 
@@ -92,6 +98,15 @@ namespace ECO.Providers.MongoDB
         public override IRepository<T, K> BuildRepository<T, K>()
         {
             return new MongoRepository<T, K>();
+        }
+
+        protected override void OnClassAdded(Type classType)
+        {
+            base.OnClassAdded(classType);
+            if (_SerializersUse.IdentityMap)
+            {
+                BsonSerializer.RegisterSerializer(classType, Serializers.ECOSerializer.Instance);
+            }
         }
 
         #endregion

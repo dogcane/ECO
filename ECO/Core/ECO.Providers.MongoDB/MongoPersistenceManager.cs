@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ECO.Data;
+using ECO.Providers.MongoDB.Serializers;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
@@ -15,7 +16,7 @@ namespace ECO.Providers.MongoDB
 
         protected MongoPersistenceManager()
         {
-            ConfigureMapping();
+            
         }
 
         #endregion
@@ -30,11 +31,6 @@ namespace ECO.Providers.MongoDB
         protected MongoCollection GetCurrentCollection()
         {
             return GetCurrentDatabase().SafeGetCollectionForType<T>();
-        }
-
-        protected virtual void ConfigureMapping()
-        {
-            //BsonSerializer.RegisterSerializer(typeof(T), ECOSerializer.Instance);
         }
 
         #endregion

@@ -9,7 +9,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization.Conventions;
 
-namespace ECO.Providers.MongoDB
+namespace ECO.Providers.MongoDB.Conventions
 {
     public class ECOMapConvention : IClassMapConvention
     {
