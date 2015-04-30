@@ -9,9 +9,9 @@ namespace ECO.Data
     {
         #region Methods
 
-        void ContextPreCreate();
+        void ContextPreCreate(IPersistenceUnit unit);
 
-        void ContextPostCreate(IPersistenceContext context);
+        void ContextPostCreate(IPersistenceUnit unit, IPersistenceContext context);
 
         #endregion
     }

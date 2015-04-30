@@ -67,13 +67,14 @@ namespace ECO.Data
                 {
                     IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
                     MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
+                    MyUnit.ClassAdded += MyUnit_ClassAdded;
+                    MyUnit.ClassRemoved += MyUnit_ClassRemoved;
                     _Units.Add(unit.Name, MyUnit);                    
                     foreach (ClassSettings setting in unit.Classes)
                     {
                         try
                         {
                             Type type = Type.GetType(setting.Type);
-                            _Classes.Add(type, MyUnit);
                             MyUnit.AddClass(type);
                         }
                         catch (Exception ex)
@@ -98,6 +99,22 @@ namespace ECO.Data
             else
             {
                 throw new ConfigurationErrorsException(Errors.CONFIG_NOT_FOUND);
+            }
+        }
+
+        private void MyUnit_ClassAdded(object sender, PersistentUnitClassEventArgs e)
+        {
+            if (!_Classes.ContainsKey(e.ClassType))
+            {
+                _Classes.Add(e.ClassType, e.PersistenceUnit);
+            }
+        }
+
+        private void MyUnit_ClassRemoved(object sender, PersistentUnitClassEventArgs e)
+        {
+            if (_Classes.ContainsKey(e.ClassType))
+            {
+                _Classes.Remove(e.ClassType);
             }
         }
 
@@ -129,6 +146,8 @@ namespace ECO.Data
                 {
                     MyUnit.Initialize(name, extendedAttributes);
                 }
+                MyUnit.ClassAdded += MyUnit_ClassAdded;
+                MyUnit.ClassRemoved += MyUnit_ClassRemoved;
                 _Units.Add(name, MyUnit);
             }
             return _Units[name];
@@ -160,8 +179,9 @@ namespace ECO.Data
             else if (entityType.GetCustomAttributes<PersistenceContextAttribute>().Any())
             {
                 PersistenceContextAttribute attribute = entityType.GetCustomAttribute<PersistenceContextAttribute>();
-                _Classes.Add(entityType, GetPersistenceUnit(attribute.PersistenceContextName));
-                return _Classes[entityType];
+                IPersistenceUnit persistenceUnit = GetPersistenceUnit(attribute.PersistenceContextName);
+                persistenceUnit.AddClass(entityType);
+                return persistenceUnit;
             }
             else
             {
@@ -169,8 +189,9 @@ namespace ECO.Data
                 {
                     if (entityType.IsSubclassOf(registeredType))
                     {
-                        _Classes.Add(entityType, _Classes[registeredType]);
-                        return _Classes[entityType];
+                        IPersistenceUnit persistenceUnit = GetPersistenceUnit(registeredType);
+                        persistenceUnit.AddClass(entityType);
+                        return persistenceUnit;
                     }
                 }
             }

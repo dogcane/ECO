@@ -21,6 +21,10 @@ namespace ECO.Providers.MongoDB
 
         private static readonly string DATABASE_ATTRIBUTE = "database";
 
+        private static readonly string SERIALIZERS_DATETIME_ATTRIBUTE = "serializers.datetimeutc";
+
+        private static readonly string SERIALIZERS_IDENTITYMAP_ATTRIBUTE = "serializers.identitymap";
+
         #endregion
 
         #region Fields
@@ -47,12 +51,31 @@ namespace ECO.Providers.MongoDB
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DATABASE_ATTRIBUTE));
             }
+            bool enableDatetimeUtcSerializer = false;
+            if (extendedAttributes.ContainsKey(SERIALIZERS_DATETIME_ATTRIBUTE))
+            {
+                enableDatetimeUtcSerializer = "1".Equals(extendedAttributes[SERIALIZERS_DATETIME_ATTRIBUTE]);
+            }
+            bool enableIdentityMapSerializer = false;
+            if (extendedAttributes.ContainsKey(SERIALIZERS_IDENTITYMAP_ATTRIBUTE))
+            {
+                enableIdentityMapSerializer = "1".Equals(extendedAttributes[SERIALIZERS_IDENTITYMAP_ATTRIBUTE]);
+            }
             ConventionRegistry.Register("ECO-Identity",
                 new ConventionPack() { new ECOMapConvention() },
                 type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null);
             _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE])
                 .GetServer()
                 .GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);
+            if (enableDatetimeUtcSerializer)
+            {
+                BsonSerializer.RegisterSerializer(typeof(DateTime), new Serializers.DateTimeUtcSerializer());
+                BsonSerializer.RegisterSerializer(typeof(DateTime?), new Serializers.DateTimeUtcSerializer());
+            }
+            if (enableIdentityMapSerializer)
+            {
+                throw new NotImplementedException("TO DO");
+            }
             OnSetup(_Database);
         }
 

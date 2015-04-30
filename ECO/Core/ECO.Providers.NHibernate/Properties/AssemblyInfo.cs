@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
 [assembly: AssemblyTitle("ECO.Providers.NHibernate")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Andrea Canegrati")]
-[assembly: AssemblyProduct("Enterprise CLR Objects provider for NHibernare")]
+[assembly: AssemblyProduct("Enterprise CLR Objects  - NHibernare provider")]
 [assembly: AssemblyCopyright("Copyright ©  2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

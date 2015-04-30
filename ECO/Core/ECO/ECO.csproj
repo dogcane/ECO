@@ -100,6 +100,7 @@
     <Compile Include="Data\PersistenceUnitNotFound.cs" />
     <Compile Include="Data\PersistentClassNotRegistered.cs" />
     <Compile Include="Data\PersistentContextBase.cs" />
+    <Compile Include="Data\PersistentUnitClassEventArgs.cs" />
     <Compile Include="Data\TransactionContext.cs" />
     <Compile Include="Data\IPersistenceContext.cs" />
     <Compile Include="Data\PersistenceUnitFactory.cs" />

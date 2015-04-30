@@ -46,7 +46,7 @@ namespace ECO.Data
         {
             foreach (IPersistenceUnitListener listener in _Listeners)
             {
-                listener.ContextPreCreate();
+                listener.ContextPreCreate(this);
             }
         }
 
@@ -54,7 +54,7 @@ namespace ECO.Data
         {
             foreach (IPersistenceUnitListener listener in _Listeners)
             {
-                listener.ContextPostCreate(context);
+                listener.ContextPostCreate(this, context);
             }
         }
 
@@ -88,6 +88,7 @@ namespace ECO.Data
         public IPersistenceUnit AddClass(Type classType)
         {
             _Classes.Add(classType);
+            OnClassAdded(classType);
             return this;
         }
 
@@ -99,6 +100,7 @@ namespace ECO.Data
         public IPersistenceUnit RemoveClass(Type classType)
         {
             _Classes.Remove(classType);
+            OnClassRemoved(classType);
             return this;
         }
 
@@ -122,6 +124,30 @@ namespace ECO.Data
         public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;
 
         public abstract IRepository<T, K> BuildRepository<T, K>() where T : IAggregateRoot<K>;
+
+        #endregion
+
+        #region Event_Management
+
+        public event EventHandler<PersistentUnitClassEventArgs> ClassAdded;
+
+        protected virtual void OnClassAdded(Type classType)
+        {
+            if (ClassAdded != null)
+            {
+                ClassAdded(this, new PersistentUnitClassEventArgs(this, classType));
+            }
+        }
+
+        public event EventHandler<PersistentUnitClassEventArgs> ClassRemoved;
+
+        protected virtual void OnClassRemoved(Type classType)
+        {
+            if (ClassRemoved != null)
+            {
+                ClassRemoved(this, new PersistentUnitClassEventArgs(this, classType));
+            }
+        }
 
         #endregion
     }

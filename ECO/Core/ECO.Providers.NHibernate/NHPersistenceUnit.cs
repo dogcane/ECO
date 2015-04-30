@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Data;
 using System.Text;
 
@@ -11,6 +12,7 @@ using ECO;
 using ECO.Context;
 using ECO.Data;
 using System.Reflection;
+using NHibernate.Mapping.ByCode;
 
 namespace ECO.Providers.NHibernate
 {
@@ -32,6 +34,8 @@ namespace ECO.Providers.NHibernate
 
         private nh.ISessionFactory _SessionFactory;
 
+        private IList<Type> _Mappers = new List<Type>();
+
         #endregion
 
         #region ~Ctor
@@ -46,6 +50,27 @@ namespace ECO.Providers.NHibernate
 
         #region Protected_Methods
 
+        protected virtual void TryAddClassMapping(nhcfg.Configuration cfg)
+        {
+            if (_Mappers.Count > 0)
+            {
+                ModelMapper mapper = new ModelMapper();
+                mapper.AddMappings(_Mappers);
+                cfg.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
+            }
+        }
+
+        protected virtual void BuildSessionFactory()
+        {
+            if (_SessionFactory == null)
+            {
+                nhcfg.Configuration cfg = new nhcfg.Configuration();
+                cfg.Configure(_ConfigPath);
+                TryAddClassMapping(cfg);
+                _SessionFactory = cfg.BuildSessionFactory();
+            }
+        }
+        
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
             base.OnInitialize(extendedAttributes);
@@ -61,13 +86,11 @@ namespace ECO.Providers.NHibernate
             {
                 _InterceptorFullName = extendedAttributes[INTERCEPTOR_ATTRIBUTE];
             }
-            _SessionFactory = new nhcfg.Configuration()
-                .Configure(_ConfigPath)
-                .BuildSessionFactory();
         }
 
         protected override IPersistenceContext CreateContext()
         {
+            BuildSessionFactory();
             nh.ISession session = null;
             if (!string.IsNullOrEmpty(_InterceptorFullName))
             {
@@ -90,6 +113,44 @@ namespace ECO.Providers.NHibernate
         public override IRepository<T, K> BuildRepository<T, K>()
         {
             return new NHRepository<T, K>();
+        }
+
+        #endregion
+
+        #region Public_Methods
+
+        public NHPersistenceUnit AddMapping<T, K>()
+            where T : IClassMapper<K>
+            where K : class
+        {
+            _Mappers.Add(typeof(T));
+            return this;
+        }
+
+        public NHPersistenceUnit RemoveMapping<T, K>()
+            where T : IClassMapper<K>
+            where K : class
+        {
+            _Mappers.Remove(typeof(T));
+            return this;
+        }
+
+        public NHPersistenceUnit AddClassWithMapping<T, K, J>()
+            where T : AggregateRoot<K>
+            where J : IClassMapper<T>            
+        {
+            AddClass<T, K>();
+            AddMapping<J, T>();
+            return this;
+        }
+
+        public NHPersistenceUnit RemoveClassWithMapping<T, K, J>()
+            where T : AggregateRoot<K>
+            where J : IClassMapper<T>     
+        {
+            RemoveMapping<J, T>();
+            RemoveClass<T, K>();
+            return this;
         }
 
         #endregion

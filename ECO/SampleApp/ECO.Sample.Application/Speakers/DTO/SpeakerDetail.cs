@@ -19,6 +19,8 @@ namespace ECO.Sample.Application.Speakers.DTO
 
         public string Description { get; set; }
 
+        public DateTime SpeakerSince { get; set; }
+
         public static SpeakerDetail From(Speaker speaker)
         {
             return new SpeakerDetail()
@@ -27,7 +29,8 @@ namespace ECO.Sample.Application.Speakers.DTO
                 Name = speaker.Name,
                 Surname = speaker.Surname,
                 Age = speaker.Age,
-                Description = speaker.Description
+                Description = speaker.Description,
+                SpeakerSince = speaker.SpeakerSince
             };
         }
     }
