@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
@@ -42,7 +43,7 @@ namespace ECO.Providers.MongoDB.Serializers
 
         #region IBsonSerializer Members
 
-        public override object Deserialize(global::MongoDB.Bson.IO.BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
+        public override object Deserialize(BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
         {
             var entityMap = GetCurrentIdentityMap(nominalType);
             var entity = base.Deserialize(bsonReader, nominalType, options);
@@ -55,7 +56,7 @@ namespace ECO.Providers.MongoDB.Serializers
             return entityFromMap ?? entity;
         }
 
-        public override object Deserialize(global::MongoDB.Bson.IO.BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
+        public override object Deserialize(BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
         {
             var entityMap = GetCurrentIdentityMap(nominalType);
             var entity = base.Deserialize(bsonReader, nominalType, actualType, options);
@@ -68,7 +69,7 @@ namespace ECO.Providers.MongoDB.Serializers
             return entityFromMap ?? entity;
         }
 
-        public override void Serialize(global::MongoDB.Bson.IO.BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
+        public override void Serialize(BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
         {
             base.Serialize(bsonWriter, nominalType, value, options);
             GetCurrentIdentityMap(nominalType)[GetECOIdentity(value)] = value;

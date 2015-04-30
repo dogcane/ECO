@@ -19,7 +19,7 @@ namespace ECO.Sample.Application.Speakers.DTO
 
         public string Description { get; set; }
 
-        public DateTime SpeakerSince { get; set; }
+        public DateTime? SpeakerSince { get; set; }
 
         public static SpeakerDetail From(Speaker speaker)
         {
