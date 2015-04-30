@@ -15,9 +15,9 @@ namespace ECO.Providers.NHibernate
 
         #region Public_Properties
 
-        public nh.ISession Session { get; private set; }
+        public nh.ISession Session { get; protected set; }
 
-        public IDataTransaction Transaction { get; private set; }
+        public IDataTransaction Transaction { get; protected set; }
 
         #endregion
 

@@ -20,6 +20,8 @@ namespace ECO.Sample.Domain
 
         public virtual int Age { get; protected set; }
 
+        public DateTime SpeakerSince { get; protected set; }
+
         #endregion
 
         #region Ctor
@@ -34,17 +36,17 @@ namespace ECO.Sample.Domain
 
         #region Factory_Methods
 
-        public static OperationResult<Speaker> Create(string name, string surname, string description, int age)
+        public static OperationResult<Speaker> Create(string name, string surname, string description, int age, DateTime speakerSince)
         {
             return OperationResult
                 .Begin()
                 .CheckSpeakerName(name)
                 .CheckSpeakerSurname(surname)
                 .CheckSpeakerDescription(description)
-                .CheckSpeakerAge(age)
+                .CheckSpeakerAge(age)                
                 .IfSuccess<Speaker>(() =>
                 {
-                    return new Speaker() { Name = name, Surname = surname, Description = description, Age = age };
+                    return new Speaker() { Name = name, Surname = surname, Description = description, Age = age, SpeakerSince = speakerSince };
                 });
         }
 
@@ -52,20 +54,21 @@ namespace ECO.Sample.Domain
 
         #region Public_Methods
 
-        public virtual OperationResult ChangeInformation(string name, string surname, string description, int age)
+        public virtual OperationResult ChangeInformation(string name, string surname, string description, int age, DateTime speakerSince)
         {
             return OperationResult
                 .Begin()
                 .CheckSpeakerName(name)
                 .CheckSpeakerSurname(surname)
                 .CheckSpeakerDescription(description)
-                .CheckSpeakerAge(age)
+                .CheckSpeakerAge(age)                
                 .IfSuccess(() =>
                 {
                     Name = name;
                     Surname = surname;
                     Description = description;
                     Age = age;
+                    SpeakerSince = speakerSince;
                 });
         }
 

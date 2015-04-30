@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
-namespace ECO.Providers.MongoDB
+namespace ECO.Providers.MongoDB.Serializers
 {
     /// <summary>
     /// ??? WORK IN PROGRESS

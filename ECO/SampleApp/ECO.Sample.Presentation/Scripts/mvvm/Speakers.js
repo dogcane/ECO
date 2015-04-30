@@ -5,7 +5,7 @@
     self.surname = ko.observable(surname);
 }
 
-function SpeakerEditViewModel(code, name, surname, description, age) {
+function SpeakerEditViewModel(code, name, surname, description, age, speakerSince) {
     var self = this;
     //CODE
     self.code = ko.observable(code);
@@ -21,12 +21,16 @@ function SpeakerEditViewModel(code, name, surname, description, age) {
     //AGE
     self.age = ko.observable(age);
     self.ageError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //SPEAKER SINCE
+    self.speakerSince = ko.observable(speakerSince);
+    self.speakerSinceError = ko.observable(new ErrorMessageViewModel(false, ''));
 
     var errorMapping = {
         'Name': self.nameError,
         'Surname': self.surnameError,
         'Description': self.descriptionError,
-        'Age': self.ageError
+        'Age': self.ageError,
+        'SpeakerSince': self.speakerSinceError
     };
 
     self.currentListItem = null;
@@ -117,7 +121,7 @@ function SpeakersListViewModel() {
         })
     };
 
-    self.Update = function (data) {
+    self.Update = function (data) {        
         $.ajax({
             url: '/speakers/api/' + data.code(),
             type: 'GET',
@@ -125,7 +129,7 @@ function SpeakersListViewModel() {
         })
         .done(function (result) {
             if (result.Success) {
-                self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age));
+                self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age, result.Value.SpeakerSince));
                 self.currentSpeaker().setCurrentListItem(data);
             } else {
                 alert('Error');
@@ -145,7 +149,8 @@ function SpeakersListViewModel() {
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),
-                Age: self.currentSpeaker().age()
+                Age: self.currentSpeaker().age(),
+                SpeakerSince: self.currentSpeaker().speakerSince()
             }
         })
         .done(function (result) {
@@ -165,7 +170,7 @@ function SpeakersListViewModel() {
         })
     };
 
-    function __Update() {        
+    function __Update() {
         $.ajax({
             url: '/speakers/api',
             type: 'PUT',
@@ -175,7 +180,8 @@ function SpeakersListViewModel() {
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),
-                Age: self.currentSpeaker().age()
+                Age: self.currentSpeaker().age(),
+                SpeakerSince: self.currentSpeaker().speakerSince(),
             }
         })
         .done(function (result) {

@@ -10,6 +10,14 @@ namespace ECO.Data
     /// </summary>
     public interface IPersistenceUnit
     {
+        #region Events
+
+        event EventHandler<PersistentUnitClassEventArgs> ClassAdded;        
+
+        event EventHandler<PersistentUnitClassEventArgs> ClassRemoved;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
