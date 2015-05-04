@@ -33,6 +33,11 @@ namespace ECO.Providers.MongoDB
             return GetCurrentDatabase().SafeGetCollectionForType<T>();
         }
 
+        protected MongoIdentityMap GetCurrentIdentityMap()
+        {
+            return (GetCurrentContext() as MongoPersistenceContext).IdentityMap;
+        }
+
         #endregion
     }
 }

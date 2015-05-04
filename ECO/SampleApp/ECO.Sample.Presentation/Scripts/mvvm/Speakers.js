@@ -5,7 +5,7 @@
     self.surname = ko.observable(surname);
 }
 
-function SpeakerEditViewModel(code, name, surname, description, age, speakerSince) {
+function SpeakerEditViewModel(code, name, surname, description, age) {
     var self = this;
     //CODE
     self.code = ko.observable(code);
@@ -21,16 +21,12 @@ function SpeakerEditViewModel(code, name, surname, description, age, speakerSinc
     //AGE
     self.age = ko.observable(age);
     self.ageError = ko.observable(new ErrorMessageViewModel(false, ''));
-    //SPEAKER SINCE
-    self.speakerSince = ko.observable(speakerSince);
-    self.speakerSinceError = ko.observable(new ErrorMessageViewModel(false, ''));
 
     var errorMapping = {
         'Name': self.nameError,
         'Surname': self.surnameError,
         'Description': self.descriptionError,
-        'Age': self.ageError,
-        'SpeakerSince': self.speakerSinceError
+        'Age': self.ageError
     };
 
     self.currentListItem = null;
@@ -129,7 +125,7 @@ function SpeakersListViewModel() {
         })
         .done(function (result) {
             if (result.Success) {
-                self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age, result.Value.SpeakerSince));
+                self.currentSpeaker(new SpeakerEditViewModel(result.Value.SpeakerCode, result.Value.Name, result.Value.Surname, result.Value.Description, result.Value.Age));
                 self.currentSpeaker().setCurrentListItem(data);
             } else {
                 alert('Error');
@@ -149,8 +145,7 @@ function SpeakersListViewModel() {
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),
-                Age: self.currentSpeaker().age(),
-                SpeakerSince: self.currentSpeaker().speakerSince()
+                Age: self.currentSpeaker().age()
             }
         })
         .done(function (result) {
@@ -180,8 +175,7 @@ function SpeakersListViewModel() {
                 Name: self.currentSpeaker().name(),
                 Surname: self.currentSpeaker().surname(),
                 Description: self.currentSpeaker().description(),
-                Age: self.currentSpeaker().age(),
-                SpeakerSince: self.currentSpeaker().speakerSince(),
+                Age: self.currentSpeaker().age()
             }
         })
         .done(function (result) {

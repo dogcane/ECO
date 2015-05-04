@@ -13,7 +13,7 @@ namespace ECO.Providers.MongoDB.Serializers
     /// <summary>
     /// ??? WORK IN PROGRESS
     /// </summary>
-    public class ECOSerializer : BsonBaseSerializer
+    public class IdentityMapSerializer : BsonBaseSerializer
     {
         #region Private_Methods
 
@@ -32,9 +32,9 @@ namespace ECO.Providers.MongoDB.Serializers
 
         #region Properties
 
-        private static ECOSerializer _Instance = new ECOSerializer();
+        private static IdentityMapSerializer _Instance = new IdentityMapSerializer();
 
-        public static ECOSerializer Instance
+        public static IdentityMapSerializer Instance
         {
             get { return _Instance; }
         }

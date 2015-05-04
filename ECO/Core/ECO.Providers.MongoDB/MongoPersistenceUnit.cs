@@ -105,7 +105,7 @@ namespace ECO.Providers.MongoDB
             base.OnClassAdded(classType);
             if (_SerializersUse.IdentityMap)
             {
-                BsonSerializer.RegisterSerializer(classType, Serializers.ECOSerializer.Instance);
+                BsonSerializer.RegisterSerializer(classType, Serializers.IdentityMapSerializer.Instance);
             }
         }
 
