@@ -10,9 +10,9 @@
     <form name="eventEditor">
         <h1>Event Detail</h1>
         <div class="field"><span>Event's name</span><input type="text" name="eventName" data-bind="value: name, error: nameError" /></div>
-        <div class="field"><span>Event's description</span><input type="text" name="eventDescription" data-bind="value: description, error: nameError" /></div>
-        <div class="field"><span>Event's start date</span><input type="text" name="eventStart" data-bind="value: startDate, error: nameError" /></div>
-        <div class="field"><span>Event's end date</span><input type="text" name="eventEnd" data-bind="value: endDate, error: nameError" /></div>
+        <div class="field"><span>Event's description</span><input type="text" name="eventDescription" data-bind="value: description, error: descriptionError" /></div>
+        <div class="field"><span>Event's start date</span><input type="text" name="eventStart" data-bind="value: startDate, error: startDateError" /></div>
+        <div class="field"><span>Event's end date</span><input type="text" name="eventEnd" data-bind="value: endDate, error: endDateError" /></div>
         <div class="buttons">
             <button data-bind="click: $root.Save">Save</button>
             <button data-bind="click: $root.Abort">Abort</button>
@@ -28,13 +28,14 @@
         <span class="eventDate" data-bind="text: startDate"></span>
     </div>
 </div>
-<div class="eventItemAdd" data-bind="click: StartNew">
+<div class="eventItemAdd" data-bind="click: Edit">
     <span>Add Event</span>
 </div>
 
 @section scripts {
 <script type="text/javascript">
     $(function () {
+        eventResources.setLanguage('@Request.UserLanguages[0]');
         $('input[name="eventStart"]').datepicker();
         $('input[name="eventEnd"]').datepicker();
     });

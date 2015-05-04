@@ -6,6 +6,7 @@ using ECO.Web.MVC;
 
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.DTO;
+using ECO.Bender;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
@@ -57,10 +58,10 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
         [DataContextApiFilter]
         [HttpPost]
-        [Route("")]
-        public void CreateEvent([FromBody]EventDetail @event)
+        [Route()]
+        public OperationResult<Guid> CreateEvent([FromBody]EventDetail @event)
         {
-            var result = _CreateEventService.CreateNewEvent(@event);
+            return _CreateEventService.CreateNewEvent(@event);
         }
 
         // PUT api/event/5

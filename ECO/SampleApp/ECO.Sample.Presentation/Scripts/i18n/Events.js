@@ -35,4 +35,4 @@
     };
 }
 
-var speakerResources = new SpeakerResources();
+var eventResources = new EventResources();
