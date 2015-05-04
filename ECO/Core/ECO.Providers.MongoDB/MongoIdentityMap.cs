@@ -54,9 +54,9 @@ namespace ECO.Providers.MongoDB
 
         #region Methods
 
-        public bool ContainsKey(object key)
+        public bool ContainsIdentity(object identity)
         {
-            return _Map.ContainsKey(key);
+            return _Map.ContainsKey(identity);
         }
 
         #endregion
