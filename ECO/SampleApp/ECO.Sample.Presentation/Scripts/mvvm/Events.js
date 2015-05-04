@@ -9,16 +9,58 @@
 
 function EventEditViewModel(code, name, description, startDate, endDate) {
     var self = this;
+    //CODE
     self.code = ko.observable(code);
+    //NAME
     self.name = ko.observable(name);
+    self.nameError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //DESCRIPTION
     self.description = ko.observable(description);
+    self.descriptionError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //STARTDATE
     self.startDate = ko.observable(startDate);
+    self.startDateError = ko.observable(new ErrorMessageViewModel(false, ''));
+    //ENDDATE
     self.endDate = ko.observable(endDate);
+    self.endDateError = ko.observable(new ErrorMessageViewModel(false, ''));
     self.sessions = ko.observableArray([]);
+
+    var errorMapping = {
+        'Name': self.nameError,
+        'Description': self.descriptionError,
+        'StartDate': self.startDateError,
+        'EndDate': self.endDateError,
+    };
+
+    self.currentListItem = null;
+    self.setCurrentListItem = function (data) {
+        self.currentListItem = data;
+    };
+    self.refreshCurrentListItem = function () {
+        if (self.currentListItem != null) {
+            self.currentListItem.name(self.name());
+            self.currentListItem.surname(self.surname());
+        }
+    };
 
     self.isNewEvent = ko.computed(function () {
         return self.code() == '';
     });
+
+    self.toListItem = function () {
+        return new EventListItemViewModel(self.code(), self.name(), self.startDate(), self.endDate(), self.sessions().lenght);
+    };
+
+    self.resetErrors = function () {
+        $.each(errorMapping, function () {
+            this(new ErrorMessageViewModel(false, ''));
+        });
+    };
+
+    self.setError = function (context, message) {
+        errorMapping[context](new ErrorMessageViewModel(true, eventResources.getResource(message)));
+    };
+
 }
 
 function EventsListViewModel() {
@@ -40,7 +82,7 @@ function EventsListViewModel() {
     };
 
     self.Save = function () {
-        if (self.currentEvent().isNewSpeaker()) {
+        if (self.currentEvent().isNewEvent()) {
             __Create();
         } else {
             __Update();

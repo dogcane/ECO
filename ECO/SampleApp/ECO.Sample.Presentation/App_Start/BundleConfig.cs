@@ -34,7 +34,8 @@ namespace ECO.Sample.Presentation
                         "~/Scripts/knockout*"));
 
             bundles.Add(new ScriptBundle("~/bundles/events").Include(
-                        "~/Scripts/mvvm/Events.js"));
+                        "~/Scripts/mvvm/Events.js",
+                        "~/Scripts/i18n/Events.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/speakers").Include(
                         "~/Scripts/mvvm/Speakers.js",
