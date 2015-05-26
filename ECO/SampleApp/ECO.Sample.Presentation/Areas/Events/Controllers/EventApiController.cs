@@ -7,6 +7,7 @@ using ECO.Web.MVC;
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.DTO;
 using ECO.Bender;
+using System.Net;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
@@ -17,7 +18,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
         private ICreateEventService _CreateEventService;
 
-        private IShowEventDetailService _ShowEventDetailService;
+        private IGetEventService _ShowEventDetailService;
 
         private IChangeEventService _ChangeEventService;
 
@@ -28,7 +29,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         private IRemoveSessionFromEventService _RemoveSessionFromEventService;
 
         public EventApiController(IShowEventsService showEventService, ICreateEventService createEventService,
-            IShowEventDetailService showEventDetailService, IChangeEventService changeEventService, IDeleteEventService deleteEventService,
+            IGetEventService showEventDetailService, IChangeEventService changeEventService, IDeleteEventService deleteEventService,
             IAddSessionToEventService addSessionToEventService, IRemoveSessionFromEventService removeSessionFromEventService)
         {
             _ShowEventsService = showEventService;
@@ -51,9 +52,14 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         [DataContextApiFilter]
         [HttpGet]
         [Route("{id:guid}")]
-        public EventDetail GetEventById(Guid eventCode)
+        public OperationResult<EventDetail> GetEventById(Guid eventCode)
         {
-            return _ShowEventDetailService.ShowDetail(eventCode);
+            var result = _ShowEventDetailService.GetEvent(eventCode);
+            if (result.Success)
+            {
+                return result;
+            }
+            throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 
         [DataContextApiFilter]
@@ -64,14 +70,23 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return _CreateEventService.CreateNewEvent(@event);
         }
 
-        // PUT api/event/5
-        public void Put(Guid eventCode, [FromBody]string name, [FromBody]string description, [FromBody]DateTime startDate, [FromBody]DateTime endDate)
+        [DataContextApiFilter]
+        [HttpPut]
+        [Route()]
+        public OperationResult UpdateEvent([FromBody]EventDetail @event)
         {
-            
+            var result = _ShowEventDetailService.GetEvent(@event.EventCode);
+            if (!result.Success)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return _ChangeEventService.ChangeInformation(@event);
         }
 
-        // DELETE api/event/5
-        public void Delete(Guid eventCode)
+        [DataContextApiFilter]
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public void DeleteEvent(Guid eventCode)
         {
         }
     }

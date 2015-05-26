@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using ECO.Bender;
 using ECO.Sample.Application.Events.DTO;
 
 namespace ECO.Sample.Application.Events
 {
-    public interface IShowEventDetailService
+    public interface IGetEventService
     {
-        EventDetail ShowDetail(Guid eventCode);
+        OperationResult<EventDetail> GetEvent(Guid eventCode);
     }
 }

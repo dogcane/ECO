@@ -12,7 +12,7 @@ using ECO.Sample.Application.Speakers.DTO;
 
 namespace ECO.Sample.Application.Speakers.Impl
 {
-    public class GetSpeakersService : IGetSpeakerService
+    public class GetSpeakerService : IGetSpeakerService
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace ECO.Sample.Application.Speakers.Impl
 
         #region Ctor
 
-        public GetSpeakersService(ISpeakerRepository speakerRepository)
+        public GetSpeakerService(ISpeakerRepository speakerRepository)
         {
             _SpeakerRepository = speakerRepository;
         }

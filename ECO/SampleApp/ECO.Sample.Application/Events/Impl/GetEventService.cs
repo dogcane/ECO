@@ -7,10 +7,11 @@ using ECO;
 
 using ECO.Sample.Domain;
 using ECO.Sample.Application.Events.DTO;
+using ECO.Bender;
 
 namespace ECO.Sample.Application.Events.Impl
 {
-    public class ShowEventDetailService : IShowEventDetailService
+    public class GetEventService : IGetEventService
     {
         #region Private_Fields
 
@@ -20,7 +21,7 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region Ctor
 
-        public ShowEventDetailService(IEventRepository eventRepository)
+        public GetEventService(IEventRepository eventRepository)
         {
             _EventRepository = eventRepository;
         }
@@ -29,10 +30,17 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IShowEventDetailService Membri di
 
-        public EventDetail ShowDetail(Guid eventCode)
+        public OperationResult<EventDetail> GetEvent(Guid eventCode)
         {
             Event @event = _EventRepository.Load(eventCode);
-            return (@event != null) ? EventDetail.From(@event) : EventDetail.Empty;
+            if (@event != null)
+            {
+                return EventDetail.From(@event);
+            }
+            else
+            {
+                return OperationResult<EventDetail>.MakeFailure(Enumerable.Empty<ErrorMessage>());
+            }
         }
 
         #endregion

@@ -47,13 +47,13 @@ namespace ECO.Sample.Presentation.DependencyResolution {
     #endif
                     x.For<IShowEventsService>().Add<ShowEventsService>();
                     x.For<ICreateEventService>().Add<CreateEventService>();
-                    x.For<IShowEventDetailService>().Add<ShowEventDetailService>();
+                    x.For<IGetEventService>().Add<GetEventService>();
                     x.For<IChangeEventService>().Add<ChangeEventService>();
                     x.For<IDeleteEventService>().Add<DeleteEventService>();
                     x.For<IAddSessionToEventService>().Add<AddSessionToEventService>();
                     x.For<IRemoveSessionFromEventService>().Add<RemoveSessionFromEventService>();
                     x.For<IShowSpeakersService>().Add<ShowSpeakersService>();
-                    x.For<IGetSpeakerService>().Add<GetSpeakersService>();
+                    x.For<IGetSpeakerService>().Add<GetSpeakerService>();
                     x.For<ICreateSpeakerService>().Add<CreateSpeakerService>();                
                     x.For<IChangeSpeakerService>().Add<ChangeSpeakerService>();
                     x.For<IDeleteSpeakerService>().Add<DeleteSpeakerService>();

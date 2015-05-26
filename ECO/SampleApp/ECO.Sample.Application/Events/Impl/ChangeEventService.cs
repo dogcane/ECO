@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using ECO.Bender;
-
+using ECO.Sample.Application.Events.DTO;
 using ECO.Sample.Domain;
 
 namespace ECO.Sample.Application.Events.Impl
@@ -28,10 +27,12 @@ namespace ECO.Sample.Application.Events.Impl
 
         #region IChangeEventService Membri di
 
-        public OperationResult ChangeInformation(Guid eventCode, string name, string description, DateTime startDate, DateTime endDate)
+        public OperationResult ChangeInformation(EventDetail @event)
         {
-            Event @event = _EventRepository.Load(eventCode);
-            return @event.ChangeInformation(name, description, new Period(startDate, endDate));
+            Event eventEventity = _EventRepository.Load(@event.EventCode);
+            return eventEventity
+                .ChangeInformation(@event.Name, @event.Description, new Period(@event.StartDate, @event.EndDate))
+                .IfSuccess(() => _EventRepository.Update(eventEventity));
         }
 
         #endregion

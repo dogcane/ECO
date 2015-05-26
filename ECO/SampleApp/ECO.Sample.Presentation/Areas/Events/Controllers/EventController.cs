@@ -21,7 +21,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
         private ICreateEventService _CreateEventService;
 
-        private IShowEventDetailService _ShowEventDetailService;
+        private IGetEventService _ShowEventDetailService;
 
         private IChangeEventService _ChangeEventService;
 
@@ -32,7 +32,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         private IRemoveSessionFromEventService _RemoveSessionFromEventService;
 
         public EventController(IShowEventsService showEventService, ICreateEventService createEventService,
-            IShowEventDetailService showEventDetailService, IChangeEventService changeEventService, IDeleteEventService deleteEventService,
+            IGetEventService showEventDetailService, IChangeEventService changeEventService, IDeleteEventService deleteEventService,
             IAddSessionToEventService addSessionToEventService, IRemoveSessionFromEventService removeSessionFromEventService)
         {
             _ShowEventsService = showEventService;
