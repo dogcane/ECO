@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ECO.Sample.Application</RootNamespace>
     <AssemblyName>ECO.Sample.Application</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -96,10 +96,10 @@
     <Compile Include="Events\ICreateEventService.cs" />
     <Compile Include="Events\Impl\DeleteEventService.cs" />
     <Compile Include="Events\Impl\RemoveSessionFromEventService.cs" />
-    <Compile Include="Events\Impl\ShowEventDetailService.cs" />
+    <Compile Include="Events\Impl\GetEventService.cs" />
     <Compile Include="Events\Impl\ShowEventsService.cs" />
     <Compile Include="Events\IRemoveSessionFromEventService.cs" />
-    <Compile Include="Events\IShowEventDetailService.cs" />
+    <Compile Include="Events\IGetEventService.cs" />
     <Compile Include="Events\IShowEventsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Speakers\DTO\SpeakerDetail.cs" />
@@ -109,7 +109,7 @@
     <Compile Include="Speakers\IDeleteSpeakerService.cs" />
     <Compile Include="Speakers\IGetSpeakerService.cs" />
     <Compile Include="Speakers\Impl\ChangeSpeakerService.cs" />
-    <Compile Include="Speakers\Impl\GetSpeakersService.cs" />
+    <Compile Include="Speakers\Impl\GetSpeakerService.cs" />
     <Compile Include="Speakers\Impl\CreateSpeakerService.cs" />
     <Compile Include="Speakers\Impl\DeleteSpeakerService.cs" />
     <Compile Include="Speakers\Impl\ShowSpeakersService.cs" />
