@@ -61,9 +61,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.CastleWind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.StructureMap", "Core\ECO.Integrations.StructureMap\ECO.Integrations.StructureMap.csproj", "{363E7AD2-D07D-4394-9D46-4C450B0AFC56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.MassTransit", "Core\ECO.Integrations.MassTransit\ECO.Integrations.MassTransit.csproj", "{117FFA9D-65BB-462A-8F6E-57C43744ACF3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs11
 		SccLocalPath0 = .
@@ -127,6 +129,10 @@ Global
 		SccProjectTopLevelParentUniqueName15 = ECO.sln
 		SccProjectName15 = Core/ECO.Integrations.StructureMap
 		SccLocalPath15 = Core\\ECO.Integrations.StructureMap
+		SccProjectUniqueName16 = Core\\ECO.Integrations.MassTransit\\ECO.Integrations.MassTransit.csproj
+		SccProjectTopLevelParentUniqueName16 = ECO.sln
+		SccProjectName16 = Core/ECO.Integrations.MassTransit
+		SccLocalPath16 = Core\\ECO.Integrations.MassTransit
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ECO2.vsmdi
@@ -196,6 +202,10 @@ Global
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -209,6 +219,7 @@ Global
 		{9DA9C8E5-6D68-4534-BFC1-9361FE956F4C} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{F213E8A3-FDD0-48FE-9DEC-DECB179B0576} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{117FFA9D-65BB-462A-8F6E-57C43744ACF3} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{C16168B8-2BD4-4596-B981-4A3F2703F614} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{BD6544C0-DE77-4CBB-825F-08B485161398} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
