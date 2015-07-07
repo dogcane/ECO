@@ -96,6 +96,7 @@
     <Compile Include="Data\IdentityAttributeTypeNotMatchedException.cs" />
     <Compile Include="Data\IPersistenceUnitListener.cs" />
     <Compile Include="Data\IECOQueryable.cs" />
+    <Compile Include="Data\NullDataTransaction.cs" />
     <Compile Include="Data\PersistenceContextNotFound.cs" />
     <Compile Include="Data\PersistenceUnitNotFound.cs" />
     <Compile Include="Data\PersistentClassNotRegistered.cs" />

@@ -18,10 +18,7 @@ namespace ECO.Providers.MongoDB
     {
         #region Properties
 
-        public IDataTransaction Transaction
-        {
-            get { throw new NotSupportedException(); }
-        }
+        public IDataTransaction Transaction { get; protected set; }
 
         public MongoDatabase Database { get; private set; }
 
@@ -63,7 +60,8 @@ namespace ECO.Providers.MongoDB
 
         public IDataTransaction BeginTransaction()
         {
-            throw new NotSupportedException();
+            Transaction = new NullDataTransaction(this);
+            return Transaction;
         }
 
         public void Close()

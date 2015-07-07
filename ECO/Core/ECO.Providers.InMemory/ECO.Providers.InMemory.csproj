@@ -70,7 +70,6 @@
     <Compile Include="InMemoryPersistenceUnit.cs" />
     <Compile Include="InMemoryReadOnlyRepository.cs" />
     <Compile Include="InMemoryRepository.cs" />
-    <Compile Include="InMemoryTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

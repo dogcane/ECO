@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-using ECO.Data;
-
-namespace ECO.Providers.InMemory
+namespace ECO.Data
 {
-    public class InMemoryTransaction : IDataTransaction
+    public class NullDataTransaction : IDataTransaction
     {
         #region Ctor
 
-        public InMemoryTransaction(InMemoryPersistenceContext context)
+        public NullDataTransaction(IPersistenceContext context)
         {
             Context = context;
         }

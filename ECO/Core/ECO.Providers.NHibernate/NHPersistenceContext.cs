@@ -12,7 +12,6 @@ namespace ECO.Providers.NHibernate
 {
     public class NHPersistenceContext : IPersistenceContext
     {
-
         #region Public_Properties
 
         public nh.ISession Session { get; protected set; }

@@ -13,35 +13,20 @@ namespace ECO.Providers.RavenDB
 {
     public class RavenPersistenceContext : IPersistenceContext
     {
-        #region Private_Fields
-
-        private IDocumentSession _Session;
-
-        #endregion
-
         #region Ctor
 
         public RavenPersistenceContext(IDocumentSession session)
         {
-            _Session = session;
+            Session = session;
         }
 
         #endregion
 
         #region Public_Properties
 
-        public IDocumentSession Session
-        {
-            get
-            {
-                return _Session;
-            }
-        }
+        public IDocumentSession Session { get; protected set; }
 
-        public IDataTransaction Transaction
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public IDataTransaction Transaction { get; protected set; }
 
         #endregion
 
@@ -69,7 +54,8 @@ namespace ECO.Providers.RavenDB
 
         public IDataTransaction BeginTransaction()
         {
-            throw new NotImplementedException();
+            Transaction = new NullDataTransaction(this);
+            return Transaction;
         }
 
         public void Close()
