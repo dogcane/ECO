@@ -18,10 +18,7 @@ namespace ECO.Providers.InMemory
 
         #region Properties
 
-        public IDataTransaction Transaction
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public IDataTransaction Transaction { get; protected set; }
 
         public object this[string indexer]
         {
@@ -63,7 +60,8 @@ namespace ECO.Providers.InMemory
 
         public IDataTransaction BeginTransaction()
         {
-            return new InMemoryTransaction(this);   
+            Transaction = new NullDataTransaction(this);
+            return Transaction;
         }
 
         public void Close()

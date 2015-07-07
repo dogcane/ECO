@@ -34,25 +34,21 @@ namespace ECO.Integrations.MassTransit
 
         public IEnumerable<Guid> Find(ISagaFilter<TSaga> filter)
         {
-            return Where(filter, x => x.CorrelationId);
+            return Where(filter, x => x.Identity);
         }
 
         public IEnumerable<Action<IConsumeContext<TMessage>>> GetSaga<TMessage>(IConsumeContext<TMessage> context, Guid sagaId, InstanceHandlerSelector<TSaga, TMessage> selector, ISagaPolicy<TSaga, TMessage> policy) where TMessage : class
         {
             using (DataContext dtx = new DataContext())
+            using (TransactionContext tcx = dtx.BeginTransaction(true))
             {
-                var instance = _EntityRepository.Where(ent => ent.CorrelationId == sagaId).FirstOrDefault();
+                var instance = _EntityRepository.Where(ent => ent.Identity == sagaId).FirstOrDefault();
                 if (instance == null)
                 {
                     if (policy.CanCreateInstance(context))
                     {
                         yield return x =>
                         {
-                            //if (_log.IsDebugEnabled)
-                            //    _log.DebugFormat("SAGA: {0} Creating New {1} for {2}",
-                            //        typeof(TSaga).ToFriendlyName(), sagaId,
-                            //        typeof(TMessage).ToFriendlyName());
-
                             try
                             {
                                 instance = policy.CreateInstance(x, sagaId);
@@ -68,23 +64,13 @@ namespace ECO.Integrations.MassTransit
                             catch (Exception ex)
                             {
                                 var sex = new SagaException("Create Saga Instance Exception", typeof(TSaga),
-                                    typeof(TMessage), sagaId, ex);
-                                //if (_log.IsErrorEnabled)
-                                //    _log.Error(sex);
+                                    typeof(TMessage), sagaId, ex);                                
 
-                                //if (transaction.IsActive)
-                                //    transaction.Rollback();
-
+                                if (tcx.Status == TransactionStatus.Alive)
+                                    tcx.Rollback();
                                 throw sex;
                             }
                         };
-                    }
-                    else
-                    {
-                        //if (_log.IsDebugEnabled)
-                        //    _log.DebugFormat("SAGA: {0} Ignoring Missing {1} for {2}", typeof(TSaga).ToFriendlyName(),
-                        //        sagaId,
-                        //        typeof(TMessage).ToFriendlyName());
                     }
                 }
                 else
@@ -93,10 +79,6 @@ namespace ECO.Integrations.MassTransit
                     {
                         yield return x =>
                         {
-                            //if (_log.IsDebugEnabled)
-                            //    _log.DebugFormat("SAGA: {0} Using Existing {1} for {2}",
-                            //        typeof(TSaga).ToFriendlyName(), sagaId,
-                            //        typeof(TMessage).ToFriendlyName());
 
                             try
                             {
@@ -114,33 +96,20 @@ namespace ECO.Integrations.MassTransit
                             {
                                 var sex = new SagaException("Existing Saga Instance Exception", typeof(TSaga),
                                     typeof(TMessage), sagaId, ex);
-                                //if (_log.IsErrorEnabled)
-                                //    _log.Error(sex);
-
-                                //if (transaction.IsActive)
-                                //    transaction.Rollback();
-
+                                if (tcx.Status == TransactionStatus.Alive)
+                                    tcx.Rollback();
                                 throw sex;
                             }
                         };
                     }
-                    else
-                    {
-                        //if (_log.IsDebugEnabled)
-                        //    _log.DebugFormat("SAGA: {0} Ignoring Existing {1} for {2}", typeof(TSaga).ToFriendlyName(),
-                        //        sagaId,
-                        //        typeof(TMessage).ToFriendlyName());
-                    }
                 }
-
-                //if (transaction.IsActive)
-                //    transaction.Commit();
             }
         }
 
         public IEnumerable<TResult> Select<TResult>(Func<TSaga, TResult> transformer)
         {
             using (DataContext dtx = new DataContext())
+            using (TransactionContext tcx = dtx.BeginTransaction())
             {
                 return _EntityRepository.Select(transformer).ToList();
             }
@@ -149,6 +118,7 @@ namespace ECO.Integrations.MassTransit
         public IEnumerable<TResult> Where<TResult>(ISagaFilter<TSaga> filter, Func<TSaga, TResult> transformer)
         {
             using (DataContext dtx = new DataContext())
+            using (TransactionContext tcx = dtx.BeginTransaction())
             {
                 return _EntityRepository.Where(filter.FilterExpression).Select(transformer).ToList();
             }
@@ -157,6 +127,7 @@ namespace ECO.Integrations.MassTransit
         public IEnumerable<TSaga> Where(ISagaFilter<TSaga> filter)
         {
             using (DataContext dtx = new DataContext())
+            using (TransactionContext tcx = dtx.BeginTransaction())
             {
                 return _EntityRepository.Where(filter.FilterExpression).ToList();
             }
