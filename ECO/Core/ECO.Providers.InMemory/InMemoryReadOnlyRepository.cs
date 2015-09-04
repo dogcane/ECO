@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using ECO;
 
 namespace ECO.Providers.InMemory
@@ -17,6 +17,11 @@ namespace ECO.Providers.InMemory
             T entity = default(T);
             GetIdentityMap().TryGetValue(identity, out entity);
             return entity;
+        }
+
+        public async Task<T> LoadAsync(K identity)
+        {
+            return await Task.Run(() => Load(identity));
         }
 
         #endregion

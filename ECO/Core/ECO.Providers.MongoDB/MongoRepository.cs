@@ -21,14 +21,29 @@ namespace ECO.Providers.MongoDB
             GetCurrentCollection().Save(item);
         }
 
+        public async Task AddAsync(T item)
+        {
+            await Task.Run(() => Add(item));
+        }
+
         public void Update(T item)
         {
             GetCurrentCollection().Save(item);
         }
 
+        public async Task UpdateAsync(T item)
+        {
+            await Task.Run(() => Update(item));
+        }
+
         public void Remove(T item)
         {
             GetCurrentCollection().Remove(Query<T>.EQ(e => e.Identity, item.Identity));
+        }
+
+        public async Task RemoveAsync(T item)
+        {
+            await Task.Run(() => Remove(item));
         }
 
         #endregion

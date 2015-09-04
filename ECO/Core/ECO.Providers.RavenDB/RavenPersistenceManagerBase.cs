@@ -15,7 +15,7 @@ namespace ECO.Providers.RavenDB
     {
         #region Protected_Methods
 
-        protected IDocumentSession GetCurrentSession()
+        protected IAsyncDocumentSession GetCurrentSession()
         {
             return (GetCurrentContext() as RavenPersistenceContext).Session;
         }

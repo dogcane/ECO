@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using ECO.Data;
 
 namespace ECO
@@ -16,10 +16,16 @@ namespace ECO
         #region Methods
 
         /// <summary>
-        /// Method that adds the entity to the repository
+        /// Method that adds asynchronously the entity to the repository
         /// </summary>
         /// <param name="item"></param>
         void Add(T item);
+
+        /// <summary>
+        /// Method that adds the entity to the repository
+        /// </summary>
+        /// <param name="item"></param>
+        Task AddAsync(T item);
 
         /// <summary>
         /// Method that update the entity in the repository
@@ -28,10 +34,22 @@ namespace ECO
         void Update(T item);
 
         /// <summary>
+        /// Method that update asynchronously the entity in the repository
+        /// </summary>
+        /// <param name="item"></param>
+        Task UpdateAsync(T item);
+
+        /// <summary>
         /// Method that removes the entity from the repository
         /// </summary>
         /// <param name="item"></param>
         void Remove(T item);
+
+        /// <summary>
+        /// Method that removes asynchronously the entity from the repository
+        /// </summary>
+        /// <param name="item"></param>
+        Task RemoveAsync(T item);
 
         #endregion
     }

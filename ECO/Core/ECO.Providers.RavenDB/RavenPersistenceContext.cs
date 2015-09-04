@@ -15,7 +15,7 @@ namespace ECO.Providers.RavenDB
     {
         #region Ctor
 
-        public RavenPersistenceContext(IDocumentSession session)
+        public RavenPersistenceContext(IAsyncDocumentSession session)
         {
             Session = session;
         }
@@ -24,7 +24,7 @@ namespace ECO.Providers.RavenDB
 
         #region Public_Properties
 
-        public IDocumentSession Session { get; protected set; }
+        public IAsyncDocumentSession Session { get; protected set; }
 
         public IDataTransaction Transaction { get; protected set; }
 

@@ -9,8 +9,9 @@ namespace ECO.Data
     {
         #region Protected_Methods
 
-        protected virtual void OnAttach<T, K>(T entity)
-            where T : IAggregateRoot<K>
+        protected abstract IDataTransaction OnBeginTransaction();
+
+        protected virtual void OnDispose()
         {
 
         }
@@ -19,48 +20,46 @@ namespace ECO.Data
 
         #region IPersistenceContext Membri di
 
-        public abstract IDataTransaction Transaction
-        {
-            get;
-        }
+        public virtual IDataTransaction Transaction { get; protected set; }
 
-        public void Attach<T, K>(T entity)
+        public virtual void Attach<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            OnAttach<T, K>(entity);
+            
         }
 
-        public void Detach<T, K>(T entity)
+        public virtual void Detach<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            throw new NotImplementedException();
+            
         }
 
-        public void Refresh<T, K>(T entity)
+        public virtual void Refresh<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            throw new NotImplementedException();
+            
         }
 
-        public PersistenceState GetPersistenceState<T, K>(T entity)
+        public virtual PersistenceState GetPersistenceState<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            throw new NotImplementedException();
+            return PersistenceState.Unknown;
         }
 
         public IDataTransaction BeginTransaction()
         {
-            throw new NotImplementedException();
+            Transaction = OnBeginTransaction();
+            return Transaction;
         }
 
-        public void Close()
+        public virtual void Close()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public void SaveChanges()
+        public virtual void SaveChanges()
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion
@@ -69,7 +68,21 @@ namespace ECO.Data
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+        }
+
+        private void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+                OnDispose();
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        ~PersistentContextBase()
+        {
+            Dispose(false);
         }
 
         #endregion

@@ -8,6 +8,7 @@ using Raven.Client;
 
 using ECO;
 using ECO.Data;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.RavenDB
 {
@@ -18,17 +19,32 @@ namespace ECO.Providers.RavenDB
 
         public void Add(T item)
         {
-            GetCurrentSession().Store(item);
+            AddAsync(item).RunSynchronously();
+        }
+
+        public async Task AddAsync(T item)
+        {
+            await GetCurrentSession().StoreAsync(item);
         }
 
         public void Update(T item)
         {
-            GetCurrentSession().Store(item);
+            UpdateAsync(item).RunSynchronously();
+        }
+
+        public async Task UpdateAsync(T item)
+        {
+            await GetCurrentSession().StoreAsync(item);
         }
 
         public void Remove(T item)
         {
             GetCurrentSession().Delete(item);
+        }
+
+        public async Task RemoveAsync(T item)
+        {
+            await Task.Run(() => Remove(item));
         }
 
         #endregion

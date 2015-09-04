@@ -1,5 +1,5 @@
 using System.Linq;
-
+using System.Threading.Tasks;
 using ECO.Data;
 
 namespace ECO
@@ -20,6 +20,13 @@ namespace ECO
         /// <param name="identity"></param>
         /// <returns></returns>
         T Load(K identity);
+
+        /// <summary>
+        /// Method that loads asynchronously the entity from the repository
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        Task<T> LoadAsync(K identity);
 
         #endregion
     }

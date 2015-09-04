@@ -28,6 +28,11 @@ namespace ECO.Providers.MongoDB
             }
         }
 
+        public async Task<T> LoadAsync(K identity)
+        {
+            return await Task.Run(() => Load(identity));
+        }
+
         #endregion
 
         #region IEnumerable<T> Members
