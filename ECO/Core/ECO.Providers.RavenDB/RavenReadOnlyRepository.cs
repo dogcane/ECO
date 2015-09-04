@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 using Raven;
 using Raven.Client;
@@ -18,7 +19,12 @@ namespace ECO.Providers.RavenDB
 
         public T Load(K identity)
         {
-            return GetCurrentSession().Load<T>(identity.ToString());
+            return LoadAsync(identity).Result;
+        }
+
+        public async Task<T> LoadAsync(K identity)
+        {
+            return await GetCurrentSession().LoadAsync<T>(identity.ToString());
         }
 
         #endregion

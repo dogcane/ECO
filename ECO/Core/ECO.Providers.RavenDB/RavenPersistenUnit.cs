@@ -57,7 +57,7 @@ namespace ECO.Providers.RavenDB
 
         protected override IPersistenceContext CreateContext()
         {
-            return new RavenPersistenceContext(_DocumentStore.OpenSession());
+            return new RavenPersistenceContext(_DocumentStore.OpenAsyncSession());
         }        
 
         public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>()

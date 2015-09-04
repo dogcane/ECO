@@ -63,9 +63,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.StructureM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.MassTransit", "Core\ECO.Integrations.MassTransit\ECO.Integrations.MassTransit.csproj", "{117FFA9D-65BB-462A-8F6E-57C43744ACF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.EntityFramework", "Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj", "{F1FE6D41-9D51-498A-A468-E003BC6491A1}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs11
 		SccLocalPath0 = .
@@ -133,6 +135,10 @@ Global
 		SccProjectTopLevelParentUniqueName16 = ECO.sln
 		SccProjectName16 = Core/ECO.Integrations.MassTransit
 		SccLocalPath16 = Core\\ECO.Integrations.MassTransit
+		SccProjectUniqueName17 = Core\\ECO.Providers.EntityFramework\\ECO.Providers.EntityFramework.csproj
+		SccProjectTopLevelParentUniqueName17 = ECO.sln
+		SccProjectName17 = Core/ECO.Providers.EntityFramework
+		SccLocalPath17 = Core\\ECO.Providers.EntityFramework
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ECO2.vsmdi
@@ -206,6 +212,10 @@ Global
 		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{117FFA9D-65BB-462A-8F6E-57C43744ACF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,6 +230,7 @@ Global
 		{F213E8A3-FDD0-48FE-9DEC-DECB179B0576} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{117FFA9D-65BB-462A-8F6E-57C43744ACF3} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{F1FE6D41-9D51-498A-A468-E003BC6491A1} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{C16168B8-2BD4-4596-B981-4A3F2703F614} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{BD6544C0-DE77-4CBB-825F-08B485161398} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}

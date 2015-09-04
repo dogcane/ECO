@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 using nh = NHibernate;
 using nhl = NHibernate.Linq;
@@ -19,6 +20,11 @@ namespace ECO.Providers.NHibernate
         public virtual T Load(K identity)
         {
             return GetCurrentSession().Load<T>(identity);
+        }
+
+        public virtual async Task<T> LoadAsync(K identity)
+        {
+            return await Task.Run(() => Load(identity));
         }
 
         #endregion

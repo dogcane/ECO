@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 using ECO;
 using ECO.Data;
@@ -23,14 +24,29 @@ namespace ECO.Providers.NHibernate
             GetCurrentSession().Save(item);
         }
 
+        public async Task AddAsync(T item)
+        {
+            await Task.Run(() => Add(item));
+        }
+
         public void Update(T item)
         {
             GetCurrentSession().Update(item); //Not necessary with auto-dirty-check
         }
 
+        public async Task UpdateAsync(T item)
+        {
+            await Task.Run(() => Update(item));
+        }
+
         public void Remove(T item)
         {
             GetCurrentSession().Delete(item);
+        }
+
+        public async Task RemoveAsync(T item)
+        {
+            await Task.Run(() => Remove(item));
         }
 
         #endregion
