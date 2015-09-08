@@ -53,7 +53,7 @@ namespace ECO.Data
         /// Add a class type to the current persistence unit
         /// </summary>
         /// <param name="classType"></param>
-        IPersistenceUnit AddClass<T,K>() where T : IAggregateRoot<K>;
+        IPersistenceUnit AddClass<T,K>() where T : class, IAggregateRoot<K>;
 
         /// <summary>
         /// Remove a class type from the current persistence unit
@@ -65,7 +65,7 @@ namespace ECO.Data
         /// Remove a class type from the current persistence unit
         /// </summary>
         /// <param name="classType"></param>
-        IPersistenceUnit RemoveClass<T, K>() where T : IAggregateRoot<K>;
+        IPersistenceUnit RemoveClass<T, K>() where T : class, IAggregateRoot<K>;
 
         /// <summary>
         /// Add a listener to the current persistence unit
@@ -85,7 +85,7 @@ namespace ECO.Data
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="K"></typeparam>
         /// <returns></returns>
-        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;        
+        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : class, IAggregateRoot<K>;        
 
         /// <summary>
         /// 
@@ -93,7 +93,7 @@ namespace ECO.Data
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="K"></typeparam>
         /// <returns></returns>
-        IRepository<T, K> BuildRepository<T, K>() where T : IAggregateRoot<K>;
+        IRepository<T, K> BuildRepository<T, K>() where T : class, IAggregateRoot<K>;
 
         #endregion
     }

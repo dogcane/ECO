@@ -11,7 +11,7 @@ namespace ECO.Data
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="K"></typeparam>
     public interface IPersistenceManager<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Properties
 

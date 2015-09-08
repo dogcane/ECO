@@ -18,17 +18,5 @@ namespace ECO.Sample.Application.Events.DTO
         public DateTime EndDate { get; set; }
 
         public int NumberOfSessions { get; set; }
-
-        public static EventListItem From(Event @event)
-        {
-            return new EventListItem()
-            {
-                EventCode = @event.Identity,
-                Name = @event.Name,
-                StartDate = @event.Period.StartDate,
-                EndDate = @event.Period.EndDate,
-                NumberOfSessions = @event.Sessions.Count()
-            };
-        }
     }
 }

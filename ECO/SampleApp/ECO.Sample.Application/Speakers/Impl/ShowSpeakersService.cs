@@ -37,7 +37,12 @@ namespace ECO.Sample.Application.Speakers.Impl
             {
                 query = query.Where(entity => entity.Name.Contains(nameOrSurname) || entity.Surname.Contains(nameOrSurname));
             }
-            return query.Select(item => SpeakerListItem.From(item));
+            return query.Select(item => new SpeakerListItem
+            {
+                SpeakerCode = item.Identity,
+                Name = item.Name,
+                Surname = item.Surname
+            });
         }
 
         #endregion

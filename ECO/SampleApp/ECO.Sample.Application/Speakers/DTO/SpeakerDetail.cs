@@ -18,17 +18,5 @@ namespace ECO.Sample.Application.Speakers.DTO
         public int Age { get; set; }
 
         public string Description { get; set; }
-
-        public static SpeakerDetail From(Speaker speaker)
-        {
-            return new SpeakerDetail()
-            {
-                SpeakerCode = speaker.Identity,
-                Name = speaker.Name,
-                Surname = speaker.Surname,
-                Age = speaker.Age,
-                Description = speaker.Description
-            };
-        }
     }
 }

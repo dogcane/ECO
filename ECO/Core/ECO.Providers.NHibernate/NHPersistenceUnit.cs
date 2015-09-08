@@ -38,16 +38,6 @@ namespace ECO.Providers.NHibernate
 
         #endregion
 
-        #region ~Ctor
-
-        public NHPersistenceUnit()
-            : base()
-        {
-
-        }
-
-        #endregion
-
         #region Protected_Methods
 
         protected virtual void TryAddClassMapping(nhcfg.Configuration cfg)

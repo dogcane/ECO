@@ -1,27 +1,20 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-using ECO;
-using ECO.Data;
-
-using nh = NHibernate;
-using nhl = NHibernate.Linq;
-using nhm = NHibernate.Metadata;
-
-namespace ECO.Providers.NHibernate
+namespace ECO.Providers.EntityFramework
 {
-    public class NHRepository<T, K> : NHReadOnlyRepository<T, K>, IRepository<T, K>
+    public class EntityFrameworkRepository<T, K> : EntityFrameworkReadOnlyRepository<T, K>, IRepository<T, K>
         where T : class, IAggregateRoot<K>
     {
-        #region IRepository<T> Membri di
+        #region IRepository<T,K> Members
 
         public void Add(T item)
         {
-            GetCurrentSession().Save(item);
+            GetCurrentDbContext().Set<T>().Add(item);
         }
 
         public async Task AddAsync(T item)
@@ -31,7 +24,7 @@ namespace ECO.Providers.NHibernate
 
         public void Update(T item)
         {
-            GetCurrentSession().Update(item); //Not necessary with auto-dirty-check
+            GetCurrentDbContext().Entry<T>(item).State = EntityState.Modified;
         }
 
         public async Task UpdateAsync(T item)
@@ -41,7 +34,7 @@ namespace ECO.Providers.NHibernate
 
         public void Remove(T item)
         {
-            GetCurrentSession().Delete(item);
+            GetCurrentDbContext().Set<T>().Remove(item);
         }
 
         public async Task RemoveAsync(T item)

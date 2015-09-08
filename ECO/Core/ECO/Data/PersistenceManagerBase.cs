@@ -6,7 +6,7 @@ using System.Text;
 namespace ECO.Data
 {
     public abstract class PersistenceManagerBase<T, K> : IPersistenceManager<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Private_Fields
 

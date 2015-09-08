@@ -86,7 +86,7 @@
     <Compile Include="NHDataTransaction.cs" />
     <Compile Include="NHPersistenceContext.cs" />
     <Compile Include="NHPersistenceUnit.cs" />
-    <Compile Include="NHPersistenceManagerBase.cs" />
+    <Compile Include="NHPersistenceManager.cs" />
     <Compile Include="NHReadOnlyRepository.cs" />
     <Compile Include="NHRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

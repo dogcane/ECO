@@ -54,7 +54,7 @@ namespace ECO.Data
 
         public virtual void Close()
         {
-            
+            Dispose(true);
         }
 
         public virtual void SaveChanges()
@@ -71,7 +71,7 @@ namespace ECO.Data
             Dispose(true);
         }
 
-        private void Dispose(bool isDisposing)
+        protected void Dispose(bool isDisposing)
         {
             if (isDisposing)
             {

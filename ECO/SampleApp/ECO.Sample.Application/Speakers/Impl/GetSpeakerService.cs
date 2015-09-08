@@ -36,7 +36,14 @@ namespace ECO.Sample.Application.Speakers.Impl
             Speaker speaker = _SpeakerRepository.Load(speakerCode);
             if (speaker != null)
             {
-                return SpeakerDetail.From(speaker);
+                return new SpeakerDetail
+                {
+                    SpeakerCode = speaker.Identity,
+                    Name = speaker.Name,
+                    Surname = speaker.Surname,
+                    Age = speaker.Age,
+                    Description = speaker.Description
+                };
             }
             else
             {

@@ -9,7 +9,7 @@ using ECO;
 namespace ECO.Providers.InMemory
 {
     public class InMemoryRepository<T, K> : InMemoryReadOnlyRepository<T, K>, IRepository<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region IRepository<T> Membri di
 

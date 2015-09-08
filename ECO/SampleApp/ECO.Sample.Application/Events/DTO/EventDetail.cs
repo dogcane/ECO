@@ -25,18 +25,5 @@ namespace ECO.Sample.Application.Events.DTO
         public DateTime EndDate { get; set; }
 
         public IEnumerable<SessionListItem> Sessions { get; set; }
-
-        public static EventDetail From(Event @event)
-        {
-            return new EventDetail()
-            {
-                EventCode = @event.Identity,
-                Name = @event.Name,
-                Description = @event.Description,
-                StartDate = @event.Period.StartDate,
-                EndDate = @event.Period.EndDate,
-                Sessions = @event.Sessions.Select(item => SessionListItem.From(item))
-            };
-        }
     }
 }
