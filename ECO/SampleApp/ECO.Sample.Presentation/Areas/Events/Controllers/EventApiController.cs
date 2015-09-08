@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 
-using ECO.Web.MVC;
+using ECO.Integrations.Web.MVC;
 
 using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.DTO;

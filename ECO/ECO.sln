@@ -67,9 +67,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.EntityFramewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.Infrastructure.DAL.EntityFramework", "SampleApp\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj", "{9E566374-88A2-4101-A0BA-A9DE340361AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Web.Mvc", "Core\ECO.Integrations.Web.Mvc\ECO.Integrations.Web.Mvc.csproj", "{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Web", "Core\ECO.Integrations.Web\ECO.Integrations.Web.csproj", "{150E397A-C60F-4397-8892-8CAA08C830FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Owin", "Core\ECO.Integrations.Owin\ECO.Integrations.Owin.csproj", "{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.WCF", "Core\ECO.Integrations.WCF\ECO.Integrations.WCF.csproj", "{57A9579F-7141-4791-81D9-ADC683474964}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 23
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs11
 		SccLocalPath0 = .
@@ -145,6 +153,22 @@ Global
 		SccProjectTopLevelParentUniqueName18 = ECO.sln
 		SccProjectName18 = SampleApp/ECO.Sample.Infrastructure.DAL.EntityFramework
 		SccLocalPath18 = SampleApp\\ECO.Sample.Infrastructure.DAL.EntityFramework
+		SccProjectUniqueName19 = Core\\ECO.Integrations.Web.Mvc\\ECO.Integrations.Web.Mvc.csproj
+		SccProjectTopLevelParentUniqueName19 = ECO.sln
+		SccProjectName19 = Core/ECO.Integrations.Web.Mvc
+		SccLocalPath19 = Core\\ECO.Integrations.Web.Mvc
+		SccProjectUniqueName20 = Core\\ECO.Integrations.Web\\ECO.Integrations.Web.csproj
+		SccProjectTopLevelParentUniqueName20 = ECO.sln
+		SccProjectName20 = Core/ECO.Integrations.Web
+		SccLocalPath20 = Core\\ECO.Integrations.Web
+		SccProjectUniqueName21 = Core\\ECO.Integrations.Owin\\ECO.Integrations.Owin.csproj
+		SccProjectTopLevelParentUniqueName21 = ECO.sln
+		SccProjectName21 = Core/ECO.Integrations.Owin
+		SccLocalPath21 = Core\\ECO.Integrations.Owin
+		SccProjectUniqueName22 = Core\\ECO.Integrations.WCF\\ECO.Integrations.WCF.csproj
+		SccProjectTopLevelParentUniqueName22 = ECO.sln
+		SccProjectName22 = Core/ECO.Integrations.WCF
+		SccLocalPath22 = Core\\ECO.Integrations.WCF
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ECO2.vsmdi
@@ -226,6 +250,22 @@ Global
 		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{150E397A-C60F-4397-8892-8CAA08C830FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{150E397A-C60F-4397-8892-8CAA08C830FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{150E397A-C60F-4397-8892-8CAA08C830FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{150E397A-C60F-4397-8892-8CAA08C830FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A9579F-7141-4791-81D9-ADC683474964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A9579F-7141-4791-81D9-ADC683474964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A9579F-7141-4791-81D9-ADC683474964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A9579F-7141-4791-81D9-ADC683474964}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +281,10 @@ Global
 		{363E7AD2-D07D-4394-9D46-4C450B0AFC56} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{117FFA9D-65BB-462A-8F6E-57C43744ACF3} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{F1FE6D41-9D51-498A-A468-E003BC6491A1} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{FBFC8096-9A0B-4F3B-A421-C744A21CEF5F} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{150E397A-C60F-4397-8892-8CAA08C830FE} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{8B2DCC8A-4807-4EA5-A179-29F6DBEB399A} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{57A9579F-7141-4791-81D9-ADC683474964} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{C16168B8-2BD4-4596-B981-4A3F2703F614} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{BD6544C0-DE77-4CBB-825F-08B485161398} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}

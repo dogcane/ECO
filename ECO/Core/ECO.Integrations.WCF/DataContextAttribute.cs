@@ -6,7 +6,7 @@ using System.ServiceModel.Dispatcher;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECO.WCF
+namespace ECO.Integrations.WCF
 {
     public class DataContextOperationInvoker : IOperationInvoker
     {

@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using ECO.Context;
 
-namespace ECO.Context
+namespace ECO.Integrations.Web
 {
     public class HttpContextProvider : IContextProvider
     {

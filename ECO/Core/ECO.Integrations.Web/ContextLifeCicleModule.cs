@@ -6,7 +6,7 @@ using System.Text;
 using ECO;
 using ECO.Data;
 
-namespace ECO.Web
+namespace ECO.Integrations.Web
 {
     public abstract class ContextLifeCicleModule
     {

@@ -8,6 +8,7 @@ using ECO;
 using ECO.Configuration;
 using ECO.Resources;
 using System.Reflection;
+using ECO.Context;
 
 namespace ECO.Data
 {
@@ -60,45 +61,38 @@ namespace ECO.Data
 
         private void TryLoadConfig()
         {
-            ECOSettings settings = ConfigurationManager.GetSection("eco") as ECOSettings;
-            if (settings != null)
+            ECOSettings settings = ECOConfiguration.Configuration;
+            foreach (PersistenceUnitSettings unit in settings.Data.PersistenceUnits)
             {
-                foreach (PersistenceUnitSettings unit in settings.Data.PersistenceUnits)
+                IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
+                MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
+                MyUnit.ClassAdded += MyUnit_ClassAdded;
+                MyUnit.ClassRemoved += MyUnit_ClassRemoved;
+                _Units.Add(unit.Name, MyUnit);                    
+                foreach (ClassSettings setting in unit.Classes)
                 {
-                    IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
-                    MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
-                    MyUnit.ClassAdded += MyUnit_ClassAdded;
-                    MyUnit.ClassRemoved += MyUnit_ClassRemoved;
-                    _Units.Add(unit.Name, MyUnit);                    
-                    foreach (ClassSettings setting in unit.Classes)
+                    try
                     {
-                        try
-                        {
-                            Type type = Type.GetType(setting.Type);
-                            MyUnit.AddClass(type);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
-                        }
+                        Type type = Type.GetType(setting.Type);
+                        MyUnit.AddClass(type);
                     }
-                    foreach (UnitListenerSettings setting in unit.Listeners)
+                    catch (Exception ex)
                     {
-                        try
-                        {
-                            IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(setting.Type)) as IPersistenceUnitListener;
-                            MyUnit.AddUnitListener(listener);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
-                        }
+                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
                     }
                 }
-            }
-            else
-            {
-                throw new ConfigurationErrorsException(Errors.CONFIG_NOT_FOUND);
+                foreach (UnitListenerSettings setting in unit.Listeners)
+                {
+                    try
+                    {
+                        IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(setting.Type)) as IPersistenceUnitListener;
+                        MyUnit.AddUnitListener(listener);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, setting.Type), ex);
+                    }
+                }
             }
         }
 
