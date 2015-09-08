@@ -35,7 +35,21 @@ namespace ECO.Sample.Application.Events.Impl
             Event @event = _EventRepository.Load(eventCode);
             if (@event != null)
             {
-                return EventDetail.From(@event);
+                return new EventDetail
+                {
+                    EventCode = @event.Identity,
+                    Name = @event.Name,
+                    Description = @event.Description,
+                    StartDate = @event.Period.StartDate,
+                    EndDate = @event.Period.EndDate,
+                    Sessions = @event.Sessions.Select(item => new SessionListItem
+                    {
+                        SessionCode = item.Identity,
+                        Title = item.Title,
+                        Level = item.Level,
+                        Speaker = string.Concat(item.Speaker.Name, " ", item.Speaker.Surname)
+                    })
+                };
             }
             else
             {

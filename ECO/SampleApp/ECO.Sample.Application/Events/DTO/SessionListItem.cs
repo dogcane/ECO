@@ -16,16 +16,5 @@ namespace ECO.Sample.Application.Events.DTO
         public int Level { get; set; }
 
         public string Speaker { get; set; }
-
-        public static SessionListItem From(Session session)
-        {
-            return new SessionListItem()
-            {
-                SessionCode = session.Identity,
-                Title = session.Title,
-                Level = session.Level,
-                Speaker = string.Concat(session.Speaker.Name, " ", session.Speaker.Surname)
-            };
-        }
     }
 }

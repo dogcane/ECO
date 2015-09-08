@@ -11,7 +11,7 @@ namespace ECO
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="K"></typeparam>
     public interface IRepository<T, K> : IReadOnlyRepository<T, K>, IPersistenceManager<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Methods
 

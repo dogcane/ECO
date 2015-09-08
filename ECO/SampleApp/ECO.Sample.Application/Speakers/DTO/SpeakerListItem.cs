@@ -14,15 +14,5 @@ namespace ECO.Sample.Application.Speakers.DTO
         public string Name { get; set; }
 
         public string Surname { get; set; }
-
-        public static SpeakerListItem From(Speaker speaker)
-        {
-            return new SpeakerListItem()
-            {
-                SpeakerCode = speaker.Identity,
-                Name = speaker.Name,
-                Surname  = speaker.Surname
-            };
-        }
     }
 }

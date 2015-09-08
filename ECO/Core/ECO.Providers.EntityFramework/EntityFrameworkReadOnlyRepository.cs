@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Raven;
-using Raven.Client;
-
-using ECO;
-using ECO.Data;
-
-namespace ECO.Providers.RavenDB
+namespace ECO.Providers.EntityFramework
 {
-    public class RavenReadOnlyRepository<T, K> : RavenPersistenceManagerBase<T,K>, IReadOnlyRepository<T,K>
+    public class EntityFrameworkReadOnlyRepository<T, K> : EntityFrameworkPersistenceManager<T, K>, IReadOnlyRepository<T, K>
         where T : class, IAggregateRoot<K>
     {
-        #region IReadOnlyRepository Members
+        #region IReadOnlyRepository<T,K> Members
 
         public T Load(K identity)
         {
-            return LoadAsync(identity).Result;
+            return GetCurrentDbContext().Set<T>().Find(identity);
         }
 
         public async Task<T> LoadAsync(K identity)
         {
-            return await GetCurrentSession().LoadAsync<T>(identity.ToString());
+            return await GetCurrentDbContext().Set<T>().FindAsync(identity);
         }
 
         #endregion
@@ -33,7 +28,7 @@ namespace ECO.Providers.RavenDB
 
         public IEnumerator<T> GetEnumerator()
         {
-            return GetCurrentSession().Query<T>().AsEnumerable().GetEnumerator();
+            return GetCurrentDbContext().Set<T>().AsEnumerable().GetEnumerator();
         }
 
         #endregion
@@ -47,21 +42,21 @@ namespace ECO.Providers.RavenDB
 
         #endregion
 
-        #region IQueryable<T> Members
+        #region IQueryable Members
 
         public Type ElementType
         {
-            get { return typeof(T); }
+            get { return GetCurrentDbContext().Set<T>().AsQueryable().ElementType; }
         }
 
         public System.Linq.Expressions.Expression Expression
         {
-            get { return GetCurrentSession().Query<T>().Expression; }
+            get { return GetCurrentDbContext().Set<T>().AsQueryable().Expression; }
         }
 
         public IQueryProvider Provider
         {
-            get { return GetCurrentSession().Query<T>().Provider; }
+            get { return GetCurrentDbContext().Set<T>().AsQueryable().Provider; }
         }
 
         #endregion

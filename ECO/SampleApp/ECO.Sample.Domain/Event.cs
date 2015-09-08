@@ -12,7 +12,9 @@ namespace ECO.Sample.Domain
     {
         #region Fields
 
-        protected IList<Session> _Sessions = new List<Session>();
+        //protected IList<Session> _Sessions = new List<Session>();
+
+        protected IList<Session> _Sessions { get; set; }
 
         #endregion
 
@@ -37,7 +39,7 @@ namespace ECO.Sample.Domain
         protected Event()
             : base(Guid.NewGuid())
         {
-
+            _Sessions = new List<Session>();
         }
 
         protected Event(string name, string description, Period period)
@@ -46,6 +48,7 @@ namespace ECO.Sample.Domain
             Name = name;
             Description = description;
             Period = period;
+            _Sessions = new List<Session>();
         }
 
         #endregion

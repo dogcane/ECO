@@ -10,7 +10,7 @@ using MongoDB.Driver;
 namespace ECO.Providers.MongoDB
 {
     public abstract class MongoPersistenceManager<T, K> : PersistenceManagerBase<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Ctor
 

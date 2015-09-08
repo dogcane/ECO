@@ -11,7 +11,7 @@ using ECO.Data;
 namespace ECO.Providers.RavenDB
 {
     public class RavenPersistenceManagerBase<T, K> : PersistenceManagerBase<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Protected_Methods
 

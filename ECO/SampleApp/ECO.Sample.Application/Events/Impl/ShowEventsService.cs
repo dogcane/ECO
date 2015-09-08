@@ -45,7 +45,14 @@ namespace ECO.Sample.Application.Events.Impl
             {
                 query = query.Where(entity => entity.Name.Contains(eventName));
             }
-            return query.Select(item => EventListItem.From(item));
+            return query.Select(item => new EventListItem
+            {
+                EventCode = item.Identity,
+                Name = item.Name,
+                StartDate = item.Period.StartDate,
+                EndDate = item.Period.EndDate,
+                NumberOfSessions = item.Sessions.Count()
+            });
         }
 
         #endregion

@@ -92,7 +92,7 @@ namespace ECO.Data
             return this;
         }
 
-        public IPersistenceUnit AddClass<T, K>() where T : IAggregateRoot<K>
+        public IPersistenceUnit AddClass<T, K>() where T : class, IAggregateRoot<K>
         {
             return AddClass(typeof(T));
         }
@@ -104,7 +104,7 @@ namespace ECO.Data
             return this;
         }
 
-        public IPersistenceUnit RemoveClass<T, K>() where T : IAggregateRoot<K>
+        public IPersistenceUnit RemoveClass<T, K>() where T : class, IAggregateRoot<K>
         {
             return RemoveClass(typeof(T));
         }
@@ -121,9 +121,9 @@ namespace ECO.Data
             return this;
         }
 
-        public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : IAggregateRoot<K>;
+        public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : class, IAggregateRoot<K>;
 
-        public abstract IRepository<T, K> BuildRepository<T, K>() where T : IAggregateRoot<K>;
+        public abstract IRepository<T, K> BuildRepository<T, K>() where T : class, IAggregateRoot<K>;
 
         #endregion
 

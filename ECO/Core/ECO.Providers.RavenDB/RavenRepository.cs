@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace ECO.Providers.RavenDB
 {
     public class RavenRepository<T, K> : RavenReadOnlyRepository<T, K>, IRepository<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region IRepository<T> Membri di
 

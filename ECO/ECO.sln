@@ -65,9 +65,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.MassTransi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.EntityFramework", "Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj", "{F1FE6D41-9D51-498A-A468-E003BC6491A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.Infrastructure.DAL.EntityFramework", "SampleApp\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj", "{9E566374-88A2-4101-A0BA-A9DE340361AE}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs11
 		SccLocalPath0 = .
@@ -139,6 +141,10 @@ Global
 		SccProjectTopLevelParentUniqueName17 = ECO.sln
 		SccProjectName17 = Core/ECO.Providers.EntityFramework
 		SccLocalPath17 = Core\\ECO.Providers.EntityFramework
+		SccProjectUniqueName18 = SampleApp\\ECO.Sample.Infrastructure.DAL.EntityFramework\\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj
+		SccProjectTopLevelParentUniqueName18 = ECO.sln
+		SccProjectName18 = SampleApp/ECO.Sample.Infrastructure.DAL.EntityFramework
+		SccLocalPath18 = SampleApp\\ECO.Sample.Infrastructure.DAL.EntityFramework
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ECO2.vsmdi
@@ -216,6 +222,10 @@ Global
 		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1FE6D41-9D51-498A-A468-E003BC6491A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E566374-88A2-4101-A0BA-A9DE340361AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -240,6 +250,7 @@ Global
 		{19325985-D5FE-4F24-AA82-00FB4AC4652F} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{136ACB8E-ADE7-4AE2-B440-F4454BF21B57} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{7287AACE-EDF7-48FB-A880-735B72EC1EA9} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{9E566374-88A2-4101-A0BA-A9DE340361AE} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{40E8A9BF-6B1E-4355-9372-87865210BF68} = {BD6544C0-DE77-4CBB-825F-08B485161398}
 		{3E62DA0D-552C-43AA-B1D1-8C03A87E22C7} = {05AD202B-FF8D-404E-83E1-AA0F97A6F588}
 	EndGlobalSection

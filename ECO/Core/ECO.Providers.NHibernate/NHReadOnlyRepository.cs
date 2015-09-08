@@ -12,8 +12,8 @@ using ECO.Data;
 
 namespace ECO.Providers.NHibernate
 {
-    public class NHReadOnlyRepository<T, K> : NHPersistenceManagerBase<T, K>, IReadOnlyRepository<T, K>
-        where T : IAggregateRoot<K>
+    public class NHReadOnlyRepository<T, K> : NHPersistenceManager<T, K>, IReadOnlyRepository<T, K>
+        where T : class, IAggregateRoot<K>
     {
         #region IReadOnlyEntityManager<T,K> Members
 

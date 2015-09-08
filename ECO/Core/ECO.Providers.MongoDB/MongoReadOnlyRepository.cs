@@ -12,7 +12,7 @@ using MongoDB.Driver.Linq;
 namespace ECO.Providers.MongoDB
 {
     public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region IReadOnlyRepository<T,K> Members
 

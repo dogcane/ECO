@@ -44,7 +44,11 @@ namespace ECO.Sample.Presentation.DependencyResolution {
     #elif MONGODB
                     x.For<IEventRepository>().Add<EventMongoRepository>(); //Mongo Stuff
                     x.For<ISpeakerRepository>().Add<SpeakerMongoRepository>(); //Mongo Stuff
+    #elif ENTITYFRAMEWORK
+                    x.For<IEventRepository>().Add<EventEFRepository>(); //EF Stuff
+                    x.For<ISpeakerRepository>().Add<SpeakerEFRepository>(); //Mongo Stuff
     #endif
+
                     x.For<IShowEventsService>().Add<ShowEventsService>();
                     x.For<ICreateEventService>().Add<CreateEventService>();
                     x.For<IGetEventService>().Add<GetEventService>();

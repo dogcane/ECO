@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F1FE6D41-9D51-498A-A468-E003BC6491A1}</ProjectGuid>
+    <ProjectGuid>{9E566374-88A2-4101-A0BA-A9DE340361AE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ECO.Providers.EntityFramework</RootNamespace>
-    <AssemblyName>ECO.Providers.EntityFramework</AssemblyName>
+    <RootNamespace>ECO.Sample.Infrastructure.DAL.EntityFramework</RootNamespace>
+    <AssemblyName>ECO.Sample.Infrastructure.DAL.EntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -54,24 +54,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ECODbContext.cs" />
-    <Compile Include="EntityFrameworkDataTransaction.cs" />
-    <Compile Include="EntityFrameworkPersistenceContext.cs" />
-    <Compile Include="EntityFrameworkPersistenceManager.cs" />
-    <Compile Include="EntityFrameworkPersistenceUnit.cs" />
-    <Compile Include="EntityFrameworkReadOnlyRepository.cs" />
-    <Compile Include="EntityFrameworkRepository.cs" />
+    <Compile Include="ECOSampleContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\EntityTypeConfiguratorExtensions.cs" />
+    <Compile Include="Repositories\EventEFRepository.cs" />
+    <Compile Include="Repositories\SpeakerEFRepository.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECO\ECO.csproj">
+    <ProjectReference Include="..\..\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj">
+      <Project>{f1fe6d41-9d51-498a-a468-e003bc6491a1}</Project>
+      <Name>ECO.Providers.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\ECO\ECO.csproj">
       <Project>{408550ba-fa42-4f2b-afb9-7c63d885384f}</Project>
       <Name>ECO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj">
+      <Project>{40e8a9bf-6b1e-4355-9372-87865210bf68}</Project>
+      <Name>ECO.Sample.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj">
+      <Project>{19325985-d5fe-4f24-aa82-00fb4ac4652f}</Project>
+      <Name>ECO.Sample.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,8 +9,8 @@ using ECO.Data;
 
 namespace ECO.Providers.NHibernate
 {
-    public class NHPersistenceManagerBase<T, K> : PersistenceManagerBase<T, K>
-        where T : IAggregateRoot<K>
+    public class NHPersistenceManager<T, K> : PersistenceManagerBase<T, K>
+        where T : class, IAggregateRoot<K>
     {
         #region Protected_Methods
 

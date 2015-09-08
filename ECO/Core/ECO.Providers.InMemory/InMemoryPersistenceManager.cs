@@ -9,7 +9,7 @@ using ECO.Data;
 namespace ECO.Providers.InMemory
 {
     public abstract class InMemoryPersistenceManager<T, K> : PersistenceManagerBase<T, K>
-        where T : IAggregateRoot<K>
+        where T : class, IAggregateRoot<K>
     {
         #region Protected_Methods
 
