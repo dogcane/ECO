@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--configurazione di ECO-->
-  <eco>    
+  <eco contextType="ApplicationContextType">    
     <data autoScanClasses="true">
       <persistence-units>
         <persistence-unit name="PersistentUnitName" type="PertistentUnitType">

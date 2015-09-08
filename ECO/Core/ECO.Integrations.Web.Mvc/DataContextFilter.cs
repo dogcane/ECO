@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Transactions;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ECO.Data;
 
-namespace ECO.Web.MVC
+namespace ECO.Integrations.Web.MVC
 {
     public class DataContextFilter : ActionFilterAttribute
     {

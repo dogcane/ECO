@@ -1,32 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text;
+using ECO.Configuration;
+using ECO.Resources;
 
 
 namespace ECO.Context
 {
     public sealed class ApplicationContext
     {
-        #region Private_Properties
+        #region Ctor
 
-        private static IContextProvider RealContextProvider
+        static ApplicationContext()
         {
-            get
+            try
             {
-                if (System.Web.HttpContext.Current != null)
-                {
-                    return new HttpContextProvider();
-                }
-                else if (System.ServiceModel.OperationContext.Current != null)
-                {
-                    return new WcfContextProvider();
-                }
-                else
-                {
-                    return new ThreadStaticContext();
-                }
+                ContextProvider = Activator.CreateInstance(Type.GetType(ECOConfiguration.Configuration.ContextType)) as IContextProvider;
             }
+            catch (Exception ex)
+            {
+                throw new ConfigurationErrorsException(string.Format(Errors.TYPE_LOAD_EXCEPTION, ECOConfiguration.Configuration.ContextType), ex);
+            }
+
         }
+
+        #endregion
+
+        #region Properties
+
+        public static IContextProvider ContextProvider { get; private set; }
 
         #endregion
 
@@ -34,12 +37,12 @@ namespace ECO.Context
 
         public static object GetContextData(string dataKey)
         {
-            return RealContextProvider.GetContextData(dataKey);
+            return ContextProvider.GetContextData(dataKey);
         }
 
         public static void SetContextData(string dataKey, object data)
         {
-            RealContextProvider.SetContextData(dataKey, data);
+            ContextProvider.SetContextData(dataKey, data);
         }
 
         #endregion

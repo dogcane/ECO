@@ -65,12 +65,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Abstractions" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +74,7 @@
     <Compile Include="Configuration\ClassSettingsCollection.cs" />
     <Compile Include="Configuration\AttributeSettingsCollection.cs" />
     <Compile Include="Configuration\DataSettings.cs" />
+    <Compile Include="Configuration\ECOConfiguration.cs" />
     <Compile Include="Configuration\ECOSettings.cs" />
     <Compile Include="Configuration\PersistenceContextAttribute.cs" />
     <Compile Include="Configuration\PersistenceUnitSettings.cs" />
@@ -87,9 +83,7 @@
     <Compile Include="Configuration\UnitListenerSettings.cs" />
     <Compile Include="Configuration\UnitListenerSettingsCollection.cs" />
     <Compile Include="Context\ApplicationContext.cs" />
-    <Compile Include="Context\HttpContextProvider.cs" />
     <Compile Include="Context\IContextProvider.cs" />
-    <Compile Include="Context\WcfInstanceContext .cs" />
     <Compile Include="Context\ThreadStaticContext.cs" />
     <Compile Include="Data\EntityExtensions.cs" />
     <Compile Include="Data\IDataTransaction.cs" />
@@ -130,12 +124,6 @@
     </Compile>
     <Compile Include="VersionableAggregateRoot.cs" />
     <Compile Include="VersionableEntity.cs" />
-    <Compile Include="WCF\DataContextAttribute.cs" />
-    <Compile Include="Web\ContextLifeCicleModule.cs" />
-    <Compile Include="Web\MVC\DataContextApiFilter.cs" />
-    <Compile Include="Web\MVC\DataContextFilter.cs" />
-    <Compile Include="Web\DataContextModule.cs" />
-    <Compile Include="Web\TransactionalDataContextModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Schema\SampleConfiguration.xml" />

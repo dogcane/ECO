@@ -10,7 +10,7 @@ using ECO.Bender;
 using ECO.Bender.Web;
 using ECO.Bender.Web.MVC;
 using ECO.Data;
-using ECO.Web.MVC;
+using ECO.Integrations.Web.MVC;
 using System.Text;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers

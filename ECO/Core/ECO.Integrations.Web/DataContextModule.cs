@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Web;
-using System.Text;
 
-using ECO;
 using ECO.Data;
-using System.Web.UI;
 
-namespace ECO.Web
+namespace ECO.Integrations.Web
 {
     public class DataContextModule : ContextLifeCicleModule, IHttpModule
     {

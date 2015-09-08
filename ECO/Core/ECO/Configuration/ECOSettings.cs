@@ -9,11 +9,22 @@ namespace ECO.Configuration
     {
         #region Private_Fields
 
+        private static ConfigurationProperty _ContextType;
+
         private static ConfigurationProperty _DataProperty;
 
         #endregion
 
         #region Public_Properties
+
+        [ConfigurationProperty("contextType", IsRequired = true)]
+        public string ContextType
+        {
+            get
+            {
+                return (string)this[_ContextType];
+            }
+        } 
 
         [ConfigurationProperty("data", IsRequired=true)]
         public DataSettings Data
@@ -30,6 +41,7 @@ namespace ECO.Configuration
 
         static ECOSettings()
         {
+            _ContextType = new ConfigurationProperty("contextType", typeof(string));
             _DataProperty = new ConfigurationProperty("data", typeof(DataSettings));
         }
 

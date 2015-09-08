@@ -1,7 +1,4 @@
-﻿using System.Web;
-using System.Web.Mvc;
-
-using ECO.Web.MVC;
+﻿using System.Web.Mvc;
 
 namespace ECO.Sample.Presentation
 {
@@ -10,7 +7,6 @@ namespace ECO.Sample.Presentation
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            //filters.Add(new DataContextFilter()); You can also abilitate global DataContextFilter
         }
     }
 }

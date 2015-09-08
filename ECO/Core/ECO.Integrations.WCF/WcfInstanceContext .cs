@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+using ECO.Context;
 
-namespace ECO.Context
+namespace ECO.Integrations.WCF
 {
     public class WcfInstanceContext : IExtension<InstanceContext>
     {
