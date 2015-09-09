@@ -19,7 +19,7 @@ namespace ECO.Providers.NHibernate
 
         public virtual T Load(K identity)
         {
-            return GetCurrentSession().Load<T>(identity);
+            return GetCurrentSession().Get<T>(identity);
         }
 
         public virtual async Task<T> LoadAsync(K identity)
@@ -62,15 +62,6 @@ namespace ECO.Providers.NHibernate
         public System.Linq.IQueryProvider Provider
         {
             get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).Provider; }
-        }
-
-        #endregion
-
-        #region Public_Methods
-
-        public virtual T Get(K identity)
-        {
-            return GetCurrentSession().Get<T>(identity);
         }
 
         #endregion
