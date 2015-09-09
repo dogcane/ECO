@@ -83,8 +83,9 @@
     <Compile Include="Configuration\UnitListenerSettings.cs" />
     <Compile Include="Configuration\UnitListenerSettingsCollection.cs" />
     <Compile Include="Context\ApplicationContext.cs" />
+    <Compile Include="Context\CallContextProvider.cs" />
     <Compile Include="Context\IContextProvider.cs" />
-    <Compile Include="Context\ThreadStaticContext.cs" />
+    <Compile Include="Context\ThreadStaticContextProvider.cs" />
     <Compile Include="Data\EntityExtensions.cs" />
     <Compile Include="Data\IDataTransaction.cs" />
     <Compile Include="Data\IdentityAttributeTypeNotMatchedException.cs" />

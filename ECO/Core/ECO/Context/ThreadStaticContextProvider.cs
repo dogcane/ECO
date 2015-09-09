@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ECO.Context
 {
-    public class ThreadStaticContext : IContextProvider
+    public class ThreadStaticContextProvider : IContextProvider
     {
         #region Fields
 
@@ -16,7 +16,7 @@ namespace ECO.Context
 
         #region ~Ctor
 
-        public ThreadStaticContext()
+        public ThreadStaticContextProvider()
         {
             
         }
