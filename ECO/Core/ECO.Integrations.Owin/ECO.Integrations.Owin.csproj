@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ECOAppBuilderExtensions.cs" />
     <Compile Include="ECOMiddleware.cs" />
+    <Compile Include="OwinContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
