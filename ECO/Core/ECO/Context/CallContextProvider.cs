@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ECO.Context
@@ -13,12 +14,12 @@ namespace ECO.Context
 
         public object GetContextData(string dataKey)
         {
-            return CallContext.GetData(dataKey);
+            return CallContext.LogicalGetData(dataKey);
         }
 
         public void SetContextData(string dataKey, object data)
         {
-            CallContext.SetData(dataKey, data);
+            CallContext.LogicalSetData(dataKey, data);
         }
 
         #endregion
