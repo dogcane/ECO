@@ -11,43 +11,37 @@ namespace ECO.Bender
     /// </summary>
     [Serializable]
     [DataContract]
-    public struct OperationResult
+    public class OperationResult
     {
-        #region Fields
-
-        private IList<ErrorMessage> _Errors;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
         /// Indica se l'operazione ha avuto successo o meno
-        /// </summary>
+        /// </summary>        
         [DataMember]
         public bool Success
         {
-            get { return _Errors.Count == 0; }
-            private set { }
+            get { return Errors.Count == 0; }
         }
 
         /// <summary>
         /// Elenco degli errori che si sono verificati durante l'esecuzione dell'operazione
         /// </summary>
         [DataMember]
-        public IEnumerable<ErrorMessage> Errors
-        {
-            get { return _Errors; }
-            private set { }
-        }        
+        public List<ErrorMessage> Errors { get; set; }
 
         #endregion
 
         #region Ctor
 
-        private OperationResult(IEnumerable<ErrorMessage> errors)
+        public OperationResult()
         {
-            _Errors = new List<ErrorMessage>(errors);
+            Errors = new List<ErrorMessage>();
+        }
+
+        public OperationResult(IEnumerable<ErrorMessage> errors)
+        {
+            Errors = new List<ErrorMessage>(errors);
         }
 
         #endregion
@@ -61,7 +55,7 @@ namespace ECO.Bender
 
         public static OperationResult MakeSuccess()
         {
-            return new OperationResult(Enumerable.Empty<ErrorMessage>());
+            return new OperationResult();
         }
 
         public static OperationResult MakeFailure(params ErrorMessage[] errors)
@@ -76,28 +70,25 @@ namespace ECO.Bender
 
         public OperationResult AppendError(string context, string description)
         {
-            _Errors.Add(ErrorMessage.Create(context, description));
+            Errors.Add(ErrorMessage.Create(context, description));
             return this;
         }
 
         public OperationResult AppendError(ErrorMessage error)
         {
-            _Errors.Add(error);
+            Errors.Add(error);
             return this;
         }
 
         public OperationResult AppendErrors(IEnumerable<ErrorMessage> errors)
         {
-            foreach (ErrorMessage error in errors)
-            {
-                _Errors.Add(error);
-            }
+            Errors.AddRange(errors);
             return this;
         }
 
         public OperationResult AppendContextPrefix(string contextPrefix)
         {
-            foreach (ErrorMessage error in _Errors)
+            foreach (ErrorMessage error in Errors)
             {
                 error.AppendContextPrefix(contextPrefix);
             }
@@ -106,12 +97,12 @@ namespace ECO.Bender
 
         public OperationResult TranslateContext(string oldContext, string newContext)
         {
-            for (int i = 0; i < _Errors.Count; i++)
+            for (int i = 0; i < Errors.Count; i++)
             {
-                ErrorMessage error = _Errors[i];
+                ErrorMessage error = Errors[i];
                 if (error.Context.Equals(oldContext, StringComparison.CurrentCultureIgnoreCase))
                 {                    
-                    _Errors[i] = error.TranslateContext(newContext);
+                    Errors[i] = error.TranslateContext(newContext);
                 }
             }
             return this;

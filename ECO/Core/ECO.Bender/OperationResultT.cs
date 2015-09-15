@@ -11,51 +11,51 @@ namespace ECO.Bender
     /// </summary>
     [Serializable]
     [DataContract]
-    public struct OperationResult<T>
+    public class OperationResult<T>
     {
-        #region Private_Fields
-
-        private OperationResult _InnerResult;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
         /// Indica se l'operazione ha avuto successo o meno
-        /// </summary>
+        /// </summary>        
         [DataMember]
         public bool Success
         {
-            get { return _InnerResult.Success; }
-            private set { }
+            get { return Errors.Count == 0; }
         }
 
         /// <summary>
         /// Valore restituito dall'operazione
         /// </summary>
         [DataMember]
-        public T Value { get; private set; }
+        public T Value { get; set; }
 
         /// <summary>
         /// Elenco degli errori che si sono verificati durante l'esecuzione dell'operazione
         /// </summary>
         [DataMember]
-        public IEnumerable<ErrorMessage> Errors
-        {
-            get { return _InnerResult.Errors; }
-            private set { }
-        }
+        public List<ErrorMessage> Errors { get; set; }
 
         #endregion
 
         #region Ctor
 
-        private OperationResult(OperationResult innerResult, T value)
-            : this()
+        public OperationResult()
         {
-            _InnerResult = innerResult;
+            Errors = new List<ErrorMessage>();
+            Value = default(T);
+        }
+
+        public OperationResult(T value)            
+        {
+            Errors = new List<ErrorMessage>();
             Value = value;
+        }
+
+        public OperationResult(IEnumerable<ErrorMessage> errors)
+        {
+            Errors = new List<ErrorMessage>(errors);
+            Value = default(T);
         }
 
         #endregion
@@ -64,12 +64,12 @@ namespace ECO.Bender
 
         public static OperationResult<T> MakeSuccess(T value)
         {
-            return new OperationResult<T>(OperationResult.MakeSuccess(), value);
+            return new OperationResult<T>(value);
         }
 
         public static OperationResult<T> MakeFailure(IEnumerable<ErrorMessage> errors)
         {
-            return new OperationResult<T>(OperationResult.MakeFailure(errors), default(T));
+            return new OperationResult<T>(errors);
         }
 
         public static implicit operator OperationResult<T>(T value)
@@ -91,17 +91,47 @@ namespace ECO.Bender
 
         public static implicit operator OperationResult(OperationResult<T> value)
         {
-            return value._InnerResult;
+            return value.Success ? OperationResult.MakeSuccess() : OperationResult.MakeFailure(value.Errors);
+        }
+
+        public OperationResult<T> AppendError(string context, string description)
+        {
+            Errors.Add(ErrorMessage.Create(context, description));
+            return this;
+        }
+
+        public OperationResult<T> AppendError(ErrorMessage error)
+        {
+            Errors.Add(error);
+            return this;
+        }
+
+        public OperationResult<T> AppendErrors(IEnumerable<ErrorMessage> errors)
+        {
+            Errors.AddRange(errors);
+            return this;
         }
 
         public OperationResult<T> AppendContextPrefix(string contextPrefix)
-        {
-            return _InnerResult.AppendContextPrefix(contextPrefix);
+        {            
+            foreach (ErrorMessage error in Errors)
+            {
+                error.AppendContextPrefix(contextPrefix);
+            }
+            return this;
         }
 
-        public OperationResult TranslateContext(string oldContext, string newContext)
+        public OperationResult<T> TranslateContext(string oldContext, string newContext)
         {
-            return _InnerResult.TranslateContext(oldContext, newContext);
+            for (int i = 0; i < Errors.Count; i++)
+            {
+                ErrorMessage error = Errors[i];
+                if (error.Context.Equals(oldContext, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Errors[i] = error.TranslateContext(newContext);
+                }
+            }
+            return this;
         }
 
         #endregion
