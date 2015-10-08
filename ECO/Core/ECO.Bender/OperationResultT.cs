@@ -19,10 +19,7 @@ namespace ECO.Bender
         /// Indica se l'operazione ha avuto successo o meno
         /// </summary>        
         [DataMember]
-        public bool Success
-        {
-            get { return Errors.Count == 0; }
-        }
+        public bool Success { get; protected set; }
 
         /// <summary>
         /// Valore restituito dall'operazione
@@ -40,20 +37,23 @@ namespace ECO.Bender
 
         #region Ctor
 
-        public OperationResult()
+        public OperationResult(bool success)
         {
+            Success = success;
             Errors = new List<ErrorMessage>();
             Value = default(T);
         }
 
-        public OperationResult(T value)            
+        public OperationResult(bool success, T value)            
         {
+            Success = success;
             Errors = new List<ErrorMessage>();
             Value = value;
         }
 
-        public OperationResult(IEnumerable<ErrorMessage> errors)
+        public OperationResult(bool success, IEnumerable<ErrorMessage> errors)
         {
+            Success = success & !errors.Any();
             Errors = new List<ErrorMessage>(errors);
             Value = default(T);
         }
@@ -64,12 +64,17 @@ namespace ECO.Bender
 
         public static OperationResult<T> MakeSuccess(T value)
         {
-            return new OperationResult<T>(value);
+            return new OperationResult<T>(true, value);
+        }
+
+        public static OperationResult MakeFailure(params ErrorMessage[] errors)
+        {
+            return new OperationResult(false, errors);
         }
 
         public static OperationResult<T> MakeFailure(IEnumerable<ErrorMessage> errors)
         {
-            return new OperationResult<T>(errors);
+            return new OperationResult<T>(false, errors);
         }
 
         public static implicit operator OperationResult<T>(T value)
@@ -96,18 +101,21 @@ namespace ECO.Bender
 
         public OperationResult<T> AppendError(string context, string description)
         {
+            Success = false;
             Errors.Add(ErrorMessage.Create(context, description));
             return this;
         }
 
         public OperationResult<T> AppendError(ErrorMessage error)
         {
+            Success = false;
             Errors.Add(error);
             return this;
         }
 
         public OperationResult<T> AppendErrors(IEnumerable<ErrorMessage> errors)
         {
+            Success = false;
             Errors.AddRange(errors);
             return this;
         }
