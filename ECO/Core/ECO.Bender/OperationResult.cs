@@ -19,10 +19,7 @@ namespace ECO.Bender
         /// Indica se l'operazione ha avuto successo o meno
         /// </summary>        
         [DataMember]
-        public bool Success
-        {
-            get { return Errors.Count == 0; }
-        }
+        public bool Success { get; protected set; }
 
         /// <summary>
         /// Elenco degli errori che si sono verificati durante l'esecuzione dell'operazione
@@ -34,13 +31,15 @@ namespace ECO.Bender
 
         #region Ctor
 
-        public OperationResult()
+        public OperationResult(bool success)
         {
+            Success = true;
             Errors = new List<ErrorMessage>();
         }
 
-        public OperationResult(IEnumerable<ErrorMessage> errors)
+        public OperationResult(bool success, IEnumerable<ErrorMessage> errors)
         {
+            Success = success & !errors.Any();
             Errors = new List<ErrorMessage>(errors);
         }
 
@@ -55,33 +54,36 @@ namespace ECO.Bender
 
         public static OperationResult MakeSuccess()
         {
-            return new OperationResult();
+            return new OperationResult(true);
         }
 
         public static OperationResult MakeFailure(params ErrorMessage[] errors)
         {
-            return new OperationResult(errors);
+            return new OperationResult(false, errors);
         }
 
         public static OperationResult MakeFailure(IEnumerable<ErrorMessage> errors)
         {
-            return new OperationResult(errors);
+            return new OperationResult(false, errors);
         }        
 
         public OperationResult AppendError(string context, string description)
         {
+            Success = false;
             Errors.Add(ErrorMessage.Create(context, description));
             return this;
         }
 
         public OperationResult AppendError(ErrorMessage error)
         {
+            Success = false;
             Errors.Add(error);
             return this;
         }
 
         public OperationResult AppendErrors(IEnumerable<ErrorMessage> errors)
         {
+            Success = false;
             Errors.AddRange(errors);
             return this;
         }
