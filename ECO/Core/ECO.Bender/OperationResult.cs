@@ -19,7 +19,7 @@ namespace ECO.Bender
         /// Indica se l'operazione ha avuto successo o meno
         /// </summary>        
         [DataMember]
-        public bool Success { get; protected set; }
+        public bool Success { get; set; }
 
         /// <summary>
         /// Elenco degli errori che si sono verificati durante l'esecuzione dell'operazione
@@ -30,6 +30,11 @@ namespace ECO.Bender
         #endregion
 
         #region Ctor
+
+        public OperationResult()
+        {
+
+        }
 
         public OperationResult(bool success)
         {
