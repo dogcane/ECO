@@ -72,9 +72,9 @@ namespace ECO.Bender
             return new OperationResult<T>(true, value);
         }
 
-        public static OperationResult MakeFailure(params ErrorMessage[] errors)
+        public static OperationResult<T> MakeFailure(params ErrorMessage[] errors)
         {
-            return new OperationResult(false, errors);
+            return new OperationResult<T>(false, errors);
         }
 
         public static OperationResult<T> MakeFailure(IEnumerable<ErrorMessage> errors)
