@@ -126,10 +126,11 @@ namespace ECO.Bender
         }
 
         public OperationResult<T> AppendContextPrefix(string contextPrefix)
-        {            
-            foreach (ErrorMessage error in Errors)
+        {
+            for (int i = 0; i < Errors.Count; i++)
             {
-                error.AppendContextPrefix(contextPrefix);
+                ErrorMessage error = Errors[i];
+                Errors[i] = error.AppendContextPrefix(contextPrefix);
             }
             return this;
         }

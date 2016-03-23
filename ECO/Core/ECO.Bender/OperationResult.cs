@@ -95,9 +95,10 @@ namespace ECO.Bender
 
         public OperationResult AppendContextPrefix(string contextPrefix)
         {
-            foreach (ErrorMessage error in Errors)
+            for (int i = 0; i < Errors.Count; i++)
             {
-                error.AppendContextPrefix(contextPrefix);
+                ErrorMessage error = Errors[i];
+                Errors[i] = error.AppendContextPrefix(contextPrefix);
             }
             return this;
         }
@@ -119,6 +120,16 @@ namespace ECO.Bender
 
         #region Operators
 
+        public static bool operator true(OperationResult o)
+        {
+            return o.Success;
+        }
+
+        public static bool operator false(OperationResult o)
+        {
+            return !o.Success;
+        }
+        
         public static OperationResult operator &(OperationResult o1, OperationResult o2)
         {
             if (o1.Success && o2.Success)
