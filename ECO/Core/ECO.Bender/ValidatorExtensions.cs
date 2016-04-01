@@ -96,6 +96,33 @@ namespace ECO.Bender
                 checker.AppendError(context, message);
             }
             return checker;
+        }        
+
+        #endregion
+
+        #region EqualTo<string>
+
+        public static ValueChecker<string> EqualTo(this ValueChecker<string> checker, string value, StringComparison comparisonType)
+        {
+            return EqualTo(checker, value, comparisonType, checker.Context, checker.Description);
+        }
+
+        public static ValueChecker<string> EqualTo(this ValueChecker<string> checker, string value, StringComparison comparisonType, string message)
+        {
+            return EqualTo(checker, value, comparisonType, checker.Context, message);
+        }
+
+        public static ValueChecker<string> EqualTo(this ValueChecker<string> checker, string value, StringComparison comparisonType, string context, string message)
+        {
+            if (value != null && !value.Equals(checker.Value, comparisonType))
+            {
+                checker.AppendError(context, message);
+            }
+            else if (checker.Value != null && !checker.Value.Equals(value, comparisonType))
+            {
+                checker.AppendError(context, message);
+            }
+            return checker;
         }
 
         #endregion
