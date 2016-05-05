@@ -19,6 +19,7 @@ namespace ECO.Providers.NHibernate
 
         public virtual T Load(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             return GetCurrentSession().Get<T>(identity);
         }
 

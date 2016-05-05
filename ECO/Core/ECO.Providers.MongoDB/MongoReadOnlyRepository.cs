@@ -18,6 +18,7 @@ namespace ECO.Providers.MongoDB
 
         public T Load(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             if (GetCurrentIdentityMap().ContainsIdentity(identity))
             {
                 return (T)GetCurrentIdentityMap()[identity];

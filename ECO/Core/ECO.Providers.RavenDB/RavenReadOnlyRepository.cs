@@ -24,6 +24,7 @@ namespace ECO.Providers.RavenDB
 
         public async Task<T> LoadAsync(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             return await GetCurrentSession().LoadAsync<T>(identity.ToString());
         }
 

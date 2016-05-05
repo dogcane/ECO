@@ -14,6 +14,7 @@ namespace ECO.Providers.InMemory
 
         public T Load(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             T entity = default(T);
             GetIdentityMap().TryGetValue(identity, out entity);
             return entity;
