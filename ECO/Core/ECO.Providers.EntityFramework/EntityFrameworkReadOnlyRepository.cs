@@ -14,11 +14,13 @@ namespace ECO.Providers.EntityFramework
 
         public T Load(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             return GetCurrentDbContext().Set<T>().Find(identity);
         }
 
         public async Task<T> LoadAsync(K identity)
         {
+            if (typeof(K).IsClass && identity == null) return default(T);
             return await GetCurrentDbContext().Set<T>().FindAsync(identity);
         }
 
