@@ -15,7 +15,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -86,15 +86,16 @@
     <Compile Include="Context\CallContextProvider.cs" />
     <Compile Include="Context\IContextProvider.cs" />
     <Compile Include="Context\ThreadStaticContextProvider.cs" />
+    <Compile Include="Data\DataContextClosedException.cs" />
     <Compile Include="Data\EntityExtensions.cs" />
     <Compile Include="Data\IDataTransaction.cs" />
     <Compile Include="Data\IdentityAttributeTypeNotMatchedException.cs" />
     <Compile Include="Data\IPersistenceUnitListener.cs" />
     <Compile Include="Data\IECOQueryable.cs" />
     <Compile Include="Data\NullDataTransaction.cs" />
-    <Compile Include="Data\PersistenceContextNotFound.cs" />
-    <Compile Include="Data\PersistenceUnitNotFound.cs" />
-    <Compile Include="Data\PersistentClassNotRegistered.cs" />
+    <Compile Include="Data\PersistenceContextNotFoundException.cs" />
+    <Compile Include="Data\PersistenceUnitNotFoundException.cs" />
+    <Compile Include="Data\PersistentClassNotRegisteredException.cs" />
     <Compile Include="Data\PersistentContextBase.cs" />
     <Compile Include="Data\PersistentUnitClassEventArgs.cs" />
     <Compile Include="Data\TransactionContext.cs" />

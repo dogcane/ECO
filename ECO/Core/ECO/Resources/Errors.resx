@@ -120,6 +120,9 @@
   <data name="CONFIG_NOT_FOUND" xml:space="preserve">
     <value>The section "eco" was not found in .config file.</value>
   </data>
+  <data name="DATA_CONTEXT_CLOSED" xml:space="preserve">
+    <value>The data context is closed</value>
+  </data>
   <data name="IDENTITY_TYPE_NOT_MATCHED" xml:space="preserve">
     <value>The type of the identity attribute is different from the type defined by the entity '{0}'.</value>
   </data>

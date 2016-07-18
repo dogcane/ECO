@@ -54,7 +54,7 @@ namespace ECO.Data
         {
             if (DataContext.Current == null)
             {
-                throw new ApplicationException("The DataContext is closed!");
+                throw new DataContextClosedException();
             }
             return PersistenceUnit.GetCurrentContext();
         }

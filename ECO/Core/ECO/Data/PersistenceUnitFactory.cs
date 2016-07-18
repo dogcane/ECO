@@ -155,7 +155,7 @@ namespace ECO.Data
             }
             else
             {
-                throw new PersistenceUnitNotFound(name);
+                throw new PersistenceUnitNotFoundException(name);
             }
         }
 
@@ -189,7 +189,7 @@ namespace ECO.Data
                     }
                 }
             }
-            throw new PersistentClassNotRegistered(entityType);
+            throw new PersistentClassNotRegisteredException(entityType);
         }
 
         #endregion
