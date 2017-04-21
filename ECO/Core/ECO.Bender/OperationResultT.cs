@@ -33,6 +33,12 @@ namespace ECO.Bender
         [DataMember]
         public List<ErrorMessage> Errors { get; set; }
 
+        /// <summary>
+        /// Informazioni aggiuntive
+        /// </summary>
+        [DataMember]
+        public string AdditionalInfo { get; set; }
+
         #endregion
 
         #region Ctor

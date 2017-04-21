@@ -21,12 +21,15 @@ namespace ECO.Integrations.Web
 
         public object GetContextData(string dataKey)
         {
-            return HttpContext.Current.Items[dataKey];
+            return (HttpContext.Current != null) ? HttpContext.Current.Items[dataKey] : null;
         }
 
         public void SetContextData(string dataKey, object data)
         {
+            if (HttpContext.Current != null)
+            {
             HttpContext.Current.Items[dataKey] = data;
+            }
         }
 
         #endregion
