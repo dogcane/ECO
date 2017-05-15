@@ -12,7 +12,7 @@ using MassTransit.Saga;
 
 namespace ECO.Integrations.MassTransit
 {
-    public class ECOSagaRepository<TSaga> : ISagaRepository<TSaga>
+    public class ECOSagaRepository<TSaga> : IECOSagaFactory<TSaga>
         where TSaga : class, ISaga, IAggregateRoot<Guid>
     {
         #region Private_Fields
@@ -32,26 +32,27 @@ namespace ECO.Integrations.MassTransit
 
         #region ISagaRepository<TInstance> Members
 
-        public IEnumerable<Guid> Find(ISagaFilter<TSaga> filter)
+        public virtual IEnumerable<Guid> Find(ISagaFilter<TSaga> filter)
         {
             return Where(filter, x => x.Identity);
         }
 
-        public IEnumerable<Action<IConsumeContext<TMessage>>> GetSaga<TMessage>(IConsumeContext<TMessage> context, Guid sagaId, InstanceHandlerSelector<TSaga, TMessage> selector, ISagaPolicy<TSaga, TMessage> policy) where TMessage : class
+        public virtual IEnumerable<Action<IConsumeContext<TMessage>>> GetSaga<TMessage>(IConsumeContext<TMessage> context, Guid sagaId, InstanceHandlerSelector<TSaga, TMessage> selector, ISagaPolicy<TSaga, TMessage> policy) where TMessage : class
         {
             using (DataContext dtx = new DataContext())
             using (TransactionContext tcx = dtx.BeginTransaction(true))
             {
-                var instance = _EntityRepository.Where(ent => ent.Identity == sagaId).FirstOrDefault();
+                var instance = LoadSaga(policy, context, sagaId);
                 if (instance == null)
                 {
                     if (policy.CanCreateInstance(context))
                     {
                         yield return x =>
                         {
+                            
                             try
                             {
-                                instance = policy.CreateInstance(x, sagaId);
+                                instance = BuildSaga(policy, x, sagaId);
 
                                 foreach (var callback in selector(instance, x))
                                 {
@@ -66,7 +67,7 @@ namespace ECO.Integrations.MassTransit
                                 var sex = new SagaException("Create Saga Instance Exception", typeof(TSaga),
                                     typeof(TMessage), sagaId, ex);                                
 
-                                if (tcx.Status == TransactionStatus.Alive)
+                                if (tcx != null && tcx.Status == TransactionStatus.Alive)
                                     tcx.Rollback();
                                 throw sex;
                             }
@@ -79,7 +80,6 @@ namespace ECO.Integrations.MassTransit
                     {
                         yield return x =>
                         {
-
                             try
                             {
                                 foreach (var callback in selector(instance, x))
@@ -96,7 +96,7 @@ namespace ECO.Integrations.MassTransit
                             {
                                 var sex = new SagaException("Existing Saga Instance Exception", typeof(TSaga),
                                     typeof(TMessage), sagaId, ex);
-                                if (tcx.Status == TransactionStatus.Alive)
+                                if (tcx != null && tcx.Status == TransactionStatus.Alive)
                                     tcx.Rollback();
                                 throw sex;
                             }
@@ -106,7 +106,7 @@ namespace ECO.Integrations.MassTransit
             }
         }
 
-        public IEnumerable<TResult> Select<TResult>(Func<TSaga, TResult> transformer)
+        public virtual IEnumerable<TResult> Select<TResult>(Func<TSaga, TResult> transformer)
         {
             using (DataContext dtx = new DataContext())
             using (TransactionContext tcx = dtx.BeginTransaction())
@@ -115,7 +115,7 @@ namespace ECO.Integrations.MassTransit
             }
         }
 
-        public IEnumerable<TResult> Where<TResult>(ISagaFilter<TSaga> filter, Func<TSaga, TResult> transformer)
+        public virtual IEnumerable<TResult> Where<TResult>(ISagaFilter<TSaga> filter, Func<TSaga, TResult> transformer)
         {
             using (DataContext dtx = new DataContext())
             using (TransactionContext tcx = dtx.BeginTransaction())
@@ -124,13 +124,27 @@ namespace ECO.Integrations.MassTransit
             }
         }
 
-        public IEnumerable<TSaga> Where(ISagaFilter<TSaga> filter)
+        public virtual IEnumerable<TSaga> Where(ISagaFilter<TSaga> filter)
         {
             using (DataContext dtx = new DataContext())
             using (TransactionContext tcx = dtx.BeginTransaction())
             {
                 return _EntityRepository.Where(filter.FilterExpression).ToList();
             }
+        }
+
+        #endregion
+
+        #region IECOSagaFactory<TSaga>
+
+        public virtual TSaga LoadSaga<TMessage>(ISagaPolicy<TSaga, TMessage> policy, IConsumeContext<TMessage> context, Guid sagaId) where TMessage : class
+        {
+            return _EntityRepository.Where(ent => ent.Identity == sagaId).FirstOrDefault();
+        }
+
+        public virtual TSaga BuildSaga<TMessage>(ISagaPolicy<TSaga, TMessage> policy, IConsumeContext<TMessage> context, Guid sagaId) where TMessage : class
+        {
+            return policy.CreateInstance(context, sagaId);
         }
 
         #endregion
