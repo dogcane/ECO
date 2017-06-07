@@ -20,25 +20,33 @@ namespace ECO.Providers.NHibernate
     {
         #region Consts
 
-        private static readonly string CONFIGFILE_ATTRIBUTE = "configFile";
+        protected static readonly string CONFIGFILE_ATTRIBUTE = "configFile";
 
-        private static readonly string INTERCEPTOR_ATTRIBUTE = "interceptor";
+        protected static readonly string INTERCEPTOR_ATTRIBUTE = "interceptor";
 
         #endregion
 
         #region Private_Fields
 
-        private string _ConfigPath;
+        protected string _ConfigPath;
 
-        private string _InterceptorFullName;
+        protected string _InterceptorFullName;
 
-        private nh.ISessionFactory _SessionFactory;
+        protected nh.ISessionFactory _SessionFactory;
 
-        private IList<Type> _Mappers = new List<Type>();
+        protected IList<Type> _Mappers = new List<Type>();
 
         #endregion
 
         #region Protected_Methods
+
+        protected virtual nhcfg.Configuration BuildConfiguration()
+        {
+            nhcfg.Configuration cfg = new nhcfg.Configuration();
+            cfg.Configure(_ConfigPath);
+            TryAddClassMapping(cfg);
+            return cfg;
+        }
 
         protected virtual void TryAddClassMapping(nhcfg.Configuration cfg)
         {
@@ -50,15 +58,10 @@ namespace ECO.Providers.NHibernate
             }
         }
 
-        protected virtual void BuildSessionFactory()
+        protected virtual nh.ISessionFactory BuildSessionFactory()
         {
-            if (_SessionFactory == null)
-            {
-                nhcfg.Configuration cfg = new nhcfg.Configuration();
-                cfg.Configure(_ConfigPath);
-                TryAddClassMapping(cfg);
-                _SessionFactory = cfg.BuildSessionFactory();
-            }
+            var cfg = BuildConfiguration();
+            return cfg.BuildSessionFactory();
         }
         
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
@@ -80,7 +83,10 @@ namespace ECO.Providers.NHibernate
 
         protected override IPersistenceContext CreateContext()
         {
-            BuildSessionFactory();
+            if (_SessionFactory == null)
+            {
+                _SessionFactory = BuildSessionFactory();
+            }
             nh.ISession session = null;
             if (!string.IsNullOrEmpty(_InterceptorFullName))
             {
