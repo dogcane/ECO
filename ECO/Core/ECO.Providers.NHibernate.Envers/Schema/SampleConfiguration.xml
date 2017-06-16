@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--configurazione di ECO-->
+<eco.NHibernate.Envers catalogName="" schemaName="" tablePrefix="" tableSuffix="" createTables=""><!-- true/false -->
+  <classes>
+    <class type="EntityType">
+      <excludes>
+        <exclude name="" type="" /> <!-- type:relation/property-->
+      </excludes>
+    </class>
+  </classes>
+</eco.NHibernate.Envers>
+<!--configurazione di ECO-->

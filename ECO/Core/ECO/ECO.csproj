@@ -132,7 +132,9 @@
     <Compile Include="VersionableEntity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Schema\SampleConfiguration.xml" />
+    <Content Include="Schema\SampleConfiguration.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
