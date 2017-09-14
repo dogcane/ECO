@@ -3,7 +3,7 @@ using ECO.Data;
 
 namespace ECO.Integrations.Web.MVC
 {
-    public class DataContextFilter : ActionFilterAttribute
+    public class DataContextFilter : ActionFilterAttribute, IExceptionFilter
     {
         public bool RequiredTransaction = false;
 
@@ -12,17 +12,38 @@ namespace ECO.Integrations.Web.MVC
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            var dataContext = new DataContext();
-            if (RequiredTransaction)
+            if (!filterContext.IsChildAction)
             {
-                dataContext.BeginTransaction(AutoCommitTransaction);
+                var dataContext = new DataContext();
+                if (RequiredTransaction)
+                {
+                    dataContext.BeginTransaction(AutoCommitTransaction);
+                }
             }
-        }        
+        }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             base.OnResultExecuted(filterContext);
-            DataContext.Current.Close();
+            if (!filterContext.IsChildAction)
+            {
+                if (DataContext.Current != null)
+                {
+                    DataContext.Current.Close();
+                }
+            }
         }
+
+        #region IExceptionFilter Members
+
+        public void OnException(ExceptionContext filterContext)
+        {
+            if (DataContext.Current != null)
+            {
+                DataContext.Current.Close();
+            }
+        }
+
+        #endregion
     }
 }
