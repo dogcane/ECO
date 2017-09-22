@@ -19,32 +19,32 @@ namespace ECO.Providers.NHibernate
     {
         #region IRepository<T> Membri di
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             GetCurrentSession().Save(item);
         }
 
-        public async Task AddAsync(T item)
+        public virtual async Task AddAsync(T item)
         {
             await Task.Run(() => Add(item));
         }
 
-        public void Update(T item)
+        public virtual void Update(T item)
         {
             GetCurrentSession().Update(item); //Not necessary with auto-dirty-check
         }
 
-        public async Task UpdateAsync(T item)
+        public virtual async Task UpdateAsync(T item)
         {
             await Task.Run(() => Update(item));
         }
 
-        public void Remove(T item)
+        public virtual void Remove(T item)
         {
             GetCurrentSession().Delete(item);
         }
 
-        public async Task RemoveAsync(T item)
+        public virtual async Task RemoveAsync(T item)
         {
             await Task.Run(() => Remove(item));
         }
