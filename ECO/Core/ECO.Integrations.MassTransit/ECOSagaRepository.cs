@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Automatonymous;
 using ECO.Data;
+using GreenPipes;
 using Magnum.StateMachine;
 using MassTransit;
 using MassTransit.Exceptions;
@@ -13,8 +15,44 @@ using MassTransit.Saga;
 namespace ECO.Integrations.MassTransit
 {
     public class ECOSagaRepository<TSaga> : IECOSagaFactory<TSaga>
-        where TSaga : class, ISaga, IAggregateRoot<Guid>
+        where TSaga : class, SagaStateMachineInstance, ISaga, IAggregateRoot<Guid>
     {
+        #region Classes
+
+        /// <summary>
+        /// Once the message pipe has processed the saga instance, add it to the saga repository
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        private class MissingPipe<TMessage> : IPipe<SagaConsumeContext<TSaga, TMessage>>
+            where TMessage : class
+        {
+            private readonly IRepository<TSaga, Guid> _EntityRepository;
+            private readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _Next;
+
+            public MissingPipe(IRepository<TSaga, Guid> entityRepository, IPipe<SagaConsumeContext<TSaga, TMessage>> next)
+            {
+                _EntityRepository = entityRepository;
+                _Next = next;
+            }
+
+            void IProbeSite.Probe(ProbeContext context)
+            {
+                _Next.Probe(context);
+            }
+
+            public async Task Send(SagaConsumeContext<TSaga, TMessage> context)
+            {
+                var proxy = new ECOSagaConsumeContext<TSaga, TMessage>(_EntityRepository, context, context.Saga);
+
+                await _Next.Send(proxy).ConfigureAwait(false);
+
+                if (!proxy.IsCompleted)
+                    await _EntityRepository.AddAsync(context.Saga);
+            }
+        }
+
+        #endregion
+
         #region Private_Fields
 
         private IRepository<TSaga, Guid> _EntityRepository;
@@ -30,123 +68,150 @@ namespace ECO.Integrations.MassTransit
 
         #endregion
 
-        #region ISagaRepository<TInstance> Members
+        #region Methods
 
-        public virtual IEnumerable<Guid> Find(ISagaFilter<TSaga> filter)
+        private async Task<bool> PreInsertSagaInstance<T>(TSaga instance, ECO.Data.DataContext dtx)
         {
-            return Where(filter, x => x.Identity);
+            bool inserted = false;
+            try
+            {
+                await _EntityRepository.AddAsync(instance);
+                dtx.SaveChanges();
+                inserted = true;
+            }
+            catch
+            {
+                //???
+            }
+            return inserted;
         }
 
-        public virtual IEnumerable<Action<IConsumeContext<TMessage>>> GetSaga<TMessage>(IConsumeContext<TMessage> context, Guid sagaId, InstanceHandlerSelector<TSaga, TMessage> selector, ISagaPolicy<TSaga, TMessage> policy) where TMessage : class
+        private Task SendToInstance<T>(SagaQueryConsumeContext<TSaga, T> context, ISagaPolicy<TSaga, T> policy, TSaga instance,
+            IPipe<SagaConsumeContext<TSaga, T>> next, ECO.Data.DataContext dtx)
+            where T : class
         {
-            using (DataContext dtx = new DataContext())
-            using (TransactionContext tcx = dtx.BeginTransaction(true))
+            try
             {
-                var instance = LoadSaga(policy, context, sagaId);
-                if (instance == null)
+                var sagaConsumeContext = new ECOSagaConsumeContext<TSaga, T>(_EntityRepository, context, instance);
+
+                return policy.Existing(sagaConsumeContext, next);
+            }
+            catch (SagaException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SagaException(ex.Message, typeof(TSaga), typeof(T), instance.CorrelationId, ex);
+            }
+        }
+
+        public async Task<IEnumerable<Guid>> Find(ISagaQuery<TSaga> query)
+        {
+            return await Task.Run(() =>
+            {
+                using (ECO.Data.DataContext dtx = new DataContext())
+                using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction())
                 {
-                    if (policy.CanCreateInstance(context))
+                    return _EntityRepository.Where(query.FilterExpression).Select(x => x.CorrelationId);
+                }
+            });
+        }
+
+        void IProbeSite.Probe(ProbeContext context)
+        {
+            var persistenceUnit = ECO.Data.PersistenceUnitFactory.Instance.GetPersistenceUnit<TSaga>();
+            var scope = context.CreateScope("sagaRepository");
+            scope.Set(new
+            {
+                Persistence = persistenceUnit.Name,
+                Entities = persistenceUnit.Classes.Select(x => x.GetType().Name).ToArray()
+            });
+        }
+
+        public async Task Send<T>(ConsumeContext<T> context, ISagaPolicy<TSaga, T> policy, IPipe<SagaConsumeContext<TSaga, T>> next) where T : class
+        {
+            if (!context.CorrelationId.HasValue)
+                throw new SagaException("The CorrelationId was not specified", typeof(TSaga), typeof(T));
+
+            var sagaId = context.CorrelationId.Value;
+
+            using (ECO.Data.DataContext dtx = new DataContext())
+            using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction(true))
+            {
+                var inserted = false;
+
+                if (policy.PreInsertInstance(context, out var instance))
+                {
+                    inserted = await PreInsertSagaInstance<T>(instance, dtx);
+                }                
+
+                try
+                {
+                    if (instance == null)
+                        instance = await  _EntityRepository.LoadAsync(sagaId);
+                    if (instance == null)
                     {
-                        yield return x =>
-                        {
-                            
-                            try
-                            {
-                                instance = BuildSaga(policy, x, sagaId);
+                        var missingSagaPipe = new MissingPipe<T>(_EntityRepository, next);
+                        await policy.Missing(context, missingSagaPipe).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        var sagaConsumeContext = new ECOSagaConsumeContext<TSaga, T>(_EntityRepository, context, instance);
 
-                                foreach (var callback in selector(instance, x))
-                                {
-                                    callback(x);
-                                }
+                        await policy.Existing(sagaConsumeContext, next).ConfigureAwait(false);
 
-                                if (!policy.CanRemoveInstance(instance))
-                                    _EntityRepository.Add(instance);
-                            }
-                            catch (Exception ex)
-                            {
-                                var sex = new SagaException("Create Saga Instance Exception", typeof(TSaga),
-                                    typeof(TMessage), sagaId, ex);                                
-
-                                if (tcx != null && tcx.Status == TransactionStatus.Alive)
-                                    tcx.Rollback();
-                                throw sex;
-                            }
-                        };
+                        if (inserted && !sagaConsumeContext.IsCompleted)
+                            await _EntityRepository.UpdateAsync(instance);
                     }
                 }
-                else
+                catch (Exception)
                 {
-                    if (policy.CanUseExistingInstance(context))
-                    {
-                        yield return x =>
-                        {
-                            try
-                            {
-                                foreach (var callback in selector(instance, x))
-                                {
-                                    callback(x);
-                                }
+                    if (tcx != null && tcx.Status == TransactionStatus.Alive)
+                        tcx.Rollback();
 
-                                if (policy.CanRemoveInstance(instance))
-                                    _EntityRepository.Remove(instance);
-                                else
-                                    _EntityRepository.Update(instance);
-                            }
-                            catch (Exception ex)
-                            {
-                                var sex = new SagaException("Existing Saga Instance Exception", typeof(TSaga),
-                                    typeof(TMessage), sagaId, ex);
-                                if (tcx != null && tcx.Status == TransactionStatus.Alive)
-                                    tcx.Rollback();
-                                throw sex;
-                            }
-                        };
-                    }
+                    throw;
                 }
             }
         }
 
-        public virtual IEnumerable<TResult> Select<TResult>(Func<TSaga, TResult> transformer)
+        public async Task SendQuery<T>(SagaQueryConsumeContext<TSaga, T> context, ISagaPolicy<TSaga, T> policy, IPipe<SagaConsumeContext<TSaga, T>> next) where T : class
         {
-            using (DataContext dtx = new DataContext())
-            using (TransactionContext tcx = dtx.BeginTransaction())
+            using (ECO.Data.DataContext dtx = new DataContext())
+            using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction(true))
             {
-                return _EntityRepository.Select(transformer).ToList();
-            }
-        }
+                try
+                {
+                    IList<TSaga> instances = _EntityRepository
+                        .Where(context.Query.FilterExpression)
+                        .ToList();
 
-        public virtual IEnumerable<TResult> Where<TResult>(ISagaFilter<TSaga> filter, Func<TSaga, TResult> transformer)
-        {
-            using (DataContext dtx = new DataContext())
-            using (TransactionContext tcx = dtx.BeginTransaction())
-            {
-                return _EntityRepository.Where(filter.FilterExpression).Select(transformer).ToList();
-            }
-        }
+                    if (instances.Count == 0)
+                    {
+                        var missingSagaPipe = new MissingPipe<T>(_EntityRepository, next);
+                        await policy.Missing(context, missingSagaPipe).ConfigureAwait(false);
+                    }
+                    else
+                        await Task.WhenAll(instances.Select(instance => SendToInstance(context, policy, instance, next, dtx))).ConfigureAwait(false);
+                }
+                catch (SagaException)
+                {
+                    if (tcx != null && tcx.Status == TransactionStatus.Alive)
+                        tcx.Rollback();
 
-        public virtual IEnumerable<TSaga> Where(ISagaFilter<TSaga> filter)
-        {
-            using (DataContext dtx = new DataContext())
-            using (TransactionContext tcx = dtx.BeginTransaction())
-            {
-                return _EntityRepository.Where(filter.FilterExpression).ToList();
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    if (tcx != null && tcx.Status == TransactionStatus.Alive)
+                        tcx.Rollback();
+
+                    throw new SagaException(ex.Message, typeof(TSaga), typeof(T), Guid.Empty, ex);
+                }
             }
         }
 
         #endregion
 
-        #region IECOSagaFactory<TSaga>
-
-        public virtual TSaga LoadSaga<TMessage>(ISagaPolicy<TSaga, TMessage> policy, IConsumeContext<TMessage> context, Guid sagaId) where TMessage : class
-        {
-            return _EntityRepository.Where(ent => ent.Identity == sagaId).FirstOrDefault();
-        }
-
-        public virtual TSaga BuildSaga<TMessage>(ISagaPolicy<TSaga, TMessage> policy, IConsumeContext<TMessage> context, Guid sagaId) where TMessage : class
-        {
-            return policy.CreateInstance(context, sagaId);
-        }
-
-        #endregion
     }
 }

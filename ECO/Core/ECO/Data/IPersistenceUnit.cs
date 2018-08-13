@@ -25,6 +25,16 @@ namespace ECO.Data
         /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Classes contained into this Persistence Unit
+        /// </summary>
+        IEnumerable<Type> Classes { get; }
+
+        /// <summary>
+        /// Listeners contained into this Persistence Unit
+        /// </summary>
+        IEnumerable<IPersistenceUnitListener> Listeners { get; }
+
         #endregion
 
         #region Methods

@@ -31,6 +31,11 @@ namespace ECO.Data
             get { return _Classes; }
         }
 
+        public IEnumerable<IPersistenceUnitListener> Listeners
+        {
+            get { return _Listeners; }
+        }
+
         #endregion
 
         #region Protected_Methods
