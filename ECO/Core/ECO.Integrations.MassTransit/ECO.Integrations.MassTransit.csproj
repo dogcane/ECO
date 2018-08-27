@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECOMassTransitConfigurator.cs" />
     <Compile Include="ECOSagaConsumeContext.cs" />
     <Compile Include="ECOSagaRepository.cs" />
     <Compile Include="IECOSagaFactory.cs" />

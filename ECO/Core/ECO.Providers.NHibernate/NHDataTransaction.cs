@@ -68,10 +68,17 @@ namespace ECO.Providers.NHibernate
             }
             catch (Exception ex)
             {
-                if (Transaction != null)
+                try
                 {
-                    Transaction.Rollback();
-                    Transaction.Dispose();
+                    if (Transaction != null)
+                    {
+                        Transaction.Rollback();
+                        Transaction.Dispose();
+                    }
+                }
+                catch (Exception subex)
+                {
+                    ex = new AggregateException(ex, subex);
                 }
                 throw ex;
             }
@@ -79,8 +86,15 @@ namespace ECO.Providers.NHibernate
 
         public void Rollback()
         {
-            Context.Session.Clear();
-            Transaction.Rollback();
+            try
+            {
+                Context.Session.Clear();
+                Transaction.Rollback();
+            }
+            catch (Exception ex)
+            {
+                //???
+            }
         }
 
         #endregion

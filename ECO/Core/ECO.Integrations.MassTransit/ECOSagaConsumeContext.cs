@@ -48,7 +48,10 @@ namespace ECO.Integrations.MassTransit
 
         async Task SagaConsumeContext<TSaga>.SetCompleted()
         {
-            await EntityRepository.RemoveAsync(Saga);
+            if (ECOMassTransitConfigurator.RemoveSagaAfterCompleted)
+            {
+                await EntityRepository.RemoveAsync(Saga);
+            }
             IsCompleted = true;
         }
 
