@@ -19,7 +19,7 @@ namespace ECO.Integrations.MassTransit
 
         public bool IsCompleted { get; private set; }
 
-        public TSaga Saga { get; }
+        public TSaga Saga { get; set; }
 
         public IRepository<TSaga, Guid> EntityRepository { get; private set; }
 

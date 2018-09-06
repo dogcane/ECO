@@ -30,7 +30,7 @@ namespace ECO.Integrations.MassTransit.Tests
             {
                 cfg.ReceiveEndpoint("queue_name", ep =>
                 {
-                    ep.StateMachineSaga(new SagaTest(), _SagaRepository);
+                    ep.StateMachineSaga(new SagaTest(), _SagaRepository);                    
                 });
             });
             _Bus.Start();

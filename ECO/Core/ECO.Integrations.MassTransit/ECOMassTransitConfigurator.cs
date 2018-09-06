@@ -9,7 +9,7 @@ namespace ECO.Integrations.MassTransit
 {
     public static class ECOMassTransitConfigurator
     {
-        public static bool RemoveSagaAfterCompleted = false;
+        public static bool RemoveSagaAfterCompleted = true;
     }
 
     public static class ECOMassTransitConfiguratorExtensions

@@ -165,7 +165,7 @@ namespace ECO.Integrations.MassTransit
                             await _EntityRepository.UpdateAsync(instance);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     if (tcx != null && tcx.Status == TransactionStatus.Alive)
                         tcx.Rollback();
@@ -194,7 +194,7 @@ namespace ECO.Integrations.MassTransit
                     else
                         await Task.WhenAll(instances.Select(instance => SendToInstance(context, policy, instance, next, dtx))).ConfigureAwait(false);
                 }
-                catch (SagaException)
+                catch (SagaException ex)
                 {
                     if (tcx != null && tcx.Status == TransactionStatus.Alive)
                         tcx.Rollback();

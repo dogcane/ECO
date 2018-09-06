@@ -39,8 +39,9 @@ $BuildArgs = @{
 # Start the build            
 Start-Process @BuildArgs #| Out-String -stream -width 1024 > $DebugBuildLogFile
 
-Get-ChildItem -Path $BuildPath -Recurse -Exclude ECO*.dll | Remove-Item -force -recurse
+Get-ChildItem -Path $BuildPath -Recurse -Exclude ECO*.dll,Deploy.Log | Remove-Item -force -recurse
 Get-ChildItem -Path $BuildPath -Recurse -Include ECO.Sample.*.dll | Remove-Item -force -recurse
+Get-ChildItem -Path $BuildPath -Recurse -Include ECO*Test*.dll | Remove-Item -force -recurse
 
 write-host
 write-host "********************************" -foreground Green
