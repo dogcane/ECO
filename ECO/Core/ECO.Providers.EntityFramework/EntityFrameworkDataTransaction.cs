@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -25,9 +26,9 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        internal EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context)
+        internal EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context, IsolationLevel? isolationLevel)
         {
-            Transaction = context.Context.Database.BeginTransaction();
+            Transaction = isolationLevel.HasValue ? context.Context.Database.BeginTransaction(isolationLevel.Value) : context.Context.Database.BeginTransaction();
             Context = context;
         }
 

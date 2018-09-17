@@ -8,6 +8,7 @@ using Raven.Client.Document;
 
 using ECO;
 using ECO.Data;
+using System.Data;
 
 namespace ECO.Providers.RavenDB
 {
@@ -56,6 +57,11 @@ namespace ECO.Providers.RavenDB
         {
             Transaction = new NullDataTransaction(this);
             return Transaction;
+        }
+
+        public IDataTransaction BeginTransaction(IsolationLevel isolationLevel) //isolationLevel not supported by memory transaction
+        {
+            return BeginTransaction();
         }
 
         public void Close()

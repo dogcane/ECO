@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace ECO.Integrations.MassTransit
             where TMessage : class
         {
             private readonly IRepository<TSaga, Guid> _EntityRepository;
-            private readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _Next;
+            private readonly IPipe<SagaConsumeContext<TSaga, TMessage>> _Next;            
 
             public MissingPipe(IRepository<TSaga, Guid> entityRepository, IPipe<SagaConsumeContext<TSaga, TMessage>> next)
             {
@@ -57,13 +58,21 @@ namespace ECO.Integrations.MassTransit
 
         private IRepository<TSaga, Guid> _EntityRepository;
 
+        private IsolationLevel? _IsolationLevel;
+
         #endregion
-                
+
         #region Ctor
 
         public ECOSagaRepository(IRepository<TSaga, Guid> entityRepository)
         {
             _EntityRepository = entityRepository;
+        }
+
+        public ECOSagaRepository(IRepository<TSaga, Guid> entityRepository, IsolationLevel isolationLevel)
+            :this(entityRepository)
+        {
+            _IsolationLevel = isolationLevel;
         }
 
         #endregion
@@ -111,7 +120,7 @@ namespace ECO.Integrations.MassTransit
             return await Task.Run(() =>
             {
                 using (ECO.Data.DataContext dtx = new DataContext())
-                using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction())
+                using (ECO.Data.TransactionContext tcx = (_IsolationLevel.HasValue ? dtx.BeginTransaction(_IsolationLevel.Value) : dtx.BeginTransaction()))
                 {
                     return _EntityRepository.Where(query.FilterExpression).Select(x => x.CorrelationId);
                 }
@@ -137,19 +146,19 @@ namespace ECO.Integrations.MassTransit
             var sagaId = context.CorrelationId.Value;
 
             using (ECO.Data.DataContext dtx = new DataContext())
-            using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction(true))
+            using (ECO.Data.TransactionContext tcx = (_IsolationLevel.HasValue ? dtx.BeginTransaction(true, _IsolationLevel.Value) : dtx.BeginTransaction(true)))
             {
                 var inserted = false;
 
                 if (policy.PreInsertInstance(context, out var instance))
                 {
                     inserted = await PreInsertSagaInstance<T>(instance, dtx);
-                }                
+                }
 
                 try
                 {
                     if (instance == null)
-                        instance = await  _EntityRepository.LoadAsync(sagaId);
+                        instance = await _EntityRepository.LoadAsync(sagaId);
                     if (instance == null)
                     {
                         var missingSagaPipe = new MissingPipe<T>(_EntityRepository, next);
@@ -178,7 +187,7 @@ namespace ECO.Integrations.MassTransit
         public async Task SendQuery<T>(SagaQueryConsumeContext<TSaga, T> context, ISagaPolicy<TSaga, T> policy, IPipe<SagaConsumeContext<TSaga, T>> next) where T : class
         {
             using (ECO.Data.DataContext dtx = new DataContext())
-            using (ECO.Data.TransactionContext tcx = dtx.BeginTransaction(true))
+            using (ECO.Data.TransactionContext tcx = (_IsolationLevel.HasValue ? dtx.BeginTransaction(true, _IsolationLevel.Value) : dtx.BeginTransaction(true)))
             {
                 try
                 {

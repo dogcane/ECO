@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,11 @@ namespace ECO.Providers.MongoDB
         {
             Transaction = new NullDataTransaction(this);
             return Transaction;
+        }
+
+        public IDataTransaction BeginTransaction(IsolationLevel isolationLevel) //isolationLevel not supported by memory transaction
+        {
+            return BeginTransaction();
         }
 
         public void Close()

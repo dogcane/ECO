@@ -5,6 +5,7 @@ using System.Text;
 using nh = NHibernate;
 
 using ECO.Data;
+using System.Data;
 
 namespace ECO.Providers.NHibernate
 {
@@ -25,9 +26,9 @@ namespace ECO.Providers.NHibernate
 
         #region ~Ctor
 
-        internal NHDataTransaction(NHPersistenceContext context)
+        internal NHDataTransaction(NHPersistenceContext context, IsolationLevel? isolationLevel)
         {
-            Transaction = context.Session.BeginTransaction();
+            Transaction = isolationLevel.HasValue ? context.Session.BeginTransaction(isolationLevel.Value) : context.Session.BeginTransaction();
             Context = context;
         }
 
@@ -68,6 +69,7 @@ namespace ECO.Providers.NHibernate
             }
             catch (Exception ex)
             {
+
                 try
                 {
                     if (Transaction != null)

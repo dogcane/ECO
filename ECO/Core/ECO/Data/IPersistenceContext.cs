@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace ECO.Data
@@ -23,6 +24,8 @@ namespace ECO.Data
         PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>;
 
         IDataTransaction BeginTransaction();
+
+        IDataTransaction BeginTransaction(IsolationLevel isolationLevel);
 
         void Close();
 

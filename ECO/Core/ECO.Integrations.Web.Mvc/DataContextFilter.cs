@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Data;
+using System.Web.Mvc;
 using ECO.Data;
 
 namespace ECO.Integrations.Web.MVC
@@ -9,6 +10,8 @@ namespace ECO.Integrations.Web.MVC
 
         public bool AutoCommitTransaction = true;
 
+        public IsolationLevel? TransactionLevel = null;
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
@@ -17,7 +20,14 @@ namespace ECO.Integrations.Web.MVC
                 var dataContext = new DataContext();
                 if (RequiredTransaction)
                 {
-                    dataContext.BeginTransaction(AutoCommitTransaction);
+                    if (TransactionLevel.HasValue)
+                    {
+                        dataContext.BeginTransaction(AutoCommitTransaction, TransactionLevel.Value);
+                    }
+                    else
+                    {
+                        dataContext.BeginTransaction(AutoCommitTransaction);
+                    }
                 }
             }
         }

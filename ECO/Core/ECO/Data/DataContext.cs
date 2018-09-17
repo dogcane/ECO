@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 using ECO.Context;
@@ -65,19 +66,22 @@ namespace ECO.Data
 
         public TransactionContext BeginTransaction()
         {
-            return BeginTransaction(false);
+            return OnBeginTransaction(false);
         }
 
         public TransactionContext BeginTransaction(bool autoCommit)
         {
-            _Transaction = new TransactionContext(autoCommit);
-            foreach (string contextKey in _Contexts.Keys)
-            {
-                IPersistenceContext context = _Contexts[contextKey];
-                IDataTransaction tx = context.BeginTransaction();
-                _Transaction.AddDataTransaction(tx);
-            }
-            return _Transaction;
+            return OnBeginTransaction(autoCommit, null);
+        }
+
+        public TransactionContext BeginTransaction(IsolationLevel transactionLevel)
+        {
+            return BeginTransaction(false, transactionLevel);
+        }
+
+        public TransactionContext BeginTransaction(bool autoCommit, IsolationLevel transactionLevel)
+        {
+            return OnBeginTransaction(autoCommit, transactionLevel);
         }
 
         public bool IsContextInitialized(string persistenceUnitName)
@@ -92,7 +96,7 @@ namespace ECO.Data
                 _Contexts.Add(persistenceUnitName, context);
                 if (_Transaction != null)
                 {
-                    IDataTransaction tx = context.BeginTransaction();
+                    IDataTransaction tx = _Transaction.IsolationLevel.HasValue ? context.BeginTransaction(_Transaction.IsolationLevel.Value) : context.BeginTransaction();
                     _Transaction.AddDataTransaction(tx);
                 }
             }
@@ -144,6 +148,22 @@ namespace ECO.Data
                 _Contexts[persistenceUnitName].SaveChanges();
             }
             GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
+        #region Private_Methods
+
+        private TransactionContext OnBeginTransaction(bool autoCommit, IsolationLevel? transactionLevel = null)
+        {
+            _Transaction = new TransactionContext(autoCommit, transactionLevel);
+            foreach (string contextKey in _Contexts.Keys)
+            {
+                IPersistenceContext context = _Contexts[contextKey];
+                IDataTransaction tx = _Transaction.IsolationLevel.HasValue ? context.BeginTransaction(_Transaction.IsolationLevel.Value) : context.BeginTransaction();
+                _Transaction.AddDataTransaction(tx);
+            }
+            return _Transaction;
         }
 
         #endregion

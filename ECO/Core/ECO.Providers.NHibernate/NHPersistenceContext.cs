@@ -7,6 +7,7 @@ using nh = NHibernate;
 using System.Reflection;
 
 using ECO.Data;
+using System.Data;
 
 namespace ECO.Providers.NHibernate
 {
@@ -96,7 +97,13 @@ namespace ECO.Providers.NHibernate
 
         public IDataTransaction BeginTransaction()
         {
-            Transaction = new NHDataTransaction(this);
+            Transaction = new NHDataTransaction(this, null);
+            return Transaction;
+        }
+
+        public IDataTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            Transaction = new NHDataTransaction(this, isolationLevel);
             return Transaction;
         }
 

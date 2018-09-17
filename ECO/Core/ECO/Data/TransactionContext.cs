@@ -13,7 +13,9 @@ namespace ECO.Data
 
         private TransactionStatus _Status;
 
-        private bool _AutoCommit;
+        private IsolationLevel? _IsolationLevel;
+
+        private bool _AutoCommit;        
 
         #endregion
 
@@ -35,21 +37,30 @@ namespace ECO.Data
             }
         }
 
+        public IsolationLevel? IsolationLevel
+        {
+            get
+            {
+                return _IsolationLevel;
+            }
+        }
+
         #endregion
 
         #region ~Ctor
 
-        internal TransactionContext()
-            : this(false)
+        internal TransactionContext(IsolationLevel? isolationLevel = null)
+            : this(false, isolationLevel)
         {
 
         }
 
-        internal TransactionContext(bool autoCommit)
+        internal TransactionContext(bool autoCommit, IsolationLevel? isolationLevel = null)
         {            
             _Transactions = new List<IDataTransaction>();
             _Status = TransactionStatus.Alive;
             _AutoCommit = autoCommit;
+            _IsolationLevel = isolationLevel;
         }
 
         ~TransactionContext()

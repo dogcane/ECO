@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace ECO.Data
     {
         #region Protected_Methods
 
-        protected abstract IDataTransaction OnBeginTransaction();
+        protected abstract IDataTransaction OnBeginTransaction(IsolationLevel? transactionLevel);
 
         protected virtual void OnDispose()
         {
@@ -48,7 +49,13 @@ namespace ECO.Data
 
         public IDataTransaction BeginTransaction()
         {
-            Transaction = OnBeginTransaction();
+            Transaction = OnBeginTransaction(null);
+            return Transaction;
+        }
+
+        public IDataTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            Transaction = OnBeginTransaction(isolationLevel);
             return Transaction;
         }
 

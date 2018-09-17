@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -46,9 +47,9 @@ namespace ECO.Providers.EntityFramework
 
         #region Public_Methods
 
-        protected override IDataTransaction OnBeginTransaction()
+        protected override IDataTransaction OnBeginTransaction(IsolationLevel? isolationLevel)
         {
-            Transaction = new EntityFrameworkDataTransaction(this);
+            Transaction = new EntityFrameworkDataTransaction(this, isolationLevel);
             return Transaction;
         }
 
