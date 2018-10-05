@@ -318,6 +318,10 @@
       <Project>{408550ba-fa42-4f2b-afb9-7c63d885384f}</Project>
       <Name>ECO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ECO.Bender.Integrations.Web\ECO.Bender.Integrations.Web.csproj">
+      <Project>{147ee225-688b-463b-9871-af43517079d5}</Project>
+      <Name>ECO.Bender.Integrations.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj">
       <Project>{df43f470-514a-4492-8ea1-5e1fe252f657}</Project>
       <Name>ECO.Sample.Application</Name>

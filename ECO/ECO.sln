@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.NHibernate.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.MassTransit.Tests", "Core\ECO.Integrations.MassTransit.Tests\ECO.Integrations.MassTransit.Tests.csproj", "{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Bender.Integrations.Web", "ECO.Bender.Integrations.Web\ECO.Bender.Integrations.Web.csproj", "{147EE225-688B-463B-9871-AF43517079D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,10 @@ Global
 		{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{147EE225-688B-463B-9871-AF43517079D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{147EE225-688B-463B-9871-AF43517079D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{147EE225-688B-463B-9871-AF43517079D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{147EE225-688B-463B-9871-AF43517079D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +222,7 @@ Global
 		{57A9579F-7141-4791-81D9-ADC683474964} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{6407058D-C269-4138-BD4C-09D64B34D6C0} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 		{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{147EE225-688B-463B-9871-AF43517079D5} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC9E7B63-B1AD-4274-B8E7-6918FB2EE808}
