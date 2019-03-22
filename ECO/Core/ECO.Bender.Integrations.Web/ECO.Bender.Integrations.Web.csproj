@@ -47,7 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\ECO.Bender\ECO.Bender.csproj">
+    <ProjectReference Include="..\ECO.Bender\ECO.Bender.csproj">
       <Project>{f798f90c-bf08-4328-8a19-2afe9b2cca8c}</Project>
       <Name>ECO.Bender</Name>
     </ProjectReference>

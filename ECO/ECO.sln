@@ -81,7 +81,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.NHibernate.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.MassTransit.Tests", "Core\ECO.Integrations.MassTransit.Tests\ECO.Integrations.MassTransit.Tests.csproj", "{7E1BC604-9EDC-4226-B85F-9C3EBC44AE13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Bender.Integrations.Web", "ECO.Bender.Integrations.Web\ECO.Bender.Integrations.Web.csproj", "{147EE225-688B-463B-9871-AF43517079D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Bender.Integrations.Web", "Core\ECO.Bender.Integrations.Web\ECO.Bender.Integrations.Web.csproj", "{147EE225-688B-463B-9871-AF43517079D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
