@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using ECO.Data;
 
 namespace ECO
 {
@@ -10,7 +6,7 @@ namespace ECO
     /// Interface that defines an Entity with an identifier of T type
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEntity<T> : IEquatable<IEntity<T>>        
+    public interface IEntity<T> : IEquatable<IEntity<T>>
     {
         #region Properties
 

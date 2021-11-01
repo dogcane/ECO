@@ -1,7 +1,4 @@
-using System;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ECO.Configuration
 {
@@ -24,9 +21,9 @@ namespace ECO.Configuration
             {
                 return (string)this[_ContextType];
             }
-        } 
+        }
 
-        [ConfigurationProperty("data", IsRequired=true)]
+        [ConfigurationProperty("data", IsRequired = true)]
         public DataSettings Data
         {
             get

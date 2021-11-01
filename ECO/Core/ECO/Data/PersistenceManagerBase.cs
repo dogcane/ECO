@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
 namespace ECO.Data
 {
     public abstract class PersistenceManagerBase<T, K> : IPersistenceManager<T, K>
@@ -34,7 +29,7 @@ namespace ECO.Data
 
         protected PersistenceManagerBase()
         {
-            
+
         }
 
         #endregion

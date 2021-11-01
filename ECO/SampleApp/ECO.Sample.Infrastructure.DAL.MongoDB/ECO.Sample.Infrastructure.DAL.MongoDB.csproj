@@ -61,10 +61,6 @@
     <Compile Include="Repositories\SpeakerMongoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\ECO.Bender\ECO.Bender.csproj">
-      <Project>{f798f90c-bf08-4328-8a19-2afe9b2cca8c}</Project>
-      <Name>ECO.Bender</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\ECO.Providers.MongoDB\ECO.Providers.MongoDB.csproj">
       <Project>{9da9c8e5-6d68-4534-bfc1-9361fe956f4c}</Project>
       <Name>ECO.Providers.MongoDB</Name>

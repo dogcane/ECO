@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
 
 namespace ECO.Data
 {
@@ -46,7 +44,7 @@ namespace ECO.Data
         }
 
         internal TransactionContext(bool autoCommit)
-        {            
+        {
             _Transactions = new List<IDataTransaction>();
             _Status = TransactionStatus.Alive;
             _AutoCommit = autoCommit;
@@ -86,7 +84,7 @@ namespace ECO.Data
                 tx.Rollback();
             }
             _Status = TransactionStatus.RolledBack;
-        }        
+        }
 
         #endregion
 
@@ -112,7 +110,7 @@ namespace ECO.Data
                         Rollback();
                     }
                 }
-            }            
+            }
         }
 
         #endregion

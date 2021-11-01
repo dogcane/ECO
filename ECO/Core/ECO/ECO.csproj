@@ -1,21 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{408550BA-FA42-4F2B-AFB9-7C63D885384F}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ECO</RootNamespace>
-    <AssemblyName>ECO</AssemblyName>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -35,102 +21,20 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core">
+    <Reference Update="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRoot.cs" />
-    <Compile Include="Configuration\ClassSettings.cs" />
-    <Compile Include="Configuration\ClassSettingsCollection.cs" />
-    <Compile Include="Configuration\AttributeSettingsCollection.cs" />
-    <Compile Include="Configuration\DataSettings.cs" />
-    <Compile Include="Configuration\ECOConfiguration.cs" />
-    <Compile Include="Configuration\ECOSettings.cs" />
-    <Compile Include="Configuration\PersistenceContextAttribute.cs" />
-    <Compile Include="Configuration\PersistenceUnitSettings.cs" />
-    <Compile Include="Configuration\PersistenceUnitSettingsCollection.cs" />
-    <Compile Include="Configuration\AttributeSettings.cs" />
-    <Compile Include="Configuration\UnitListenerSettings.cs" />
-    <Compile Include="Configuration\UnitListenerSettingsCollection.cs" />
-    <Compile Include="Context\ApplicationContext.cs" />
-    <Compile Include="Context\CallContextProvider.cs" />
-    <Compile Include="Context\IContextProvider.cs" />
-    <Compile Include="Context\ThreadStaticContextProvider.cs" />
-    <Compile Include="Data\DataContextClosedException.cs" />
-    <Compile Include="Data\EntityExtensions.cs" />
-    <Compile Include="Data\IDataTransaction.cs" />
-    <Compile Include="Data\IdentityAttributeTypeNotMatchedException.cs" />
-    <Compile Include="Data\IPersistenceUnitListener.cs" />
-    <Compile Include="Data\IECOQueryable.cs" />
-    <Compile Include="Data\NullDataTransaction.cs" />
-    <Compile Include="Data\PersistenceContextNotFoundException.cs" />
-    <Compile Include="Data\PersistenceUnitNotFoundException.cs" />
-    <Compile Include="Data\PersistentClassNotRegisteredException.cs" />
-    <Compile Include="Data\PersistentContextBase.cs" />
-    <Compile Include="Data\PersistentUnitClassEventArgs.cs" />
-    <Compile Include="Data\TransactionContext.cs" />
-    <Compile Include="Data\IPersistenceContext.cs" />
-    <Compile Include="Data\PersistenceUnitFactory.cs" />
-    <Compile Include="Data\PersistenceManagerBase.cs" />
-    <Compile Include="Data\DataContext.cs" />
-    <Compile Include="Data\IPersistenceUnit.cs" />
-    <Compile Include="Data\TransactionStatus.cs" />
-    <Compile Include="Data\TransientIdentityValueAttribute.cs" />
-    <Compile Include="Data\IPersistenceManager.cs" />
-    <Compile Include="Events\DomainEventArgs.cs" />
-    <Compile Include="Events\DomainEvents.cs" />
-    <Compile Include="Events\EventActionT.cs" />
-    <Compile Include="Events\IDomainEvent.cs" />
-    <Compile Include="Events\IDomainEventExtensions.cs" />
-    <Compile Include="IAggregateRoot.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="IVersionableAggregateRoot.cs" />
-    <Compile Include="IReadOnlyRepository.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="IValueObject.cs" />
-    <Compile Include="IVersionableEntity.cs" />
-    <Compile Include="Linq\QueryableExtensions.cs" />
-    <Compile Include="PersistenceState.cs" />
-    <Compile Include="Data\PersistenceUnitBase.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Errors.Designer.cs">
+    <Compile Update="Resources\Errors.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
-    <Compile Include="VersionableAggregateRoot.cs" />
-    <Compile Include="VersionableEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Schema\SampleConfiguration.xml" />
@@ -163,22 +67,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Errors.resx">
+    <EmbeddedResource Update="Resources\Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Errors.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Schema\ECOConfiguration.xsd" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.246501">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

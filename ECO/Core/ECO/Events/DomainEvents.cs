@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ECO.Events
 {
@@ -12,7 +11,7 @@ namespace ECO.Events
     {
         #region Private_Fields
 
-        private static IDictionary<Type, IDictionary<object, Delegate>> _Subscribers = new Dictionary<Type, IDictionary<object, Delegate>>();        
+        private static IDictionary<Type, IDictionary<object, Delegate>> _Subscribers = new Dictionary<Type, IDictionary<object, Delegate>>();
 
         #endregion
 

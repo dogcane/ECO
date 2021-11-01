@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ECO.Data
+﻿namespace ECO.Data
 {
     public interface IPersistenceUnitListener
     {

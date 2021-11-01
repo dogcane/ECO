@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ECO.Data
 {
@@ -39,7 +38,7 @@ namespace ECO.Data
 
         protected virtual void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
-            
+
         }
 
         protected virtual void OnContextPreCreate()

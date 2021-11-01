@@ -27,6 +27,8 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -278,10 +280,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\ECO.Bender\ECO.Bender.csproj">
-      <Project>{f798f90c-bf08-4328-8a19-2afe9b2cca8c}</Project>
-      <Name>ECO.Bender</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\ECO.Integrations.CastleWindsor\ECO.Integrations.CastleWindsor.csproj">
       <Project>{f213e8a3-fdd0-48fe-9dec-decb179b0576}</Project>
       <Name>ECO.Integrations.CastleWindsor</Name>

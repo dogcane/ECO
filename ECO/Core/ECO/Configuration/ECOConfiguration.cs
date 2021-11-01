@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ECO.Resources;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECO.Resources;
 
 namespace ECO.Configuration
 {

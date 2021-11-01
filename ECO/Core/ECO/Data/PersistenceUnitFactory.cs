@@ -1,14 +1,10 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
-
-using ECO;
 using ECO.Configuration;
 using ECO.Resources;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Reflection;
-using ECO.Context;
 
 namespace ECO.Data
 {
@@ -68,7 +64,7 @@ namespace ECO.Data
                 MyUnit.Initialize(unit.Name, GetExtendedAttributes(unit.Attributes));
                 MyUnit.ClassAdded += MyUnit_ClassAdded;
                 MyUnit.ClassRemoved += MyUnit_ClassRemoved;
-                _Units.Add(unit.Name, MyUnit);                    
+                _Units.Add(unit.Name, MyUnit);
                 foreach (ClassSettings setting in unit.Classes)
                 {
                     try

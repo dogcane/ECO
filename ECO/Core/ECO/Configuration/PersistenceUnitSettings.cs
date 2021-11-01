@@ -1,7 +1,4 @@
-using System;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ECO.Configuration
 {
@@ -11,7 +8,7 @@ namespace ECO.Configuration
 
         private static ConfigurationProperty _NameProperty;
 
-        private static ConfigurationProperty _TypeProperty;        
+        private static ConfigurationProperty _TypeProperty;
 
         private static ConfigurationProperty _ListenersProperty;
 
@@ -23,7 +20,7 @@ namespace ECO.Configuration
 
         #region Public_Propertues
 
-        [ConfigurationProperty("name", IsRequired=true, IsKey=true)]
+        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name
         {
             get
@@ -32,14 +29,14 @@ namespace ECO.Configuration
             }
         }
 
-        [ConfigurationProperty("type", IsRequired=true)]
+        [ConfigurationProperty("type", IsRequired = true)]
         public string Type
         {
             get
             {
                 return (string)this[_TypeProperty];
             }
-        }        
+        }
 
         [ConfigurationProperty("listeners", IsRequired = false)]
         public UnitListenerSettingsCollection Listeners
@@ -50,7 +47,7 @@ namespace ECO.Configuration
             }
         }
 
-        [ConfigurationProperty("classes", IsRequired=true)]
+        [ConfigurationProperty("classes", IsRequired = true)]
         public ClassSettingsCollection Classes
         {
             get
@@ -59,7 +56,7 @@ namespace ECO.Configuration
             }
         }
 
-        [ConfigurationProperty("attributes", IsRequired=false)]
+        [ConfigurationProperty("attributes", IsRequired = false)]
         public AttributeSettingsCollection Attributes
         {
             get
@@ -75,7 +72,7 @@ namespace ECO.Configuration
         static PersistenceUnitSettings()
         {
             _NameProperty = new ConfigurationProperty("name", typeof(string));
-            _TypeProperty = new ConfigurationProperty("type", typeof(string));            
+            _TypeProperty = new ConfigurationProperty("type", typeof(string));
             _ListenersProperty = new ConfigurationProperty("listeners", typeof(UnitListenerSettingsCollection));
             _ClassesProperty = new ConfigurationProperty("classes", typeof(ClassSettingsCollection));
             _AttributesProperty = new ConfigurationProperty("attributes", typeof(AttributeSettingsCollection));

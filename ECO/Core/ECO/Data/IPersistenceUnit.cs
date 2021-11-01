@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ECO.Data
 {
@@ -12,7 +11,7 @@ namespace ECO.Data
     {
         #region Events
 
-        event EventHandler<PersistentUnitClassEventArgs> ClassAdded;        
+        event EventHandler<PersistentUnitClassEventArgs> ClassAdded;
 
         event EventHandler<PersistentUnitClassEventArgs> ClassRemoved;
 
@@ -53,7 +52,7 @@ namespace ECO.Data
         /// Add a class type to the current persistence unit
         /// </summary>
         /// <param name="classType"></param>
-        IPersistenceUnit AddClass<T,K>() where T : class, IAggregateRoot<K>;
+        IPersistenceUnit AddClass<T, K>() where T : class, IAggregateRoot<K>;
 
         /// <summary>
         /// Remove a class type from the current persistence unit
@@ -85,7 +84,7 @@ namespace ECO.Data
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="K"></typeparam>
         /// <returns></returns>
-        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : class, IAggregateRoot<K>;        
+        IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>() where T : class, IAggregateRoot<K>;
 
         /// <summary>
         /// 

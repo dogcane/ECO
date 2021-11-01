@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 
 namespace ECO.Context
 {
@@ -18,7 +16,7 @@ namespace ECO.Context
 
         public ThreadStaticContextProvider()
         {
-            
+
         }
 
         #endregion
@@ -37,7 +35,7 @@ namespace ECO.Context
 
         #region IContextProvider Members
 
-        public object GetContextData(string dataKey)            
+        public object GetContextData(string dataKey)
         {
             Initialize();
             return _ThreadContext.ContainsKey(dataKey) ? _ThreadContext[dataKey] : null;

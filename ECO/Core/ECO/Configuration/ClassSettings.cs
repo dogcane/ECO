@@ -1,7 +1,4 @@
-using System;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ECO.Configuration
 {
@@ -29,7 +26,7 @@ namespace ECO.Configuration
         #region ~Ctor
 
         static ClassSettings()
-        {            
+        {
             _TypeProperty = new ConfigurationProperty("type", typeof(string));
         }
 
