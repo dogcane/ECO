@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{94C9423D-4BD2-495A-8FDC-72974CC574A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{D8873A5D-0370-477A-BA72-9E6A0008A8BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application.Layer", "Application.Layer", "{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.Layer", "Infrastructure.Layer", "{C16168B8-2BD4-4596-B981-4A3F2703F614}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain.Layer", "Domain.Layer", "{BD6544C0-DE77-4CBB-825F-08B485161398}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation.Layer", "Presentation.Layer", "{05AD202B-FF8D-404E-83E1-AA0F97A6F588}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F724E0DE-FAE8-41E1-9166-DB48FCBFCD80}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO", "src\ECO\Core\ECO\ECO.csproj", "{85D16E1A-39AC-48CF-8E36-9C4389812592}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Providers.InMemory", "src\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj", "{7CE573FF-159F-49D9-97F8-26CC54C95DAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Domain", "src\ECO.SampleApp\ECO.Sample.Domain\ECO.Sample.Domain.csproj", "{33C85129-92EE-4AE4-A841-5410CB9A8893}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Infrastructure", "src\ECO.SampleApp\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj", "{16FCC440-EE26-4DB3-A46E-AAF1058D36E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Infrastructure.DAL.InMemory", "src\ECO.SampleApp\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj", "{61194090-B9BF-4BD2-A710-32DBB5393170}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Application", "src\ECO.SampleApp\ECO.Sample.Application\ECO.Sample.Application.csproj", "{E8826335-23C7-4F86-B94E-4B810452960F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85D16E1A-39AC-48CF-8E36-9C4389812592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D16E1A-39AC-48CF-8E36-9C4389812592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D16E1A-39AC-48CF-8E36-9C4389812592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D16E1A-39AC-48CF-8E36-9C4389812592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE573FF-159F-49D9-97F8-26CC54C95DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE573FF-159F-49D9-97F8-26CC54C95DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE573FF-159F-49D9-97F8-26CC54C95DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE573FF-159F-49D9-97F8-26CC54C95DAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C85129-92EE-4AE4-A841-5410CB9A8893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C85129-92EE-4AE4-A841-5410CB9A8893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C85129-92EE-4AE4-A841-5410CB9A8893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C85129-92EE-4AE4-A841-5410CB9A8893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16FCC440-EE26-4DB3-A46E-AAF1058D36E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16FCC440-EE26-4DB3-A46E-AAF1058D36E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16FCC440-EE26-4DB3-A46E-AAF1058D36E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16FCC440-EE26-4DB3-A46E-AAF1058D36E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61194090-B9BF-4BD2-A710-32DBB5393170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61194090-B9BF-4BD2-A710-32DBB5393170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61194090-B9BF-4BD2-A710-32DBB5393170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61194090-B9BF-4BD2-A710-32DBB5393170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8826335-23C7-4F86-B94E-4B810452960F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8826335-23C7-4F86-B94E-4B810452960F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8826335-23C7-4F86-B94E-4B810452960F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8826335-23C7-4F86-B94E-4B810452960F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
+		{C16168B8-2BD4-4596-B981-4A3F2703F614} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
+		{BD6544C0-DE77-4CBB-825F-08B485161398} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
+		{05AD202B-FF8D-404E-83E1-AA0F97A6F588} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
+		{85D16E1A-39AC-48CF-8E36-9C4389812592} = {94C9423D-4BD2-495A-8FDC-72974CC574A3}
+		{7CE573FF-159F-49D9-97F8-26CC54C95DAC} = {8EDC210B-C825-46F6-B6D9-9BDD8B159AC2}
+		{33C85129-92EE-4AE4-A841-5410CB9A8893} = {BD6544C0-DE77-4CBB-825F-08B485161398}
+		{16FCC440-EE26-4DB3-A46E-AAF1058D36E2} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{61194090-B9BF-4BD2-A710-32DBB5393170} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{E8826335-23C7-4F86-B94E-4B810452960F} = {D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ECO2.vsmdi
+	EndGlobalSection
+EndGlobal
