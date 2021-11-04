@@ -1,4 +1,5 @@
 using ECO.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,35 +20,43 @@ namespace ECO.Data
 
         #region ~Ctor
 
-        public PersistenceUnitFactory(ECOOptions options)
+        public PersistenceUnitFactory(IOptions<ECOOptions> optionsAccessor)
         {
+            var options = optionsAccessor.Value;
             foreach (PersistenceUnitOptions unit in options.PersistenceUnits)
             {
-                IPersistenceUnit MyUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
-                MyUnit.Initialize(unit.Name, unit.Attributes);
-                _Units.Add(unit.Name, MyUnit);
-                foreach (string classType in unit.Classes)
+                IPersistenceUnit persistenceUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
+                persistenceUnit.Initialize(unit.Name, unit.Attributes);
+                _Units.Add(unit.Name, persistenceUnit);
+                if (unit.Classes != null)
                 {
-                    try
+                    foreach (string classType in unit.Classes)
                     {
-                        Type type = Type.GetType(classType);
-                        MyUnit.AddClass(type);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ConfigurationErrorsException($"Error when loading the type {classType}", ex);
+                        try
+                        {
+                            Type type = Type.GetType(classType);
+                            persistenceUnit.AddClass(type);
+                            _Classes.Add(type, persistenceUnit);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ConfigurationErrorsException($"Error when loading the type {classType}", ex);
+                        }
                     }
                 }
-                foreach (string unitListenerType in unit.UnitListeners)
+                if (unit.Listeners != null)
                 {
-                    try
+                    foreach (string unitListenerType in unit.Listeners)
                     {
-                        IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(unitListenerType)) as IPersistenceUnitListener;
-                        MyUnit.AddUnitListener(listener);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ConfigurationErrorsException($"Error when loading the type {unitListenerType}", ex);
+                        try
+                        {
+                            IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(unitListenerType)) as IPersistenceUnitListener;
+                            persistenceUnit.AddUnitListener(listener);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ConfigurationErrorsException($"Error when loading the type {unitListenerType}", ex);
+                        }
                     }
                 }
             }

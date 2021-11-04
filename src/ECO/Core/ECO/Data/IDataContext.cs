@@ -2,7 +2,7 @@
 
 namespace ECO.Data
 {
-    public interface IDataContext
+    public interface IDataContext : IDisposable
     {
         #region Proterties
         ITransactionContext Transaction { get; }
