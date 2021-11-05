@@ -8,6 +8,7 @@ using NHibernate.Engine;
 
 namespace ECO.Providers.NHibernate.Types
 {
+    [Serializable]
     public class CaseInsensitiveStringType : global::NHibernate.Type.AbstractStringType
     {
         #region Fields
@@ -15,6 +16,12 @@ namespace ECO.Providers.NHibernate.Types
         private StringComparer _Comparer = StringComparer.CurrentCultureIgnoreCase;
 
         #endregion
+
+        public CaseInsensitiveStringType() 
+            : base(new global::NHibernate.SqlTypes.StringSqlType())
+        {
+
+        }
 
         public CaseInsensitiveStringType(global::NHibernate.SqlTypes.SqlType sqlType)
             : base(sqlType)
