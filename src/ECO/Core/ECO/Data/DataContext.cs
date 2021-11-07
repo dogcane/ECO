@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace ECO.Data
 {
@@ -8,28 +9,33 @@ namespace ECO.Data
     {
         #region Private_Fields
 
-        private object _SyncLock = new object();
+        private readonly object _SyncLock = new object();
 
-        private IPersistenceUnitFactory _PersistenceUnitFactory;
+        private readonly IPersistenceUnitFactory _PersistenceUnitFactory;
 
-        private IDictionary<string, IPersistenceContext> _Contexts;
+        private readonly IDictionary<string, IPersistenceContext> _Contexts;
 
-        private ITransactionContext _Transaction;
+        private readonly ILogger<DataContext> _Logger;
 
         #endregion
 
         #region Public_Properties
 
-        public ITransactionContext Transaction => _Transaction;
+        public Guid DataContextId { get; }
+
+        public ITransactionContext Transaction { get; private set; }
 
         #endregion
 
         #region ~Ctor
 
-        public DataContext(IPersistenceUnitFactory persistenceUnitFactory)
+        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILoggerFactory loggerFactory)
         {
+            DataContextId = Guid.NewGuid();
             _PersistenceUnitFactory = persistenceUnitFactory;
             _Contexts = new Dictionary<string, IPersistenceContext>();
+            _Logger = loggerFactory.CreateLogger<DataContext>();
+            _Logger.LogDebug("Data context is opening");
         }
 
         ~DataContext()
@@ -51,13 +57,19 @@ namespace ECO.Data
                 {
                     if (!_Contexts.ContainsKey(persistenceUnitName))
                     {
+                        _Logger.LogDebug("Initialization of persistence context for entity {entityType}", entityType);
                         IPersistenceContext context = persistenceUnit.CreateContext();
                         _Contexts.Add(persistenceUnitName, context);
-                        if (_Transaction != null)
+                        if (Transaction != null)
                         {
                             IDataTransaction tx = context.BeginTransaction();
-                            _Transaction.EnlistDataTransaction(tx);
+                            Transaction.EnlistDataTransaction(tx);
                         }
+                        _Logger.LogDebug("Persistence context for entity {entityType} already initialized => {persistenceUnitName}:{persistenceContextId}", entityType, persistenceUnitName, _Contexts[persistenceUnitName].PersistenceContextId);
+                    }
+                    else
+                    {
+                        _Logger.LogDebug("Persistence context for entity {entityType} initialized => {persistenceUnitName}:{persistenceContextId}", entityType, persistenceUnitName, _Contexts[persistenceUnitName].PersistenceContextId);
                     }
                 }
             }
@@ -72,22 +84,23 @@ namespace ECO.Data
 
         public ITransactionContext BeginTransaction(bool autoCommit)
         {
-            if (_Transaction == null)
+            if (Transaction == null)
             {
                 lock (_SyncLock)
                 {
-                    if (_Transaction == null)
+                    if (Transaction == null)
                     {
-                        _Transaction = new TransactionContext(autoCommit);
+                        Transaction = new TransactionContext(autoCommit);
+                        _Logger.LogDebug("Starting a new transaction context : {transactionContextId}", Transaction.TransactionContextId);
                         foreach (IPersistenceContext persistenceContext in _Contexts.Values)
                         {
                             IDataTransaction tx = persistenceContext.BeginTransaction();
-                            _Transaction.EnlistDataTransaction(tx);
+                            Transaction.EnlistDataTransaction(tx);
                         }
                     }
                 }
             }
-            return _Transaction;
+            return Transaction;
         }        
 
         public void Attach<T, K>(T entity)

@@ -7,19 +7,17 @@ namespace ECO.Data
     {
         #region Private_Fields
 
-        private IList<IDataTransaction> _Transactions;
-
-        private TransactionStatus _Status;
-
-        private bool _AutoCommit;
+        private readonly IList<IDataTransaction> _Transactions;
 
         #endregion
 
         #region Public_Properties
 
-        public TransactionStatus Status => _Status;
+        public Guid TransactionContextId { get; }
 
-        public bool AutoCommit => _AutoCommit;
+        public TransactionStatus Status { get; private set; }
+
+        public bool AutoCommit { get; }
 
         #endregion
 
@@ -34,8 +32,9 @@ namespace ECO.Data
         internal TransactionContext(bool autoCommit)
         {
             _Transactions = new List<IDataTransaction>();
-            _Status = TransactionStatus.Alive;
-            _AutoCommit = autoCommit;
+            TransactionContextId = Guid.NewGuid();
+            Status = TransactionStatus.Alive;
+            AutoCommit = autoCommit;
         }
 
         ~TransactionContext()
@@ -49,6 +48,7 @@ namespace ECO.Data
 
         public void EnlistDataTransaction(IDataTransaction transaction)
         {
+
             _Transactions.Add(transaction);
         }
 
@@ -58,7 +58,7 @@ namespace ECO.Data
             {
                 tx.Commit();
             }
-            _Status = TransactionStatus.Committed;
+            Status = TransactionStatus.Committed;
         }
 
         public void Rollback()
@@ -67,7 +67,7 @@ namespace ECO.Data
             {
                 tx.Rollback();
             }
-            _Status = TransactionStatus.RolledBack;
+            Status = TransactionStatus.RolledBack;
         }
 
         #endregion

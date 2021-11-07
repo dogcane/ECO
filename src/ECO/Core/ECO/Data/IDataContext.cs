@@ -5,7 +5,11 @@ namespace ECO.Data
     public interface IDataContext : IDisposable
     {
         #region Proterties
+
+        Guid DataContextId { get; }
+
         ITransactionContext Transaction { get; }
+
         #endregion
 
         #region Methods

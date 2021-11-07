@@ -2,6 +2,7 @@
 using ECO.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,7 +30,8 @@ namespace ECO.Web.Infrastructure
             serviceCollection.AddScoped<IDataContext>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
-                var dataContext = new DataContext(persistenceUnitFactory);
+                var loggerFactory = fact.GetRequiredService<ILoggerFactory>();
+                var dataContext = new DataContext(persistenceUnitFactory, loggerFactory);
                 if (options.RequireTransaction) dataContext.BeginTransaction(true);
                 return dataContext;
             });

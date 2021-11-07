@@ -1,4 +1,5 @@
 using ECO.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -8,24 +9,26 @@ using System.Reflection;
 
 namespace ECO.Data
 {
-    public class PersistenceUnitFactory : IPersistenceUnitFactory
+    public sealed class PersistenceUnitFactory : IPersistenceUnitFactory
     {
         #region Private_Fields
 
-        private IDictionary<string, IPersistenceUnit> _Units = new Dictionary<string, IPersistenceUnit>();
+        private readonly IDictionary<string, IPersistenceUnit> _Units = new Dictionary<string, IPersistenceUnit>();
 
-        private IDictionary<Type, IPersistenceUnit> _Classes = new Dictionary<Type, IPersistenceUnit>();
+        private readonly IDictionary<Type, IPersistenceUnit> _Classes = new Dictionary<Type, IPersistenceUnit>();
+
+        private readonly ILogger<PersistenceUnitFactory> _Logger;
 
         #endregion
 
         #region ~Ctor
 
-        public PersistenceUnitFactory(IOptions<ECOOptions> optionsAccessor)
+        public PersistenceUnitFactory(IOptions<ECOOptions> optionsAccessor, ILoggerFactory loggerFactory)
         {
             var options = optionsAccessor.Value;
             foreach (PersistenceUnitOptions unit in options.PersistenceUnits)
             {
-                IPersistenceUnit persistenceUnit = Activator.CreateInstance(Type.GetType(unit.Type)) as IPersistenceUnit;
+                IPersistenceUnit persistenceUnit = Activator.CreateInstance(Type.GetType(unit.Type), loggerFactory) as IPersistenceUnit;
                 persistenceUnit.Initialize(unit.Name, unit.Attributes);
                 _Units.Add(unit.Name, persistenceUnit);
                 if (unit.Classes != null)

@@ -1,58 +1,28 @@
 ﻿using ECO.Data;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ECO.Providers.InMemory
 {
-    public class InMemoryPersistenceContext : IPersistenceContext
+    public class InMemoryPersistenceContext : PersistentContextBase<InMemoryPersistenceContext>
     {
-        #region Properties
+        #region Ctor
 
-        public IDataTransaction Transaction { get; protected set; }
+        public InMemoryPersistenceContext(IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory)
+            :base(persistenceUnit, loggerFactory)
+        {
+
+        }
 
         #endregion
 
         #region Methods
 
-        public void Attach<T, K>(T entity) where T : IAggregateRoot<K>
+        protected override IDataTransaction OnBeginTransaction()
         {
-
-        }
-
-        public void Detach<T, K>(T entity) where T : IAggregateRoot<K>
-        {
-
-        }
-
-        public void Refresh<T, K>(T entity) where T : IAggregateRoot<K>
-        {
-
-        }
-
-        public PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>
-        {
-            return PersistenceState.Unknown;
-        }
-
-        public IDataTransaction BeginTransaction()
-        {
-            Transaction = new NullDataTransaction(this);
-            return Transaction;
-        }
-
-        public void Close()
-        {
-
-        }
-
-        public void SaveChanges()
-        {
-
-        }
-
-        public void Dispose()
-        {
-
+            return new NullDataTransaction(this);
         }
 
         #endregion

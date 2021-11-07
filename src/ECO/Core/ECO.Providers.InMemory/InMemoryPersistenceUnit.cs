@@ -1,14 +1,25 @@
 ﻿using ECO.Data;
+using Microsoft.Extensions.Logging;
 
 namespace ECO.Providers.InMemory
 {
-    public class InMemoryPersistenceUnit : PersistenceUnitBase
+    public sealed class InMemoryPersistenceUnit : PersistenceUnitBase<InMemoryPersistenceUnit>
     {
+        #region Ctor
+
+        public InMemoryPersistenceUnit(ILoggerFactory loggerFactory)
+            :base(loggerFactory)
+        {
+
+        }
+
+        #endregion
+
         #region Methods
 
         protected override IPersistenceContext OnCreateContext()
         {
-            return new InMemoryPersistenceContext();
+            return new InMemoryPersistenceContext(this, _LoggerFactory);
         }
 
         public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)

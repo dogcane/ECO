@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace ECO.Data
 {
-    public abstract class PersistenceUnitBase : IPersistenceUnit
+    public abstract class PersistenceUnitBase<P> : IPersistenceUnit
+        where P : PersistenceUnitBase<P>
     {
         #region Private_Fields
 
@@ -12,6 +14,10 @@ namespace ECO.Data
         protected IList<Type> _Classes = new List<Type>();
 
         protected IList<IPersistenceUnitListener> _Listeners = new List<IPersistenceUnitListener>();
+
+        protected readonly ILoggerFactory _LoggerFactory;
+
+        protected readonly ILogger<P> _Logger;
 
         #endregion
 
@@ -22,6 +28,16 @@ namespace ECO.Data
         public virtual IEnumerable<Type> Classes => _Classes;
 
         public virtual IEnumerable<IPersistenceUnitListener> Listeners => _Listeners;
+
+        #endregion
+
+        #region Ctor
+
+        protected PersistenceUnitBase(ILoggerFactory loggerFactory)
+        {
+            _LoggerFactory = loggerFactory;
+            _Logger = loggerFactory.CreateLogger<P>();
+        }
 
         #endregion
 

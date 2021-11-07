@@ -6,6 +6,10 @@ namespace ECO.Data
     {
         #region Properties
 
+        Guid PersistenceContextId { get; }
+
+        IPersistenceUnit PersistenceUnit { get; }
+
         IDataTransaction Transaction { get; }
 
         #endregion

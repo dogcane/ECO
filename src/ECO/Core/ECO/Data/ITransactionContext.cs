@@ -6,13 +6,22 @@ namespace ECO.Data
     {
         #region Properties
 
+        Guid TransactionContextId { get; }
+
         bool AutoCommit { get; }
+
         TransactionStatus Status { get; }
+
         #endregion
+
         #region Methods
-        void EnlistDataTransaction(IDataTransaction transaction);
+
+        void EnlistDataTransaction(IDataTransaction dataTransaction);
+
         void Commit();
+
         void Rollback();
+
         #endregion
     }
 }
