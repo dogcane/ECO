@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ECO.Sample.Application.Events.DTO.EventListItem>
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Events";
 }
 
 <h1>View</h1>
@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                <label asp-for="Name"></label>
+                <label>Name</label>
             </th>
             <th>
-                <label asp-for="EventCode"></label>
+                <label>Event Code</label>
             </th>
             <th></th>
         </tr>
@@ -31,9 +31,8 @@
                 @Html.DisplayFor(modelItem => item.EventCode)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="EventCode">Edit</a>
-                <a asp-action="Details" asp-route-id="Details">Details</a>
-                <a asp-action="Delete" asp-route-id="Delete">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.EventCode">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.EventCode" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
 }
