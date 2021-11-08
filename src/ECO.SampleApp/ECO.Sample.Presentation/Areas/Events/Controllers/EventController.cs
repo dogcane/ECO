@@ -1,6 +1,8 @@
 ﻿using ECO.Sample.Application.Events;
+using ECO.Sample.Application.Events.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
@@ -33,11 +35,36 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             _AddSessionToEventService = addSessionToEventService;
             _RemoveSessionFromEventService = removeSessionFromEventService;
         }
-       
+
+        // GET: NewEventController
         public ActionResult Index(DateTime? start, DateTime? end, string eventName)
         {
             var model = _ShowEventsService.ShowEvents(start, end, eventName);
             return View(model);
+        }
+
+        // GET: NewEventController/Create
+        public ActionResult Create()
+        {
+            var model = new EventDetail();
+            return View(model);
+        }
+
+        // POST: NewEventController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(EventDetail model)
+        {
+            try
+            {
+                var result = _CreateEventService.CreateNewEvent(model);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
         }
     }
 }

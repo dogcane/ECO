@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <label asp-for="Name"></label>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EventCode)
+                <label asp-for="EventCode"></label>
             </th>
             <th></th>
         </tr>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.EventCode)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Edit" asp-route-id="EventCode">Edit</a>
+                <a asp-action="Details" asp-route-id="Details">Details</a>
+                <a asp-action="Delete" asp-route-id="Delete">Delete</a>
             </td>
         </tr>
 }
