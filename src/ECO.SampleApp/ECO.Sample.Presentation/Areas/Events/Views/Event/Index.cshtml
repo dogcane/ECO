@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ECO.Sample.Application.Events.DTO.EventListItem>
+﻿@model ECO.Sample.Presentation.Areas.Events.Models.EventListViewModel
 
 @{
     ViewData["Title"] = "Events";
@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Items) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

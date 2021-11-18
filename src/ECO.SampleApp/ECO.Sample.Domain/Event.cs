@@ -1,4 +1,5 @@
 ﻿using Resulz;
+using Resulz.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -55,9 +56,10 @@ namespace ECO.Sample.Domain
         {
             var result = OperationResult
                 .MakeSuccess()
-                .CheckEventName(name)
-                .CheckEventDescription(description)
-                .CheckEventPeriod(period);
+                .With(name, nameof(Name)).Required("NAME_REQUIRED").StringLength(50, "NAME_TOO_LONG")
+                .With(description, nameof(Description)).Required("DESCRIPTION_REQUIRED").StringLength(200, "DESCRIPTION_TOO_LONG")
+                .With(period.StartDate, "Period.StartDate").LessThenOrEqual(period.EndDate, "STARTDATE_GREATER_ENDDATE")
+                .Result;
             if (result.Success)
             {
                 return new Event(name, description, period);
@@ -73,9 +75,10 @@ namespace ECO.Sample.Domain
         {
             var result = OperationResult
                 .MakeSuccess()
-                .CheckEventName(name)
-                .CheckEventDescription(description)
-                .CheckEventPeriod(period);
+                .With(name, nameof(Name)).Required("NAME_REQUIRED").StringLength(50, "NAME_TOO_LONG")
+                .With(description, nameof(Description)).Required("DESCRIPTION_REQUIRED").StringLength(200, "DESCRIPTION_TOO_LONG")
+                .With(period.StartDate, "Period.StartDate").LessThenOrEqual(period.EndDate, "STARTDATE_GREATER_ENDDATE")
+                .Result;
             if (result.Success)
             {
                 Name = name;

@@ -1,5 +1,8 @@
 ﻿using ECO.Sample.Application.Events;
-using ECO.Sample.Application.Events.DTO;
+using ECO.Sample.Application.Events.Commands;
+using ECO.Sample.Application.Events.Queries;
+using ECO.Sample.Presentation.Areas.Events.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -11,40 +14,31 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
     [Route("events/event")]
     public class EventController : Controller
     {
-        private IShowEventsService _ShowEventsService;
+        private IMediator _Mediator;
 
-        private ICreateEventService _CreateEventService;
-
-        private IGetEventService _ShowEventDetailService;
-
-        private IChangeEventService _ChangeEventService;
-
-        private IDeleteEventService _DeleteEventService;
-
-        private IAddSessionToEventService _AddSessionToEventService;
-
-        private IRemoveSessionFromEventService _RemoveSessionFromEventService;
-
-        public EventController(IShowEventsService showEventService, ICreateEventService createEventService,
-            IGetEventService showEventDetailService, IChangeEventService changeEventService, IDeleteEventService deleteEventService,
-            IAddSessionToEventService addSessionToEventService, IRemoveSessionFromEventService removeSessionFromEventService)
+        public EventController(IMediator mediator)
         {
-            _ShowEventsService = showEventService;
-            _CreateEventService = createEventService;
-            _ShowEventDetailService = showEventDetailService;
-            _ChangeEventService = changeEventService;
-            _DeleteEventService = deleteEventService;
-            _AddSessionToEventService = addSessionToEventService;
-            _RemoveSessionFromEventService = removeSessionFromEventService;
+            _Mediator = mediator;
         }
 
         // GET: EventController
         [HttpGet]
         [Route("")]
         [Route("index")]
-        public ActionResult Index(DateTime? start, DateTime? end, string eventName)
+        public async Task<ActionResult> Index(DateTime? start, DateTime? end, string eventName)
         {
-            var model = _ShowEventsService.ShowEvents(start, end, eventName);
+            var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
+            var model = new EventListViewModel();
+            if (result.Success) {
+                model.Items = result.Value.Select(item => new EvenItemViewModel
+                {
+                    EventCode = item.EventCode,
+                    Name = item.Name,
+                    StartDate = item.StartDate,
+                    EndDate = item.EndDate,
+                    NumberOfSessions = item.NumberOfSessions
+                });                
+            }
             return View(model);
         }
 
@@ -53,7 +47,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         [Route("create")]
         public ActionResult Create()
         {
-            var model = new EventDetail();
+            var model = new EventViewModel();
             return View(model);
         }
 
@@ -61,12 +55,12 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         [HttpPost]
         [Route("create")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(EventDetail model)
+        public async Task<ActionResult> Create(EventViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = _CreateEventService.CreateNewEvent(model);
+            var result = await _Mediator.Send(new CreateEvent.Command(model.Name, model.Description, model.StartDate, model.EndDate));
             if (!result.Success)
             {
                 result.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Context, error.Description));
@@ -78,58 +72,61 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         // GET: EventController/Edit/5
         [HttpGet]
         [Route("edit/{id}")]
-        public ActionResult Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var result = _ShowEventDetailService.GetEvent(id.Value);
+            var result = await _Mediator.Send(new GetEvent.Query(id.Value));
             if (!result.Success)
                 return NotFound();
 
-            return View(result.Value);
+            var model = new EventViewModel
+            {
+                EventCode = result.Value.EventCode,
+                Description = result.Value.Description,
+                StartDate = result.Value.StartDate,
+                EndDate = result.Value.EndDate,
+                Name = result.Value.Name,
+                Sessions = result.Value.SessionItems.Select(item => new SessionItemViewModel { 
+                    Level = item.Level,
+                    Title = item.Title,
+                    Speaker = item.Speaker,
+                    SessionCode = item.SessionCode
+                })
+            };
+
+            return View(model);
         }
 
         // POST: NewEventController/Edit/5
         [HttpPost]
         [Route("edit/{id}")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid? id, EventDetail model)
+        public async Task<ActionResult> Edit(Guid? id, EventViewModel model)
         {
             if (id == null)
                 return NotFound();
 
-            var search = _ShowEventDetailService.GetEvent(id.Value);
-            if (!search.Success)
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var edit = _ChangeEventService.ChangeInformation(model);
-            if (!edit.Success)
+            var result = await _Mediator.Send(new ChangeEvent.Command(model.EventCode, model.Name, model.Description, model.StartDate, model.EndDate));
+            if (!result.Success)
             {
-                edit.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Context, error.Description));
+                result.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Context, error.Description));
                 return View(model);
             }
-
             return RedirectToAction(nameof(Index));
         }
 
         // GET: EventController/Delete/5
         [HttpGet]
         [Route("delete/{id}")]
-        public ActionResult Delete(Guid? id)
+        public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
                 return NotFound();
 
-            var search = _ShowEventDetailService.GetEvent(id.Value);
-            if (!search.Success)
-                return NotFound();
-
-            var delete = _DeleteEventService.DeleteEvent(id.Value);
-            if (!delete.Success)
+            var result = await _Mediator.Send(new DeleteEvent.Command(id.Value));
+            if (!result.Success)
                 return RedirectToAction(nameof(Index), new { deleteError = true });
 
             return RedirectToAction(nameof(Index));
