@@ -4,6 +4,6 @@ namespace ECO.Sample.Presentation.Areas.Events.Models
 {
     public class EventListViewModel
     {
-        public IEnumerable<EvenItemViewModel> Items { get; set; }
+        public IEnumerable<EventItemViewModel> Items { get; set; }
     }
 }

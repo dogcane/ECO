@@ -1,4 +1,5 @@
-﻿using ECO.Sample.Application.Events.DTO;
+﻿using AutoMapper;
+using ECO.Sample.Application.Events.DTO;
 using ECO.Sample.Domain;
 using MediatR;
 using Resulz;
@@ -19,7 +20,13 @@ namespace ECO.Sample.Application.Events.Queries
         {
             private IEventRepository _EventRepository;
 
-            public Handler(IEventRepository eventRepository) => _EventRepository = eventRepository;
+            private IMapper _Mapper;
+
+            public Handler(IEventRepository eventRepository, IMapper mapper)
+            {
+                _EventRepository = eventRepository;
+                _Mapper = mapper;
+            }                
 
             public async Task<OperationResult<IEnumerable<EventItem>>> Handle(Query request, CancellationToken cancellationToken)
             {                
@@ -36,8 +43,7 @@ namespace ECO.Sample.Application.Events.Queries
                 {
                     query = query.Where(entity => entity.Name.Contains(request.EventName));
                 }
-                var events = query.Select(item => new EventItem(item.Identity, item.Name, item.Period.StartDate, item.Period.EndDate, item.Sessions.Count()));
-                return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(events));
+                return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(_Mapper.Map<IEnumerable<EventItem>>(query)));
             }
         }                
     }

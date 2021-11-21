@@ -1,0 +1,46 @@
+﻿@model ECO.Sample.Presentation.Areas.Speakers.Models.SpeakerListViewModel
+
+@{
+    ViewData["Title"] = "Speakers";
+}
+
+<h1>View</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label>Name</label>
+            </th>
+            <th>
+                <label>Surname</label>
+            </th>
+            <th>
+                <label>Speaker Code</label>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Items) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpeakerCode)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SpeakerCode">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.SpeakerCode" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

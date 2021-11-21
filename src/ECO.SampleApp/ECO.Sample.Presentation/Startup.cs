@@ -31,6 +31,8 @@ namespace ECO.Sample.Presentation
             });
             //MediatR
             services.AddMediatR(typeof(ECO.Sample.Application.Events.Queries.SearchEvents));
+            //Automapper
+            services.AddAutoMapper(typeof(ECO.Sample.Application.Utils.DTOsProfile));
             //Sample App Services
             services.AddScoped<IEventRepository, EventMemoryRepository>();
             services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
@@ -56,9 +58,7 @@ namespace ECO.Sample.Presentation
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "events",
-                    pattern: "{area:exists}/{controller=event}/{action=Index}/{id?}");
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

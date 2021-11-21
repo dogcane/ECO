@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
     [Area("events")]
-    [Route("events/event")]
+    [Route("events")]
     public class EventController : Controller
     {
         private IMediator _Mediator;
@@ -30,7 +30,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
             var model = new EventListViewModel();
             if (result.Success) {
-                model.Items = result.Value.Select(item => new EvenItemViewModel
+                model.Items = result.Value.Select(item => new EventItemViewModel
                 {
                     EventCode = item.EventCode,
                     Name = item.Name,
@@ -47,7 +47,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         [Route("create")]
         public ActionResult Create()
         {
-            var model = new EventViewModel();
+            var model = EventViewModel.Empty;
             return View(model);
         }
 

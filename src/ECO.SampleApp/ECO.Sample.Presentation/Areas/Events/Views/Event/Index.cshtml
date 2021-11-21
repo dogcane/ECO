@@ -16,7 +16,7 @@
                 <label>Name</label>
             </th>
             <th>
-                <label>Event Code</label>
+                <label>Number of sessions</label>
             </th>
             <th></th>
         </tr>
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EventCode)
+                @Html.DisplayFor(modelItem => item.NumberOfSessions)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EventCode">Edit</a>

@@ -7,7 +7,7 @@ using ECO.Sample.Domain;
 
 namespace ECO.Sample.Presentation.Areas.Events.Models
 {
-    public class EvenItemViewModel
+    public class EventItemViewModel
     {
         public Guid EventCode { get; set; }
 
