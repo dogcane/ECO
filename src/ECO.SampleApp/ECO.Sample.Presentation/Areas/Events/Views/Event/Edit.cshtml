@@ -9,7 +9,7 @@
 <h4>EventDetail</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="EventCode" type="hidden" />
@@ -38,12 +38,50 @@
             </div>
         </form>
     </div>
+    <div class="col-md-6">
+        <p>Sessions</p>        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label>Title</label>
+                    </th>
+                    <th>
+                        <label>Speaker</label>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Sessions)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Speaker)
+                        </td>
+                        <td>
+                            <a asp-action="RemoveSession" asp-route-id="@Model.EventCode" asp-route-sessionid="@item.SessionCode" onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @await Html.PartialAsync("_AddSession", new ECO.Sample.Presentation.Areas.Events.Models.SessionEditViewModel())
+    </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }

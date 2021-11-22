@@ -1,10 +1,12 @@
-﻿using ECO.Sample.Application.Speakers;
+﻿using AutoMapper;
+using ECO.Sample.Application.Speakers;
 using ECO.Sample.Application.Speakers.Commands;
 using ECO.Sample.Application.Speakers.Queries;
 using ECO.Sample.Presentation.Areas.Speakers.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,9 +18,12 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
     {
         private IMediator _Mediator;
 
-        public SpeakerController(IMediator mediator)
+        private IMapper _Mapper;
+
+        public SpeakerController(IMediator mediator, IMapper mapper)
         {
             _Mediator = mediator;
+            _Mapper = mapper;
         }
 
         // GET: SpeakerController
@@ -31,14 +36,23 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             var model = new SpeakerListViewModel();
             if (result.Success)
             {
-                model.Items = result.Value.Select(item => new SpeakerItemViewModel
-                {
-                    SpeakerCode = item.SpeakerCode,
-                    Name = item.Name,
-                    Surname = item.Surname
-                });
+                model.Items = _Mapper.Map<IEnumerable<SpeakerItemViewModel>>(result.Value);
             }
             return View(model);
+        }
+
+        // GET: SpeakerController
+        [HttpGet]
+        [Route("json")]
+        public async Task<ActionResult> JsonSearch(string nameOrSurname)
+        {
+            var result = await _Mediator.Send(new SearchSpeakers.Query(nameOrSurname));
+            var model = new SpeakerListViewModel();
+            if (result.Success)
+            {
+                model.Items = _Mapper.Map<IEnumerable<SpeakerItemViewModel>>(result.Value);
+            }
+            return Json(model);
         }
 
         // GET: SpeakerController/Create
@@ -80,14 +94,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             if (!result.Success)
                 return NotFound();
 
-            var model = new SpeakerViewModel
-            {
-                SpeakerCode = result.Value.SpeakerCode,
-                Name = result.Value.Name,
-                Surname = result.Value.Surname,
-                Description = result.Value.Description,
-                Age = result.Value.Age
-            };
+            var model = _Mapper.Map<SpeakerViewModel>(result.Value);
 
             return View(model);
         }

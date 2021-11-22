@@ -30,9 +30,12 @@ namespace ECO.Sample.Presentation
                 options.RequireTransaction = true;
             });
             //MediatR
-            services.AddMediatR(typeof(ECO.Sample.Application.Events.Queries.SearchEvents));
+            services.AddMediatR(typeof(ECO.Sample.Application.AssemblyMarker));
             //Automapper
-            services.AddAutoMapper(typeof(ECO.Sample.Application.Utils.DTOsProfile));
+            services.AddAutoMapper(
+                typeof(ECO.Sample.Application.AssemblyMarker), 
+                typeof(Startup)
+            );
             //Sample App Services
             services.AddScoped<IEventRepository, EventMemoryRepository>();
             services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
