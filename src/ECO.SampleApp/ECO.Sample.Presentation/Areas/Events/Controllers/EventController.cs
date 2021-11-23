@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace ECO.Sample.Presentation.Areas.Events.Controllers
 {
     [Area("events")]
-    [Route("events")]
+    [Route("event")]
     public class EventController : Controller
     {
         private IMediator _Mediator;
@@ -26,10 +26,8 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             _Mapper = mapper;
         }
 
-        // GET: EventController
         [HttpGet]
         [Route("")]
-        [Route("index")]
         public async Task<ActionResult> Index(DateTime? start, DateTime? end, string eventName)
         {
             var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
@@ -40,7 +38,6 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return View(model);
         }
 
-        // GET: EventController/Create
         [HttpGet]
         [Route("create")]
         public ActionResult Create()
@@ -48,8 +45,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             var model = EventViewModel.Empty;
             return View(model);
         }
-
-        // POST: EventController/Create
+                
         [HttpPost]
         [Route("create")]
         [ValidateAntiForgeryToken]
@@ -67,9 +63,8 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: EventController/Edit/5
         [HttpGet]
-        [Route("edit/{id}")]
+        [Route("{id}/edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -83,10 +78,9 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
             return View(model);
         }
-
-        // POST: NewEventController/Edit/5
+                
         [HttpPost]
-        [Route("edit/{id}")]
+        [Route("{id}/edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, EventViewModel model)
         {
@@ -102,9 +96,8 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: EventController/Delete/5
         [HttpGet]
-        [Route("delete/{id}")]
+        [Route("{id}/delete")]
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -118,7 +111,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         }
 
         [HttpPost]
-        [Route("sessions/{id}/add")]
+        [Route("{id}/sessions/add")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddSession(Guid? id, SessionEditViewModel model)
         {
@@ -134,9 +127,8 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Edit), new { id });
         }
 
-        [HttpPost]
-        [Route("sessions/{id}/remove/{sessionid}")]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
+        [Route("{id}/sessions/{sessionid}/remove")]
         public async Task<ActionResult> RemoveSession(Guid? id, Guid? sessionid)
         {
             if (id == null || sessionid == null)

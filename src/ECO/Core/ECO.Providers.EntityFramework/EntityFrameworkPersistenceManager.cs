@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECO;
-using ECO.Data;
+﻿using ECO.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECO.Providers.EntityFramework
 {
     public class EntityFrameworkPersistenceManager<T, K> : PersistenceManagerBase<T, K>
         where T : class, IAggregateRoot<K>
     {
-        #region Protected_Methods
+        #region Properties
 
-        protected DbContext GetCurrentDbContext()
-        {
-            return (GetCurrentContext() as EntityFrameworkPersistenceContext).Context;
-        }
+        public DbContext DbContext => (PersistenceContext as EntityFrameworkPersistenceContext).Context;
 
-        protected DbContextTransaction GetCurrentTransaction()
+        #endregion
+
+        #region Ctor
+
+        public EntityFrameworkPersistenceManager(IDataContext dataContext) : base(dataContext)
         {
-            return (GetCurrentContext().Transaction as EntityFrameworkDataTransaction).Transaction;
         }
 
         #endregion
+
+        
     }
 }

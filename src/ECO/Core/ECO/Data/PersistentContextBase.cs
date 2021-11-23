@@ -8,6 +8,8 @@ namespace ECO.Data
     {
         #region Protected_Fields
 
+        protected bool _disposed = false;
+
         protected readonly ILogger<P> _Logger;
 
         #endregion
@@ -130,11 +132,16 @@ namespace ECO.Data
 
         private void Dispose(bool isDisposing)
         {
+            if (_disposed)
+                return;
+
             if (isDisposing)
             {
                 OnDispose();
                 GC.SuppressFinalize(this);
             }
+
+            _disposed = true;
         }
 
         #endregion

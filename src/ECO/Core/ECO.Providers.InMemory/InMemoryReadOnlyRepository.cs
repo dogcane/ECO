@@ -30,10 +30,7 @@ namespace ECO.Providers.InMemory
             }
         }
 
-        public virtual async Task<T> LoadAsync(K identity)
-        {
-            return await Task.Run(() => Load(identity));
-        }
+        public virtual async Task<T> LoadAsync(K identity) => await Task.FromResult(Load(identity));
 
         #endregion
 
@@ -63,20 +60,11 @@ namespace ECO.Providers.InMemory
 
         #region IQueryable Membri di
 
-        public virtual Type ElementType
-        {
-            get { return _EntitySet.AsQueryable().ElementType; }
-        }
+        public virtual Type ElementType => _EntitySet.AsQueryable().ElementType;
 
-        public virtual System.Linq.Expressions.Expression Expression
-        {
-            get { return _EntitySet.AsQueryable().Expression; }
-        }
+        public virtual System.Linq.Expressions.Expression Expression => _EntitySet.AsQueryable().Expression;
 
-        public virtual IQueryProvider Provider
-        {
-            get { return _EntitySet.AsQueryable().Provider; }
-        }
+        public virtual IQueryProvider Provider => _EntitySet.AsQueryable().Provider;
 
         #endregion
     }

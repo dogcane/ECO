@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 {
     [Area("speakers")]
-    [Route("speakers")]
+    [Route("speaker")]
     public class SpeakerController : Controller
     {
         private IMediator _Mediator;
@@ -29,7 +29,6 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
         // GET: SpeakerController
         [HttpGet]
         [Route("")]
-        [Route("index")]
         public async Task<ActionResult> Index(string nameOrSurname)
         {
             var result = await _Mediator.Send(new SearchSpeakers.Query(nameOrSurname));
@@ -84,7 +83,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         // GET: SpeakerController/Edit/5
         [HttpGet]
-        [Route("edit/{id}")]
+        [Route("{id}/edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -101,7 +100,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         // POST: NewSpeakerController/Edit/5
         [HttpPost]
-        [Route("edit/{id}")]
+        [Route("{id}/edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, SpeakerViewModel model)
         {
@@ -119,7 +118,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
 
         // GET: SpeakerController/Delete/5
         [HttpGet]
-        [Route("delete/{id}")]
+        [Route("{id}/delete")]
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)

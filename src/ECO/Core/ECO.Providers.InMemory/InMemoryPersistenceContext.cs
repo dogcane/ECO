@@ -20,10 +20,7 @@ namespace ECO.Providers.InMemory
 
         #region Methods
 
-        protected override IDataTransaction OnBeginTransaction()
-        {
-            return new NullDataTransaction(this);
-        }
+        protected override IDataTransaction OnBeginTransaction() => new NullDataTransaction(this);
 
         #endregion
     }

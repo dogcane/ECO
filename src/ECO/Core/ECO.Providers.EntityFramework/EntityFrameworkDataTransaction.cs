@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECO.Data;
+﻿using ECO.Data;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 
 namespace ECO.Providers.EntityFramework
 {
-    public class EntityFrameworkDataTransaction : IDataTransaction
+    public sealed class EntityFrameworkDataTransaction : IDataTransaction
     {
+        #region Fields
+
+        private bool _disposed = false;
+
+        #endregion
+
         #region IDataTransaction Members
 
-        public DbContextTransaction Transaction { get; protected set; }
+        public IDbContextTransaction Transaction { get; private set; }
 
-        public EntityFrameworkPersistenceContext Context { get; protected set; }
+        public EntityFrameworkPersistenceContext Context { get; private set; }
 
         IPersistenceContext IDataTransaction.Context
         {
@@ -43,6 +45,9 @@ namespace ECO.Providers.EntityFramework
 
         private void Dispose(bool isDisposing)
         {
+            if (_disposed)
+                return;
+
             if (isDisposing)
             {
                 if (Transaction != null)
@@ -51,6 +56,7 @@ namespace ECO.Providers.EntityFramework
                 }
                 GC.SuppressFinalize(this);
             }
+            _disposed = true;
             Transaction = null;
             Context = null;
         }

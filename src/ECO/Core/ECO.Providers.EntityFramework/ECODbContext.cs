@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECO.Providers.EntityFramework
 {
     public abstract class ECODbContext : DbContext
     {
-        protected ECODbContext(string connectionString)
-            : base(connectionString)
+        protected ECODbContext(DbContextOptions options)
+            : base(options)
         {
 
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Properties().Where(p => p.Name == "Identity").Configure(p => p.IsKey()); 
+            foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                modelBuilder.Entity(entityType.ClrType).HasKey("Identity");
+            }
             base.OnModelCreating(modelBuilder);
         }
     }

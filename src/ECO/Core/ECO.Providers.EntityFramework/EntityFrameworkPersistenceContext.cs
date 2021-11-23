@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECO;
-using ECO.Data;
+﻿using ECO.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ECO.Providers.EntityFramework
 {
-    public class EntityFrameworkPersistenceContext : PersistentContextBase
+    public class EntityFrameworkPersistenceContext : PersistentContextBase<EntityFrameworkPersistenceContext>
     {
         #region Public_Properties
 
@@ -19,27 +14,10 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        public EntityFrameworkPersistenceContext(DbContext context)
+        public EntityFrameworkPersistenceContext(IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory, DbContext context)
+            : base(persistenceUnit, loggerFactory)
         {
             Context = context;
-        }
-
-        ~EntityFrameworkPersistenceContext()
-        {
-            Dispose(false);
-        }
-
-        protected override void OnDispose()
-        {
-            base.OnDispose();
-            if (Transaction != null)
-            {
-                Transaction.Dispose();
-            }
-            else
-            {
-                Context.SaveChanges();
-            }
         }
 
         #endregion
@@ -48,13 +26,12 @@ namespace ECO.Providers.EntityFramework
 
         protected override IDataTransaction OnBeginTransaction()
         {
-            Transaction = new EntityFrameworkDataTransaction(this);
-            return Transaction;
+            return new EntityFrameworkDataTransaction(this);
         }
 
-        public override void SaveChanges()
+        protected override void OnSaveChanges()
         {
-            base.SaveChanges();
+            base.OnSaveChanges();
             Context.SaveChanges();
         }
 

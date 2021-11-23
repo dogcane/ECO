@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECO.Providers.EntityFramework;
+﻿using ECO.Providers.EntityFramework;
 using ECO.Sample.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECO.Sample.Infrastructure.DAL.EntityFramework
 {
@@ -15,16 +10,12 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
         
         public DbSet<Event> Events { get; set; }
 
-        public ECOSampleContext(string connectionString)
-            : base(connectionString)
+        public DbSet<Speaker> Speakers { get; set; }
+
+        public ECOSampleContext(DbContextOptions options)
+            : base(options)
         {
 
-        }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.HasDefaultSchema("ECO_EF");
-            base.OnModelCreating(modelBuilder);            
         }
     }
 }

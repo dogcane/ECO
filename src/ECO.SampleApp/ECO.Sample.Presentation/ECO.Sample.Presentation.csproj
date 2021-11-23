@@ -16,11 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
+    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Web\ECO.Web.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
     <ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj" />
     <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
+    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj" />
     <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj" />
     <ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
   </ItemGroup>
