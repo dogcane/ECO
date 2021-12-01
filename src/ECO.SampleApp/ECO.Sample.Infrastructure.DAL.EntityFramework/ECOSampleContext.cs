@@ -7,7 +7,7 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
     public class ECOSampleContext : ECODbContext
     {
         public DbSet<Session> Sessions { get; set; }
-        
+
         public DbSet<Event> Events { get; set; }
 
         public DbSet<Speaker> Speakers { get; set; }

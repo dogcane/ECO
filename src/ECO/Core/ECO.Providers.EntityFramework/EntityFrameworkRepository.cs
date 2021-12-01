@@ -1,5 +1,4 @@
 ﻿using ECO.Data;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ECO.Providers.EntityFramework

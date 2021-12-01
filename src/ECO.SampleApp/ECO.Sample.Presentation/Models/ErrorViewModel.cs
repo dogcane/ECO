@@ -1,5 +1,3 @@
-using System;
-
 namespace ECO.Sample.Presentation.Models
 {
     public class ErrorViewModel

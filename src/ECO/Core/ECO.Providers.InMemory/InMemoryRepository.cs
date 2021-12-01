@@ -1,5 +1,4 @@
 ﻿using ECO.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECO.Providers.InMemory

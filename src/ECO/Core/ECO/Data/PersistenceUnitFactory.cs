@@ -1,11 +1,6 @@
-using ECO.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
 
 namespace ECO.Data
 {
@@ -23,69 +18,20 @@ namespace ECO.Data
 
         #region ~Ctor
 
-        public PersistenceUnitFactory(IOptions<ECOOptions> optionsAccessor, ILoggerFactory loggerFactory)
-        {
-            var options = optionsAccessor.Value;
-            foreach (PersistenceUnitOptions unit in options.PersistenceUnits)
-            {
-                IPersistenceUnit persistenceUnit = Activator.CreateInstance(Type.GetType(unit.Type), loggerFactory) as IPersistenceUnit;
-                persistenceUnit.Initialize(unit.Name, unit.Attributes);
-                _Units.Add(unit.Name, persistenceUnit);
-                if (unit.Classes != null)
-                {
-                    foreach (string classType in unit.Classes)
-                    {
-                        try
-                        {
-                            Type type = Type.GetType(classType);
-                            persistenceUnit.AddClass(type);
-                            _Classes.Add(type, persistenceUnit);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ConfigurationErrorsException($"Error when loading the type {classType}", ex);
-                        }
-                    }
-                }
-                if (unit.Listeners != null)
-                {
-                    foreach (string unitListenerType in unit.Listeners)
-                    {
-                        try
-                        {
-                            IPersistenceUnitListener listener = Activator.CreateInstance(Type.GetType(unitListenerType)) as IPersistenceUnitListener;
-                            persistenceUnit.AddUnitListener(listener);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ConfigurationErrorsException($"Error when loading the type {unitListenerType}", ex);
-                        }
-                    }
-                }
-            }
-        }
+        public PersistenceUnitFactory(ILogger<PersistenceUnitFactory> logger) => _Logger = logger;
 
         #endregion
 
         #region Public_Methods
 
-        public IPersistenceUnit BuildPersistenceUnit<T>(string name) where T : IPersistenceUnit
+        public IPersistenceUnitFactory AddPersistenceUnit(IPersistenceUnit persistenceUnit)
         {
-            return BuildPersistenceUnit<T>(name, null);
-        }
-
-        public IPersistenceUnit BuildPersistenceUnit<T>(string name, IDictionary<string, string> extendedAttributes) where T : IPersistenceUnit
-        {
-            if (!_Units.ContainsKey(name))
+            _Units.Add(persistenceUnit.Name, persistenceUnit);
+            foreach (var classType in persistenceUnit.Classes)
             {
-                IPersistenceUnit MyUnit = Activator.CreateInstance<T>();
-                if (extendedAttributes != null && extendedAttributes.Count > 0)
-                {
-                    MyUnit.Initialize(name, extendedAttributes);
-                }
-                _Units.Add(name, MyUnit);
+                _Classes.Add(classType, persistenceUnit);
             }
-            return _Units[name];
+            return this;
         }
 
         public IPersistenceUnit GetPersistenceUnit(string name)

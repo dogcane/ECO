@@ -1,4 +1,3 @@
-using ECO.Utils;
 using System;
 
 namespace ECO
@@ -68,7 +67,7 @@ namespace ECO
         /// Method that returns the hash code for the current entity
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() => Utils.HashCode.Combine(Identity, typeof(T));
+        public override int GetHashCode() => HashCode.Combine(Identity, typeof(T));
 
         #endregion
     }

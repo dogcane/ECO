@@ -1,8 +1,6 @@
-using ECO.Sample.Application.Events;
-using ECO.Sample.Application.Events.Impl;
+using ECO.Configuration;
 using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.Repositories;
-using ECO.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,27 +18,30 @@ namespace ECO.Sample.Presentation
         }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //ECO
-            services.AddECODataContext(Configuration, options =>
+            //ECO            
+            services.AddDataContext(options =>
             {
-                options.RequireTransaction = true;
+                options
+                    .UsingConfiguration(Configuration)
+                    .RequireTransaction();
             });
+
             //MediatR
             services.AddMediatR(typeof(ECO.Sample.Application.AssemblyMarker));
             //Automapper
             services.AddAutoMapper(
-                typeof(ECO.Sample.Application.AssemblyMarker), 
+                typeof(ECO.Sample.Application.AssemblyMarker),
                 typeof(Startup)
             );
             //Sample App Services
             services.AddScoped<IEventRepository, EventMemoryRepository>();
             services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
         }
-                
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

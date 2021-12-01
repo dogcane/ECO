@@ -13,7 +13,7 @@ namespace ECO.Data
         #region Ctor
 
         public PersistenceUnitNotFoundException(string persistenceUnitName)
-            : base($"Persistence Unit '{persistenceUnitName}' not found") => PersistenceUnitName = persistenceUnitName;        
+            : base($"Persistence Unit '{persistenceUnitName}' not found") => PersistenceUnitName = persistenceUnitName;
 
         #endregion
     }

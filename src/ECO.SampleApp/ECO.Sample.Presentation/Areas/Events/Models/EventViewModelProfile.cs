@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ECO.Sample.Application.Events.Commands;
 using ECO.Sample.Application.Events.DTO;
 
 namespace ECO.Sample.Presentation.Areas.Events.Models

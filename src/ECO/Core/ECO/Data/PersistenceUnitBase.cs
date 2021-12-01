@@ -1,6 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 namespace ECO.Data
 {
@@ -33,8 +33,9 @@ namespace ECO.Data
 
         #region Ctor
 
-        protected PersistenceUnitBase(ILoggerFactory loggerFactory)
+        protected PersistenceUnitBase(string name, ILoggerFactory loggerFactory)
         {
+            _Name = name;
             _LoggerFactory = loggerFactory;
             _Logger = loggerFactory.CreateLogger<P>();
         }
@@ -69,9 +70,8 @@ namespace ECO.Data
         #endregion
 
         #region Public_Methods
-        public virtual void Initialize(string name, IDictionary<string, string> extededAttributes)
+        public virtual void Initialize(IDictionary<string, string> extededAttributes)
         {
-            _Name = name;
             OnInitialize(extededAttributes);
         }
 
@@ -79,7 +79,7 @@ namespace ECO.Data
         {
             OnContextPreCreate();
             IPersistenceContext context = OnCreateContext();
-            OnContextPostCreate(context);            
+            OnContextPostCreate(context);
             return context;
         }
 

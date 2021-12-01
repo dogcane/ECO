@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using nh = NHibernate;
-
 using ECO.Data;
+using System;
+using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
 {

@@ -1,17 +1,14 @@
 ﻿using ECO.Data;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace ECO.Providers.InMemory
 {
-    public class InMemoryPersistenceContext : PersistentContextBase<InMemoryPersistenceContext>
+    public class InMemoryPersistenceContext : PersistenceContextBase<InMemoryPersistenceContext>
     {
         #region Ctor
 
-        public InMemoryPersistenceContext(IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory)
-            :base(persistenceUnit, loggerFactory)
+        public InMemoryPersistenceContext(IPersistenceUnit persistenceUnit, ILogger<InMemoryPersistenceContext> logger)
+            : base(persistenceUnit, logger)
         {
 
         }

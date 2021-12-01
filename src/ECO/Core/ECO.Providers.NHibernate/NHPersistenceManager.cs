@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using nh = NHibernate;
-
+﻿
 using ECO.Data;
+using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
 {
     public class NHPersistenceManager<T, K> : PersistenceManagerBase<T, K>
         where T : class, IAggregateRoot<K>
     {
+        #region Ctor
+
+        public NHPersistenceManager(IDataContext dataContext) : base(dataContext)
+        {
+        }
+
+        #endregion
+
         #region Protected_Methods
 
-        protected nh.ISession GetCurrentSession()
-        {
-            return (GetCurrentContext() as NHPersistenceContext).Session;
-        }
+        protected nh.ISession GetCurrentSession() => (PersistenceContext as NHPersistenceContext).Session;
 
-        protected nh.ITransaction GetCurrentTransaction()
-        {
-            return (GetCurrentContext().Transaction as NHDataTransaction).Transaction;
-        }
+        protected nh.ITransaction GetCurrentTransaction() => (PersistenceContext.Transaction as NHDataTransaction).Transaction;
 
         #endregion
     }

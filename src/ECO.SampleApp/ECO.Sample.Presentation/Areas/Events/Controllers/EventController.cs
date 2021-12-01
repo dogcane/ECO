@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ECO.Sample.Application.Events;
 using ECO.Sample.Application.Events.Commands;
 using ECO.Sample.Application.Events.Queries;
 using ECO.Sample.Presentation.Areas.Events.Models;
@@ -32,7 +31,8 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         {
             var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
             var model = new EventListViewModel();
-            if (result.Success) {
+            if (result.Success)
+            {
                 model.Items = _Mapper.Map<IEnumerable<EventItemViewModel>>(result.Value);
             }
             return View(model);
@@ -45,7 +45,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             var model = EventViewModel.Empty;
             return View(model);
         }
-                
+
         [HttpPost]
         [Route("create")]
         [ValidateAntiForgeryToken]
@@ -78,7 +78,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
             return View(model);
         }
-                
+
         [HttpPost]
         [Route("{id}/edit")]
         [ValidateAntiForgeryToken]

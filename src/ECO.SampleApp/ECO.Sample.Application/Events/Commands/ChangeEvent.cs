@@ -2,9 +2,6 @@
 using MediatR;
 using Resulz;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +20,8 @@ namespace ECO.Sample.Application.Events.Commands
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
                 Event eventEventity = _EventRepository.Load(request.EventCode);
-                if (eventEventity == null) {
+                if (eventEventity == null)
+                {
                     return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
                 }
                 var eventResult = eventEventity.ChangeInformation(request.Name, request.Description, new Period(request.StartDate, request.EndDate));

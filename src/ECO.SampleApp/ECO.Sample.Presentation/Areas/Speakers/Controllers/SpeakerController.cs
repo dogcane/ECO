@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ECO.Sample.Application.Speakers;
 using ECO.Sample.Application.Speakers.Commands;
 using ECO.Sample.Application.Speakers.Queries;
 using ECO.Sample.Presentation.Areas.Speakers.Models;

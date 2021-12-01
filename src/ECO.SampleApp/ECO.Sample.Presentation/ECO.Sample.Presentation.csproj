@@ -10,7 +10,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   </ItemGroup>
@@ -19,7 +19,6 @@
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Web\ECO.Web.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
     <ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj" />
     <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />

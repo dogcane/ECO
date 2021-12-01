@@ -16,6 +16,8 @@ namespace ECO.Data
         /// </summary>
         string Name { get; }
 
+        IEnumerable<Type> Classes { get; }
+
         #endregion
 
         #region Methods
@@ -23,9 +25,8 @@ namespace ECO.Data
         /// <summary>
         /// Method that initialize the persistence unit
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="extendedAttributes"></param>
-        void Initialize(string name, IDictionary<string, string> extendedAttributes);
+        void Initialize(IDictionary<string, string> extendedAttributes);
 
         /// <summary>
         /// Method that return the current persistence context for the opened data context (if there is one).

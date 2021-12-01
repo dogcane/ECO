@@ -7,8 +7,8 @@ namespace ECO.Providers.InMemory
     {
         #region Ctor
 
-        public InMemoryPersistenceUnit(ILoggerFactory loggerFactory)
-            :base(loggerFactory)
+        public InMemoryPersistenceUnit(string name, ILoggerFactory loggerFactory)
+            : base(name, loggerFactory)
         {
 
         }
@@ -17,7 +17,7 @@ namespace ECO.Providers.InMemory
 
         #region Methods
 
-        protected override IPersistenceContext OnCreateContext() => new InMemoryPersistenceContext(this, _LoggerFactory);
+        protected override IPersistenceContext OnCreateContext() => new InMemoryPersistenceContext(this, _LoggerFactory.CreateLogger<InMemoryPersistenceContext>());
 
         public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) => new InMemoryReadOnlyRepository<T, K>(dataContext);
 

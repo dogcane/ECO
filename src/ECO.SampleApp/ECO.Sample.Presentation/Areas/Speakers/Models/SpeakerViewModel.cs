@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-
-using AutoMapper;
-
-using ECO.Sample.Domain;
 
 namespace ECO.Sample.Presentation.Areas.Speakers.Models
 {

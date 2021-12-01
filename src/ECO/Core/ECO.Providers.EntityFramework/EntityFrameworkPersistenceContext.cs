@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ECO.Providers.EntityFramework
 {
-    public class EntityFrameworkPersistenceContext : PersistentContextBase<EntityFrameworkPersistenceContext>
+    public class EntityFrameworkPersistenceContext : PersistenceContextBase<EntityFrameworkPersistenceContext>
     {
         #region Public_Properties
 
@@ -14,8 +14,8 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        public EntityFrameworkPersistenceContext(IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory, DbContext context)
-            : base(persistenceUnit, loggerFactory)
+        public EntityFrameworkPersistenceContext(IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext> logger, DbContext context)
+            : base(persistenceUnit, logger)
         {
             Context = context;
         }

@@ -23,8 +23,8 @@ namespace ECO.Data
         IPersistenceContext GetCurrentContext<T>();
         IPersistenceContext GetCurrentContext(object entity);
         IPersistenceContext GetCurrentContext(Type entityType);
-        PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>;        
-        
+        PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>;
+
         #endregion
     }
 }

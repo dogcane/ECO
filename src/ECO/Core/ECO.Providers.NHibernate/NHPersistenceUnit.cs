@@ -1,148 +1,188 @@
+using ECO.Data;
+using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.Text;
-
+using System.Reflection;
 using nh = NHibernate;
 using nhcfg = NHibernate.Cfg;
 
-using ECO;
-using ECO.Context;
-using ECO.Data;
-using System.Reflection;
-using NHibernate.Mapping.ByCode;
-
 namespace ECO.Providers.NHibernate
 {
-    public class NHPersistenceUnit : PersistenceUnitBase
+    public sealed class NHPersistenceUnit : PersistenceUnitBase<NHPersistenceUnit>
     {
         #region Consts
 
-        private static readonly string CONFIGFILE_ATTRIBUTE = "configFile";
+        private static readonly string CONNECTIONSTRINNAME_ATTRIBUTE = "connectionStringName";
 
-        private static readonly string INTERCEPTOR_ATTRIBUTE = "interceptor";
+        private static readonly string DIALECT_ATTRIBUTE = "sqlDialect";
+
+        private static readonly string DRIVER_ATTRIBUTE = "sqlDriver";
+
+        private static readonly string CONNECTIONPROVIDER_ATTRIBUTE = "connectionProvider";
+
+        private static readonly string SESSIONINTERCEPTOR_ATTRIBUTE = "sessionInterceptor";
+
+        private static readonly string MAPPINGASSEMBLIES_ATTRIBUTE = "mappingAssemblies";
 
         #endregion
 
         #region Private_Fields
 
-        private string _ConfigPath;
+        private string _ConnectionStringName;
+
+        private string _SqlDialect;
+
+        private string _SqlDriver;
+
+        private string _ConnectionProvider;
 
         private string _InterceptorFullName;
 
+        private string[] _MappingAssemblies;
+
         private nh.ISessionFactory _SessionFactory;
 
-        private IList<Type> _Mappers = new List<Type>();
+        #endregion
+
+        #region Ctor
+
+        public NHPersistenceUnit(string name, ILoggerFactory loggerFactory) : base(name, loggerFactory)
+        {
+        }
+
+        #endregion
+
+        #region Private_Methods
+        private void BuildSessionFactory()
+        {
+            if (_SessionFactory == null)
+            {
+                var configuration = new nhcfg.Configuration();
+                configuration.DataBaseIntegration(c =>
+                {
+                    c.ConnectionStringName = _ConnectionStringName;
+                    c.Dialect(_SqlDialect);
+                    c.Driver(_SqlDriver);
+                    if (!string.IsNullOrEmpty(_ConnectionProvider))
+                    {
+                        c.ConnectionProvider(_ConnectionProvider);
+                    }
+                    c.KeywordsAutoImport = nhcfg.Hbm2DDLKeyWords.AutoQuote;
+                    c.SchemaAction = nhcfg.SchemaAutoAction.Validate;
+                    c.LogFormattedSql = true;
+                    c.LogSqlInConsole = true;
+                });
+                if (!string.IsNullOrEmpty(_InterceptorFullName))
+                {
+                    Type interceptorType = Type.GetType(_InterceptorFullName);
+                    nh.IInterceptor interceptor = Activator.CreateInstance(interceptorType) as nh.IInterceptor;
+                    configuration.SetInterceptor(interceptor);
+                }
+                foreach (var mappingAssembly in _MappingAssemblies)
+                {
+                    configuration.AddAssembly(mappingAssembly);
+                }
+                _SessionFactory = configuration.BuildSessionFactory();
+            }
+        }
 
         #endregion
 
         #region Protected_Methods
 
-        protected virtual void TryAddClassMapping(nhcfg.Configuration cfg)
-        {
-            if (_Mappers.Count > 0)
-            {
-                ModelMapper mapper = new ModelMapper();
-                mapper.AddMappings(_Mappers);
-                cfg.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
-            }
-        }
-
-        protected virtual void BuildSessionFactory()
-        {
-            if (_SessionFactory == null)
-            {
-                nhcfg.Configuration cfg = new nhcfg.Configuration();
-                cfg.Configure(_ConfigPath);
-                TryAddClassMapping(cfg);
-                _SessionFactory = cfg.BuildSessionFactory();
-            }
-        }
-        
         protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
         {
             base.OnInitialize(extendedAttributes);
-            if (extendedAttributes.ContainsKey(CONFIGFILE_ATTRIBUTE))
+            if (extendedAttributes.ContainsKey(CONNECTIONSTRINNAME_ATTRIBUTE))
             {
-                _ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, extendedAttributes[CONFIGFILE_ATTRIBUTE]);
+                _ConnectionStringName = extendedAttributes[CONNECTIONSTRINNAME_ATTRIBUTE];
             }
             else
             {
-                throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", CONFIGFILE_ATTRIBUTE));
+                throw new ApplicationException($"The attribute '{CONNECTIONSTRINNAME_ATTRIBUTE}' was not found in the persistent unit configuration");
             }
-            if (extendedAttributes.ContainsKey(INTERCEPTOR_ATTRIBUTE))
+            if (extendedAttributes.ContainsKey(DIALECT_ATTRIBUTE))
             {
-                _InterceptorFullName = extendedAttributes[INTERCEPTOR_ATTRIBUTE];
+                _SqlDialect = extendedAttributes[DIALECT_ATTRIBUTE];
+            }
+            else
+            {
+                throw new ApplicationException($"The attribute '{DIALECT_ATTRIBUTE}' was not found in the persistent unit configuration");
+            }
+            if (extendedAttributes.ContainsKey(DRIVER_ATTRIBUTE))
+            {
+                _SqlDialect = extendedAttributes[DRIVER_ATTRIBUTE];
+            }
+            else
+            {
+                throw new ApplicationException($"The attribute '{DRIVER_ATTRIBUTE}' was not found in the persistent unit configuration");
+            }
+            if (extendedAttributes.ContainsKey(MAPPINGASSEMBLIES_ATTRIBUTE))
+            {
+                _MappingAssemblies = extendedAttributes[MAPPINGASSEMBLIES_ATTRIBUTE].Split(";", StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                throw new ApplicationException($"The attribute '{MAPPINGASSEMBLIES_ATTRIBUTE}' was not found in the persistent unit configuration");
+            }
+            if (extendedAttributes.ContainsKey(CONNECTIONPROVIDER_ATTRIBUTE))
+            {
+                _ConnectionProvider = extendedAttributes[CONNECTIONPROVIDER_ATTRIBUTE];
+            }
+            if (extendedAttributes.ContainsKey(SESSIONINTERCEPTOR_ATTRIBUTE))
+            {
+                _InterceptorFullName = extendedAttributes[SESSIONINTERCEPTOR_ATTRIBUTE];
             }
         }
 
-        protected override IPersistenceContext CreateContext()
+        protected override IPersistenceContext OnCreateContext()
         {
             BuildSessionFactory();
-            nh.ISession session = null;
-            if (!string.IsNullOrEmpty(_InterceptorFullName))
-            {
-                Type interceptorType = Type.GetType(_InterceptorFullName);
-                nh.IInterceptor interceptor = (nh.IInterceptor)Activator.CreateInstance(interceptorType);
-                session = _SessionFactory.OpenSession(interceptor);
-            }
-            else
-            {
-                session = _SessionFactory.OpenSession();
-            }
-            return new NHPersistenceContext(session);
-        }        
-
-        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>()
-        {
-            return new NHReadOnlyRepository<T, K>();
-        }
-
-        public override IRepository<T, K> BuildRepository<T, K>()
-        {
-            return new NHRepository<T, K>();
+            nh.ISession session = _SessionFactory.OpenSession();
+            return new NHPersistenceContext(session, this, _LoggerFactory);
         }
 
         #endregion
 
         #region Public_Methods
 
-        public NHPersistenceUnit AddMapping<T, K>()
-            where T : IClassMapper<K>
-            where K : class
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
         {
-            _Mappers.Add(typeof(T));
-            return this;
+            return new NHReadOnlyRepository<T, K>(dataContext);
         }
 
-        public NHPersistenceUnit RemoveMapping<T, K>()
-            where T : IClassMapper<K>
-            where K : class
+        public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
         {
-            _Mappers.Remove(typeof(T));
-            return this;
-        }
-
-        public NHPersistenceUnit AddClassWithMapping<T, K, J>()
-            where T : AggregateRoot<K>
-            where J : IClassMapper<T>            
-        {
-            AddClass<T, K>();
-            AddMapping<J, T>();
-            return this;
-        }
-
-        public NHPersistenceUnit RemoveClassWithMapping<T, K, J>()
-            where T : AggregateRoot<K>
-            where J : IClassMapper<T>     
-        {
-            RemoveMapping<J, T>();
-            RemoveClass<T, K>();
-            return this;
+            return new NHRepository<T, K>(dataContext);
         }
 
         #endregion
+    }
+
+    public static class DbPropertiesConfigurationExtensions
+    {
+        public static void Dialect(this nhcfg.Loquacious.DbIntegrationConfigurationProperties config, string dialectType)
+        {
+            MethodInfo method = typeof(nhcfg.Loquacious.DbIntegrationConfigurationProperties).GetType().GetMethod(nameof(nhcfg.Loquacious.DbIntegrationConfigurationProperties.Dialect));
+            Type dialect = Type.GetType($"NHibernate.Dialect.{dialectType}, NHibernate");
+            MethodInfo generic = method.MakeGenericMethod(dialect);
+            generic.Invoke(config, null);
+        }
+
+        public static void Driver(this nhcfg.Loquacious.DbIntegrationConfigurationProperties config, string driverType)
+        {
+            MethodInfo method = typeof(nhcfg.Loquacious.DbIntegrationConfigurationProperties).GetType().GetMethod(nameof(nhcfg.Loquacious.DbIntegrationConfigurationProperties.Driver));
+            Type driver = Type.GetType($"NHibernate.Driver.{driverType}, NHibernate");
+            MethodInfo generic = method.MakeGenericMethod(driver);
+            generic.Invoke(config, null);
+        }
+
+        public static void ConnectionProvider(this nhcfg.Loquacious.DbIntegrationConfigurationProperties config, string connectionProviderType)
+        {
+            MethodInfo method = typeof(nhcfg.Loquacious.DbIntegrationConfigurationProperties).GetType().GetMethod(nameof(nhcfg.Loquacious.DbIntegrationConfigurationProperties.ConnectionProvider));
+            Type driver = Type.GetType(connectionProviderType);
+            MethodInfo generic = method.MakeGenericMethod(driver);
+            generic.Invoke(config, null);
+        }
     }
 }

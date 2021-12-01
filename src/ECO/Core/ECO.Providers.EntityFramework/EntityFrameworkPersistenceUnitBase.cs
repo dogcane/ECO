@@ -24,8 +24,8 @@ namespace ECO.Providers.EntityFramework
 
         #region Ctor
 
-        protected EntityFrameworkPersistenceUnitBase(ILoggerFactory loggerFactory)
-            : base(loggerFactory)
+        protected EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory loggerFactory)
+            : base(name, loggerFactory)
         {
 
         }
@@ -58,7 +58,7 @@ namespace ECO.Providers.EntityFramework
         protected override IPersistenceContext OnCreateContext()
         {
             DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext;
-            return new EntityFrameworkPersistenceContext(this, _LoggerFactory, context);
+            return new EntityFrameworkPersistenceContext(this, _LoggerFactory.CreateLogger<EntityFrameworkPersistenceContext>(), context);
         }
 
         public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)

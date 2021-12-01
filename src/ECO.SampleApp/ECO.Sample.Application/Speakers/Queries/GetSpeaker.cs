@@ -3,9 +3,6 @@ using ECO.Sample.Domain;
 using MediatR;
 using Resulz;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,8 +25,8 @@ namespace ECO.Sample.Application.Speakers.Queries
                 {
                     return await Task.FromResult(
                         OperationResult<SpeakerDetail>.MakeSuccess(
-                            new SpeakerDetail(speaker.Identity,speaker.Name,speaker.Surname,speaker.Age,speaker.Description)
-                    ));                    
+                            new SpeakerDetail(speaker.Identity, speaker.Name, speaker.Surname, speaker.Age, speaker.Description)
+                    ));
                 }
                 else
                 {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace ECO.Providers.EntityFramework
 {
@@ -13,7 +12,7 @@ namespace ECO.Providers.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 modelBuilder.Entity(entityType.ClrType).HasKey("Identity");
             }

@@ -6,7 +6,6 @@ using Resulz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,10 +25,10 @@ namespace ECO.Sample.Application.Events.Queries
             {
                 _EventRepository = eventRepository;
                 _Mapper = mapper;
-            }                
+            }
 
             public async Task<OperationResult<IEnumerable<EventItem>>> Handle(Query request, CancellationToken cancellationToken)
-            {                
+            {
                 var query = _EventRepository.AsQueryable();
                 if (request.FromDate.HasValue)
                 {
@@ -45,6 +44,6 @@ namespace ECO.Sample.Application.Events.Queries
                 }
                 return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(_Mapper.Map<IEnumerable<EventItem>>(query)));
             }
-        }                
+        }
     }
 }

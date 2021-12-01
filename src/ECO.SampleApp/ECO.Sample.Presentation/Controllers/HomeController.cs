@@ -3,10 +3,7 @@ using ECO.Sample.Presentation.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECO.Sample.Presentation.Controllers
@@ -15,7 +12,7 @@ namespace ECO.Sample.Presentation.Controllers
     {
         private readonly IMediator _Mediator;
 
-        private readonly ILogger<HomeController> _logger;        
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(IMediator mediator, ILogger<HomeController> logger)
         {

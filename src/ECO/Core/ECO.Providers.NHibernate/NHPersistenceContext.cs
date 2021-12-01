@@ -1,66 +1,40 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-
-using nh = NHibernate;
-using System.Reflection;
 
 using ECO.Data;
+using Microsoft.Extensions.Logging;
+using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
 {
-    public class NHPersistenceContext : IPersistenceContext
+    public sealed class NHPersistenceContext : PersistenceContextBase<NHPersistenceContext>
     {
         #region Public_Properties
 
-        public nh.ISession Session { get; protected set; }
-
-        public IDataTransaction Transaction { get; protected set; }
+        public nh.ISession Session { get; private set; }
 
         #endregion
 
         #region ~Ctor
 
-        public NHPersistenceContext(nh.ISession session)
+        public NHPersistenceContext(nh.ISession session, IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory) : base(persistenceUnit, loggerFactory.CreateLogger<NHPersistenceContext>())
         {
             Session = session;
         }
 
-        ~NHPersistenceContext()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        private void Dispose(bool isDisposing)
-        {
-            if (isDisposing)
-            {
-                if (Transaction != null)
-                {
-                    Transaction.Dispose();
-                }
-                else
-                {
-                    Session.Flush();
-                }
-                Session.Close();
-                GC.SuppressFinalize(this);
-            }
-            Transaction = null;
-            Session = null;
-        }
-
         #endregion
 
-        #region Public_Methods
+        #region Protected_Methods
 
-        public void Attach<T, K>(T entity)  where T : IAggregateRoot<K>            
+        protected override IDataTransaction OnBeginTransaction() => new NHDataTransaction(this);
+
+        protected override void OnClose() => Session.Close();
+
+        protected override void OnSaveChanges()
+        {
+            Session.Flush();
+            Session.Clear();
+        }
+
+        protected override void OnAttach<T, K>(T entity)
         {
             try
             {
@@ -72,17 +46,11 @@ namespace ECO.Providers.NHibernate
             }
         }
 
-        public void Detach<T, K>(T entity) where T : IAggregateRoot<K>
-        {
-            Session.Evict(entity);
-        }
+        protected override void OnDetach<T, K>(T entity) => Session.Evict(entity);
 
-        public void Refresh<T, K>(T entity) where T : IAggregateRoot<K>
-        {
-            Session.Refresh(entity);
-        }
+        protected override void OnRefresh<T, K>(T entity) => Session.Refresh(entity);
 
-        public PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>
+        protected override PersistenceState OnGetPersistenceState<T, K>(T entity)
         {
             if (Session.Contains(entity))
             {
@@ -94,21 +62,10 @@ namespace ECO.Providers.NHibernate
             }
         }
 
-        public IDataTransaction BeginTransaction()
+        protected override void OnDispose()
         {
-            Transaction = new NHDataTransaction(this);
-            return Transaction;
-        }
-
-        public void Close()
-        {
-            Dispose(true);
-        }
-
-        public void SaveChanges()
-        {
-            Session.Flush();
-            Session.Clear();
+            Session.Dispose();
+            if (Transaction != null) Transaction.Dispose();
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace ECO.Sample.Domain
 
         public static OperationResult CheckSessionDescription(this OperationResult result, string description)
         {
-            return new ValueChecker <string>(description, result, "Description").Required("DESCRIPTION_REQUIRED").StringLength(1000, "DESCRIPTION_TOO_LONG");
+            return new ValueChecker<string>(description, result, "Description").Required("DESCRIPTION_REQUIRED").StringLength(1000, "DESCRIPTION_TOO_LONG");
         }
 
         public static OperationResult CheckSessionLevel(this OperationResult result, int level)

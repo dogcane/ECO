@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ECO;
+﻿using ECO.Data;
 using ECO.Providers.NHibernate;
-
 using ECO.Sample.Domain;
+using System;
 
 namespace ECO.Sample.Infrastructure.Repositories
 {
     public class SpeakerNHRepository : NHRepository<Speaker, Guid>, ISpeakerRepository
     {
+        public SpeakerNHRepository(IDataContext dataContext) : base(dataContext)
+        {
+        }
     }
 }

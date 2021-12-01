@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 namespace ECO.Data
 {
@@ -29,12 +28,12 @@ namespace ECO.Data
 
         #region ~Ctor
 
-        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILoggerFactory loggerFactory)
+        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext> logger)
         {
             DataContextId = Guid.NewGuid();
             _PersistenceUnitFactory = persistenceUnitFactory;
             _Contexts = new Dictionary<string, IPersistenceContext>();
-            _Logger = loggerFactory.CreateLogger<DataContext>();
+            _Logger = logger;
             _Logger.LogDebug("Data context is opening");
         }
 
@@ -50,7 +49,7 @@ namespace ECO.Data
         private IPersistenceContext InitializeOrReturnContext(Type entityType)
         {
             IPersistenceUnit persistenceUnit = _PersistenceUnitFactory.GetPersistenceUnit(entityType);
-            string persistenceUnitName = persistenceUnit.Name;                
+            string persistenceUnitName = persistenceUnit.Name;
             if (!_Contexts.ContainsKey(persistenceUnitName))
             {
                 lock (_SyncLock)
@@ -101,13 +100,13 @@ namespace ECO.Data
                 }
             }
             return Transaction;
-        }        
+        }
 
         public void Attach<T, K>(T entity)
             where T : IAggregateRoot<K> => GetCurrentContext(entity).Attach<T, K>(entity);
 
         public void Detach<T, K>(T entity)
-            where T : IAggregateRoot<K> => GetCurrentContext(entity).Detach<T, K>(entity);        
+            where T : IAggregateRoot<K> => GetCurrentContext(entity).Detach<T, K>(entity);
 
         public void Refresh<T, K>(T entity)
             where T : IAggregateRoot<K> => GetCurrentContext(entity).Refresh<T, K>(entity);

@@ -1,69 +1,48 @@
+using ECO.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using nh = NHibernate;
-using nhl = NHibernate.Linq;
-
-using ECO;
-using ECO.Data;
 
 namespace ECO.Providers.NHibernate
 {
     public class NHReadOnlyRepository<T, K> : NHPersistenceManager<T, K>, IReadOnlyRepository<T, K>
         where T : class, IAggregateRoot<K>
     {
+        #region Ctor
+        public NHReadOnlyRepository(IDataContext dataContext) : base(dataContext)
+        {
+        }
+
+        #endregion
+
         #region IReadOnlyEntityManager<T,K> Members
 
-        public virtual T Load(K identity)
-        {
-            if (typeof(K).IsClass && identity == null) return default(T);
-            return GetCurrentSession().Get<T>(identity);
-        }
+        public virtual T Load(K identity) => GetCurrentSession().Get<T>(identity);
 
-        public virtual async Task<T> LoadAsync(K identity)
-        {
-            return await Task.Run(() => Load(identity));
-        }
+        public virtual async Task<T> LoadAsync(K identity) => await GetCurrentSession().GetAsync<T>(identity);
 
         #endregion
 
         #region IEnumerable<T> Members
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).AsEnumerable().GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
 
         #endregion
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
 
         #endregion
 
         #region IQueryable Members
 
-        public Type ElementType
-        {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).ElementType; }
-        }
+        public Type ElementType => GetCurrentSession().Query<T>().ElementType;
 
-        public System.Linq.Expressions.Expression Expression
-        {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).Expression; }
-        }
+        public System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
 
-        public System.Linq.IQueryProvider Provider
-        {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).Provider; }
-        }
+        public IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
 
         #endregion
     }

@@ -20,6 +20,6 @@ namespace ECO.Providers.EntityFramework
 
         #endregion
 
-        
+
     }
 }

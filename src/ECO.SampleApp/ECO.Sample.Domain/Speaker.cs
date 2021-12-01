@@ -38,8 +38,8 @@ namespace ECO.Sample.Domain
                 .CheckSpeakerDescription(description)
                 .CheckSpeakerAge(age);
             if (result.Success)
-            { 
-               return new Speaker() { Name = name, Surname = surname, Description = description, Age = age };
+            {
+                return new Speaker() { Name = name, Surname = surname, Description = description, Age = age };
             }
             return result;
         }
