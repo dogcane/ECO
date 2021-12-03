@@ -11,21 +11,14 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Mapping\SessionMapping.cs~RF6798c727.TMP" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
     <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mapping\Session.hbm.xml" />
-    <EmbeddedResource Include="Mapping\Event.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mapping\Speaker.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.256001">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="NHibernate" Version="5.3.10" />
   </ItemGroup>
 </Project>

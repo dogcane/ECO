@@ -9,9 +9,7 @@ namespace ECO.Sample.Domain
     {
         #region Fields
 
-        //protected IList<Session> _Sessions = new List<Session>();
-
-        protected IList<Session> _Sessions { get; set; }
+        protected IList<Session> _Sessions = new List<Session>();
 
         #endregion
 

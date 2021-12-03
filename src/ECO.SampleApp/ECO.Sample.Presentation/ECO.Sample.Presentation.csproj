@@ -13,21 +13,27 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="NHibernate" Version="5.3.10" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
+    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
     <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
     <ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj" />
     <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
     <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj" />
     <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj" />
+    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.NHibernate\ECO.Sample.Infrastructure.DAL.NHibernate.csproj" />
     <ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

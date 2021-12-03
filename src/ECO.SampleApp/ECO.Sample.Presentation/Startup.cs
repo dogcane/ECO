@@ -38,8 +38,10 @@ namespace ECO.Sample.Presentation
                 typeof(Startup)
             );
             //Sample App Services
-            services.AddScoped<IEventRepository, EventMemoryRepository>();
-            services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
+            //services.AddScoped<IEventRepository, EventMemoryRepository>();
+            //services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
+            services.AddScoped<IEventRepository, EventNHRepository>();
+            services.AddScoped<ISpeakerRepository, SpeakerNHRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
