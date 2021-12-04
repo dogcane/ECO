@@ -17,17 +17,18 @@ namespace ECO.Sample.Infrastructure.DAL.NHibernate.Mapping
                 aPeriod.Property(per => per.StartDate);
                 aPeriod.Property(per => per.EndDate);
             });
-            /*Bag(ev => ev.Sessions, sessions =>
-            {
-                sessions.Table("Sessions");
-                sessions.Key(ses =>
-                {
-                    ses.ForeignKey("FK_Event");
-                });                                
-                sessions.Access(nhmapping.ByCode.Accessor.NoSetter);
-                sessions.Inverse(true);
-                sessions.Cascade(nhmapping.ByCode.Cascade.All);                
-            });*/
+            Bag(ev => ev.Sessions,
+                sessions => {
+                    sessions.Table("Sessions");                    
+                    sessions.Key(ses =>
+                    {
+                        ses.Column("Id");
+                        ses.ForeignKey("FK_Event");                        
+                    });                
+                    sessions.Access(nhmapping.ByCode.Accessor.NoSetter);
+                    sessions.Inverse(true);
+                    sessions.Cascade(nhmapping.ByCode.Cascade.All);                
+                }, mapping => mapping.OneToMany());
         }
     }
 }

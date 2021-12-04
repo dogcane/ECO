@@ -1,4 +1,5 @@
 ﻿using Resulz;
+using Resulz.Validation;
 using System;
 
 namespace ECO.Sample.Domain
@@ -33,10 +34,11 @@ namespace ECO.Sample.Domain
         {
             var result = OperationResult
                 .MakeSuccess()
-                .CheckSpeakerName(name)
-                .CheckSpeakerSurname(surname)
-                .CheckSpeakerDescription(description)
-                .CheckSpeakerAge(age);
+                .With(name, nameof(Name)).Required("NAME_REQUIRED").StringLength(50, "NAME_TOO_LONG")
+                .With(surname, nameof(Surname)).Required("SURNAME_REQUIRED").StringLength(50, "SURNAME_TOO_LONG")
+                .With(description, nameof(Description)).StringLength(1000, "DESCRIPTION_TOO_LONG")
+                .With(age, nameof(Age)).GreaterThen(18, "AGE_MUST_BE_OVER18")
+                .Result;
             if (result.Success)
             {
                 return new Speaker() { Name = name, Surname = surname, Description = description, Age = age };
@@ -52,10 +54,11 @@ namespace ECO.Sample.Domain
         {
             var result = OperationResult
                 .MakeSuccess()
-                .CheckSpeakerName(name)
-                .CheckSpeakerSurname(surname)
-                .CheckSpeakerDescription(description)
-                .CheckSpeakerAge(age);
+                .With(name, nameof(Name)).Required("NAME_REQUIRED").StringLength(50, "NAME_TOO_LONG")
+                .With(surname, nameof(Surname)).Required("SURNAME_REQUIRED").StringLength(50, "SURNAME_TOO_LONG")
+                .With(description, nameof(Description)).StringLength(1000, "DESCRIPTION_TOO_LONG")
+                .With(age, nameof(Age)).GreaterThen(18, "AGE_MUST_BE_OVER18")
+                .Result;
             if (result.Success)
             {
                 Name = name;

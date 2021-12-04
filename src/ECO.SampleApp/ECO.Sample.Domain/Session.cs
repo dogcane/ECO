@@ -1,4 +1,5 @@
 ﻿using Resulz;
+using Resulz.Validation;
 using System;
 
 namespace ECO.Sample.Domain
@@ -45,11 +46,12 @@ namespace ECO.Sample.Domain
         {
             var result = OperationResult
                 .MakeSuccess()
-                .CheckSessionEvent(@event)
-                .CheckSessionTitle(title)
-                .CheckSessionDescription(description)
-                .CheckSessionLevel(level)
-                .CheckSessionSpeaker(speaker);
+                .With(@event, nameof(Event)).Required("EVENT_REQUIRED")
+                .With(title, nameof(Title)).Required("TITLE_REQUIRED").StringLength(50, "TITLE_TOO_LONG")
+                .With(description, nameof(Description)).Required("DESCRIPTION_REQUIRED").StringLength(1000, "DESCRIPTION_TOO_LONG")
+                .With(level, nameof(Level)).Into(new[] { 100, 200, 300, 400 }, "LEVEL_NOT_VALID")
+                .With(speaker, nameof(Speaker)).Required("SPEAKER_REQUIRED")
+                .Result;
             if (result.Success)
             {
                 return new Session(@event, title, description, level, speaker);
