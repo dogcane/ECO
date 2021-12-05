@@ -11,9 +11,9 @@ namespace ECO.Data
 
         protected string _Name;
 
-        protected IList<Type> _Classes = new List<Type>();
+        protected ISet<Type> _Classes = new HashSet<Type>();
 
-        protected IList<IPersistenceUnitListener> _Listeners = new List<IPersistenceUnitListener>();
+        protected ISet<IPersistenceUnitListener> _Listeners = new HashSet<IPersistenceUnitListener>();
 
         protected readonly ILoggerFactory _LoggerFactory;
 

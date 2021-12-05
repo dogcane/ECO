@@ -14,7 +14,7 @@ namespace ECO.Configuration
 
         public static DataContextOptions UsingConfiguration(this DataContextOptions dataContextOptions, IConfiguration configuration)
         {
-            ECOOptions options = configuration.GetSection(ECOOptions.ECOConfigurationName).Get<ECOOptions>();            
+            ECOOptions options = configuration.GetSection(ECOOptions.ECOConfigurationName).Get<ECOOptions>();
             dataContextOptions.PersistenceUnitFactoryOptions += (persistenceUnitFactory, loggerFactory) =>
             {
                 foreach (PersistenceUnitOptions unit in options.PersistenceUnits)

@@ -2,7 +2,7 @@
 
 namespace ECO.Sample.Domain
 {
-    public struct Period : IValueObject<Period>
+    public class Period : IValueObject<Period>
     {
         #region Properties
 
@@ -14,8 +14,12 @@ namespace ECO.Sample.Domain
 
         #region Ctor
 
+        protected Period()
+        {
+
+        }
+
         public Period(DateTime startDate, DateTime endDate)
-            : this()
         {
             StartDate = startDate;
             EndDate = endDate;

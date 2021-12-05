@@ -2,6 +2,7 @@ using ECO.Data;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using nh = NHibernate;
 using nhcfg = NHibernate.Cfg;
@@ -66,6 +67,13 @@ namespace ECO.Providers.NHibernate
                     configuration.AddMapping(domainMapping);
                 }
                 _SessionFactory = configuration.BuildSessionFactory();
+                //Register class types
+                foreach (var classMetadata in _SessionFactory.GetAllClassMetadata())
+                {
+                    var mappedClass = classMetadata.Value.MappedClass;
+                    if (mappedClass.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
+                        _Classes.Add(classMetadata.Value.MappedClass);
+                }
             }
         }
 
@@ -77,11 +85,11 @@ namespace ECO.Providers.NHibernate
         {
             base.OnInitialize(extendedAttributes);
             _ConfigurationProperties = extendedAttributes;
+            BuildSessionFactory();
         }
 
         protected override IPersistenceContext OnCreateContext()
-        {
-            BuildSessionFactory();
+        {            
             nh.ISession session = _SessionFactory.OpenSession();
             return new NHPersistenceContext(session, this, _LoggerFactory);
         }

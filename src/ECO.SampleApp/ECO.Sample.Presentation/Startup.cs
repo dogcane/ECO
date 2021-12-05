@@ -37,9 +37,13 @@ namespace ECO.Sample.Presentation
                 typeof(ECO.Sample.Application.AssemblyMarker),
                 typeof(Startup)
             );
-            //Sample App Services
+            //Sample App Services - InMemory
             //services.AddScoped<IEventRepository, EventMemoryRepository>();
             //services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
+            //Sample App Services - EF
+            //services.AddScoped<IEventRepository, EventEFRepository>();
+            //services.AddScoped<ISpeakerRepository, SpeakerEFRepository>();
+            //Sample App Services - NHibernate
             services.AddScoped<IEventRepository, EventNHRepository>();
             services.AddScoped<ISpeakerRepository, SpeakerNHRepository>();
         }

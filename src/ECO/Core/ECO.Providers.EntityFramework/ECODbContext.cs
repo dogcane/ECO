@@ -10,13 +10,5 @@ namespace ECO.Providers.EntityFramework
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                modelBuilder.Entity(entityType.ClrType).HasKey("Identity");
-            }
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

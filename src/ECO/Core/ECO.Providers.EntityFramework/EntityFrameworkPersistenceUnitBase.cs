@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ECO.Providers.EntityFramework
 {
@@ -52,12 +53,23 @@ namespace ECO.Providers.EntityFramework
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DBCONTEXTTYPE_ATTRIBUTE));
             }
             _DbContextOptions = CreateDbContextOptions(extendedAttributes);
+            //Register class types
+            using (DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext)
+            {
+                foreach(var entity in context.Model.GetEntityTypes())
+                {
+                    var entityType = entity.ClrType;
+                    if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
+                        _Classes.Add(entity.ClrType);
+                }
+            }
+
         }
 
 
         protected override IPersistenceContext OnCreateContext()
         {
-            DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext;
+            DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext;            
             return new EntityFrameworkPersistenceContext(this, _LoggerFactory.CreateLogger<EntityFrameworkPersistenceContext>(), context);
         }
 

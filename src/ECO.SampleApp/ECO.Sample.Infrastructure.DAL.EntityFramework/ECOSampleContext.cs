@@ -1,5 +1,6 @@
 ﻿using ECO.Providers.EntityFramework;
 using ECO.Sample.Domain;
+using ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECO.Sample.Infrastructure.DAL.EntityFramework
@@ -16,6 +17,12 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
             : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
         }
     }
 }
