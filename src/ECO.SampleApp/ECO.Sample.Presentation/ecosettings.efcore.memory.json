@@ -1,0 +1,14 @@
+{
+  "eco": {
+    "persistenceUnits": [
+      {
+        "name": "ecosampleapp.efcore.memory",
+        "type": "ECO.Providers.EntityFramework.InMemory.EntityFrameworkInMemoryPersistenceUnit, ECO.Providers.EntityFramework.InMemory",
+        "attributes": {
+          "dbContextType": "ECO.Sample.Infrastructure.DAL.EntityFramework.ECOSampleContext, ECO.Sample.Infrastructure.DAL.EntityFramework",
+          "databaseName": "ECOSampleApp"
+        }
+      }
+    ]
+  }
+}

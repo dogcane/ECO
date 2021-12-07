@@ -35,6 +35,12 @@ namespace ECO.Providers.EntityFramework
             Context.SaveChanges();
         }
 
+        protected override void OnClose()
+        {
+            base.OnClose();
+            Context.SaveChanges();
+        }
+
         #endregion
     }
 }

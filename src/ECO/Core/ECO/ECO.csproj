@@ -7,7 +7,8 @@
 		<FileVersion>2.0.0.0</FileVersion>
 		<Product>Enterprise CLR Objects</Product>
 		<Authors>Andrea Canegrati</Authors>
-		<Copyright>Andrea Canegrati © 2007</Copyright>		
+		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<SignAssembly>False</SignAssembly>		
 	</PropertyGroup>
 	
 	<ItemGroup>

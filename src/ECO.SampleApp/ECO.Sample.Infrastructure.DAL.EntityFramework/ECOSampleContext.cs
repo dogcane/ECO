@@ -7,8 +7,6 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
 {
     public class ECOSampleContext : ECODbContext
     {
-        public DbSet<Session> Sessions { get; set; }
-
         public DbSet<Event> Events { get; set; }
 
         public DbSet<Speaker> Speakers { get; set; }
@@ -22,7 +20,9 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new EventConfiguration());
+            modelBuilder.ApplyConfiguration(new SpeakerConfiguration());
+            modelBuilder.ApplyConfiguration(new SessionConfiguration());
+            modelBuilder.ApplyConfiguration(new EventConfiguration());            
         }
     }
 }

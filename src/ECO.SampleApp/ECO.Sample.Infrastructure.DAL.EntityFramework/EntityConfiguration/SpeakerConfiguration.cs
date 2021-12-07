@@ -9,21 +9,17 @@ using System.Threading.Tasks;
 
 namespace ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration
 {
-    public class EventConfiguration : IEntityTypeConfiguration<Event>
+    public class SpeakerConfiguration : IEntityTypeConfiguration<Speaker>
     {
-        public void Configure(EntityTypeBuilder<Event> builder)
+        public void Configure(EntityTypeBuilder<Speaker> builder)
         {
-            builder.ToTable("Events");            
+            builder.ToTable("Speakers");
             builder.HasKey(x => x.Identity);
             builder.Property(x => x.Identity).HasColumnName("Id");
             builder.Property(x => x.Name);
+            builder.Property(x => x.Surname);
             builder.Property(x => x.Description);
-            builder.OwnsOne(x => x.Period, p =>
-            {
-                p.Property(p => p.StartDate).HasColumnName("StartDate");
-                p.Property(p => p.EndDate).HasColumnName("EndDate");
-            });
-            builder.HasMany(x => x.Sessions).WithOne(x => x.Event).HasForeignKey("FK_Event");
+            builder.Property(x => x.Age);
         }        
     }
 }

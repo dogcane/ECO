@@ -1,0 +1,27 @@
+{
+  "eco": {
+    "persistenceUnits": [
+      {
+        "name": "ecosampleapp.nhibernate",
+        "type": "ECO.Providers.NHibernate.NHPersistenceUnit, ECO.Providers.NHibernate",
+        "attributes": {
+          "connection.provider": "NHibernate.Connection.DriverConnectionProvider",
+          "connection.driver_class": "NHibernate.Driver.SqlClientDriver",
+          "connection.connection_string": "Server=(localdb)\\mssqllocaldb;Database=ECOSampleApp;Trusted_Connection=True;",
+          //"connection.connection_string_name": "ECOSampleAppNH",
+          "show_sql": "false",
+          "dialect": "NHibernate.Dialect.MsSql2012Dialect",
+          "connection.isolation": "ReadCommitted",
+          "adonet.batch_size": "100",
+          "cache.use_query_cache": "true",
+          "cache.provider_class": "NHibernate.Cache.HashtableCacheProvider",
+          "default_schema": "dbo",
+          "max_fetch_depth": "2",
+          "sqlDialect": "MsSql2012Dialect",
+          "sqlDriver": "SqlClientDriver",
+          "mappingAssemblies": "ECO.Sample.Infrastructure.DAL.NHibernate"
+        }
+      }
+    ]
+  }
+}
