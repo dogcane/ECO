@@ -19,15 +19,11 @@ namespace ECO.Sample.Infrastructure.DAL.NHibernate.Mapping
             });
             Bag(ev => ev.Sessions,
                 sessions => {
-                    sessions.Table("Sessions");                    
-                    sessions.Key(ses =>
-                    {
-                        ses.Column("Id");
-                        ses.ForeignKey("FK_Event");                        
-                    });                
+                    sessions.Table("Sessions");                                        
+                    sessions.Key(ses => ses.Column("FK_Event"));                
                     sessions.Access(nhmapping.ByCode.Accessor.NoSetter);
                     sessions.Inverse(true);
-                    sessions.Cascade(nhmapping.ByCode.Cascade.All);                
+                    sessions.Cascade(nhmapping.ByCode.Cascade.DeleteOrphans | nhmapping.ByCode.Cascade.All);
                 }, mapping => mapping.OneToMany());
         }
     }

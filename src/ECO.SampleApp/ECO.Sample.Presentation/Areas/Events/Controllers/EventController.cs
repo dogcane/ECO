@@ -25,8 +25,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             _Mapper = mapper;
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public async Task<ActionResult> Index(DateTime? start, DateTime? end, string eventName)
         {
             var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
@@ -38,16 +37,14 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [Route("create")]
+        [HttpGet("create")]
         public ActionResult Create()
         {
             var model = EventViewModel.Empty;
             return View(model);
         }
 
-        [HttpPost]
-        [Route("create")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(EventViewModel model)
         {
@@ -63,8 +60,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
-        [Route("{id}/edit")]
+        [HttpGet("{id}/edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -79,8 +75,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [Route("{id}/edit")]
+        [HttpPost("{id}/edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, EventViewModel model)
         {
@@ -110,8 +105,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        [Route("{id}/sessions/add")]
+        [HttpPost("{id}/addsession")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddSession(Guid? id, SessionEditViewModel model)
         {
@@ -127,8 +121,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
             return RedirectToAction(nameof(Edit), new { id });
         }
 
-        [HttpGet]
-        [Route("{id}/sessions/{sessionid}/remove")]
+        [HttpGet("{id}/removesession/{sessionid}")]
         public async Task<ActionResult> RemoveSession(Guid? id, Guid? sessionid)
         {
             if (id == null || sessionid == null)

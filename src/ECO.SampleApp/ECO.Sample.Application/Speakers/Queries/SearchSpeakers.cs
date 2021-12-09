@@ -1,4 +1,5 @@
-﻿using ECO.Sample.Application.Speakers.DTO;
+﻿using AutoMapper;
+using ECO.Sample.Application.Speakers.DTO;
 using ECO.Sample.Domain;
 using MediatR;
 using Resulz;
@@ -17,7 +18,13 @@ namespace ECO.Sample.Application.Speakers.Queries
         {
             private ISpeakerRepository _SpeakerRepository;
 
-            public Handler(ISpeakerRepository speakerRepository) => _SpeakerRepository = speakerRepository;
+            private IMapper _Mapper;
+
+            public Handler(ISpeakerRepository speakerRepository, IMapper mapper)
+            {
+                _SpeakerRepository = speakerRepository;
+                _Mapper = mapper;
+            }
 
             public async Task<OperationResult<IEnumerable<SpeakerItem>>> Handle(Query request, CancellationToken cancellationToken)
             {
@@ -26,8 +33,8 @@ namespace ECO.Sample.Application.Speakers.Queries
                 {
                     query = query.Where(entity => entity.Name.Contains(request.NameOrSurname) || entity.Surname.Contains(request.NameOrSurname));
                 }
-                var Speakers = query.Select(item => new SpeakerItem(item.Identity, item.Name, item.Surname));
-                return await Task.FromResult(OperationResult<IEnumerable<SpeakerItem>>.MakeSuccess(Speakers));
+                var speakers = _Mapper.ProjectTo<SpeakerItem>(query);
+                return await Task.FromResult(OperationResult<IEnumerable<SpeakerItem>>.MakeSuccess(speakers));
             }
         }
     }

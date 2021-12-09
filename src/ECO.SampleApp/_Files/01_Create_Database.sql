@@ -24,3 +24,8 @@ CREATE TABLE [Sessions] (
 	CONSTRAINT Foreign_Key_Event FOREIGN KEY(FK_Event) REFERENCES [Events](Id),
 	CONSTRAINT Foreign_Key_Speaker FOREIGN KEY(FK_Speaker) REFERENCES [Speakers](Id)
 )
+
+--CLEAN DATA
+DELETE FROM [dbo].[Sessions]
+DELETE FROM [dbo].[Events]
+DELETE FROM [dbo].[Speakers]

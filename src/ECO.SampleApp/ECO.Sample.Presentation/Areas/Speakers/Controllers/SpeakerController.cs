@@ -25,9 +25,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             _Mapper = mapper;
         }
 
-        // GET: SpeakerController
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public async Task<ActionResult> Index(string nameOrSurname)
         {
             var result = await _Mediator.Send(new SearchSpeakers.Query(nameOrSurname));
@@ -39,9 +37,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             return View(model);
         }
 
-        // GET: SpeakerController
-        [HttpGet]
-        [Route("json")]
+        [HttpGet("json")]
         public async Task<ActionResult> JsonSearch(string nameOrSurname)
         {
             var result = await _Mediator.Send(new SearchSpeakers.Query(nameOrSurname));
@@ -53,18 +49,14 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             return Json(model);
         }
 
-        // GET: SpeakerController/Create
-        [HttpGet]
-        [Route("create")]
+        [HttpGet("create")]
         public ActionResult Create()
         {
             var model = SpeakerViewModel.Empty;
             return View(model);
         }
 
-        // POST: SpeakerController/Create
-        [HttpPost]
-        [Route("create")]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(SpeakerViewModel model)
         {
@@ -80,9 +72,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: SpeakerController/Edit/5
-        [HttpGet]
-        [Route("{id}/edit")]
+        [HttpGet("{id}/edit")]
         public async Task<ActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -97,9 +87,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             return View(model);
         }
 
-        // POST: NewSpeakerController/Edit/5
-        [HttpPost]
-        [Route("{id}/edit")]
+        [HttpPost("{id}/edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, SpeakerViewModel model)
         {
@@ -115,9 +103,7 @@ namespace ECO.Sample.Presentation.Areas.Speakers.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: SpeakerController/Delete/5
-        [HttpGet]
-        [Route("{id}/delete")]
+        [HttpGet("{id}/delete")]
         public async Task<ActionResult> Delete(Guid? id)
         {
             if (id == null)

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace ECO.Sample.Presentation.Controllers
 {
+    [Route("")]
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly IMediator _Mediator;
@@ -20,17 +22,20 @@ namespace ECO.Sample.Presentation.Controllers
             _logger = logger;
         }
 
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet("putfakedata")]
         public async Task<IActionResult> PutFakeData()
         {
             await _Mediator.Send(new CreateFakeData.Command());
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet("error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -29,11 +29,7 @@ namespace ECO.Sample.Application.Events.Commands
                 {
                     _EventRepository.Update(eventEventity);
                 }
-                return await Task.FromResult(
-                    eventResult.Success ?
-                        OperationResult.MakeSuccess() :
-                        OperationResult.MakeFailure(eventResult.Errors).TranslateContext("Period.StartDate", "StartDate")
-                );
+                return await Task.FromResult(eventResult.TranslateContext("Period.StartDate", "StartDate"));                
             }
         }
     }

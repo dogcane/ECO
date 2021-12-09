@@ -15,7 +15,8 @@ namespace ECO.Sample.Presentation
             Host.CreateDefaultBuilder(args)  
                 .ConfigureAppConfiguration(config =>
                 {
-                    config.AddJsonFile("ecosettings.efcore.memory.json");
+                    config.AddJsonFile("ecosettings.efcore.sqlserver.json");
+                    //config.AddJsonFile("ecosettings.nhibernate.json");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

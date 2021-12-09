@@ -14,13 +14,15 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration
         public void Configure(EntityTypeBuilder<Session> builder)
         {
             builder.ToTable("Sessions");
-            builder.HasKey(x => x.Identity);
+            builder.HasKey(x => x.Identity);            
             builder.Property(x => x.Identity).HasColumnName("Id");
             builder.Property(x => x.Title);
             builder.Property(x => x.Description);
             builder.Property(x => x.Level);
+            builder.Navigation(x => x.Event).AutoInclude(true);
             builder.HasOne(x => x.Event).WithMany(x => x.Sessions).HasForeignKey(x => x.Identity);
-            builder.HasOne(x => x.Speaker);
+            builder.Navigation(x => x.Speaker).AutoInclude(true);
+            builder.HasOne(x => x.Speaker).WithOne().HasForeignKey<Speaker>(x => x.Identity);
         }        
     }
 }

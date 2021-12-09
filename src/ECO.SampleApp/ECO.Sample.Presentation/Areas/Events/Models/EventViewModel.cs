@@ -18,5 +18,7 @@ namespace ECO.Sample.Presentation.Areas.Events.Models
         public DateTime EndDate { get; set; }
 
         public IEnumerable<SessionItemViewModel> Sessions { get; set; }
+
+        public SessionEditViewModel NewSession { get; set; }
     }
 }

@@ -42,7 +42,8 @@ namespace ECO.Sample.Application.Events.Queries
                 {
                     query = query.Where(entity => entity.Name.Contains(request.EventName));
                 }
-                return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(_Mapper.Map<IEnumerable<EventItem>>(query)));
+                var events = _Mapper.ProjectTo<EventItem>(query);
+                return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(events));
             }
         }
     }

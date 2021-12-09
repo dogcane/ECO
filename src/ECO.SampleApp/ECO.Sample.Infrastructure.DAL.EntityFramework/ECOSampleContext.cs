@@ -14,7 +14,7 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework
         public ECOSampleContext(DbContextOptions options)
             : base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -23,7 +23,8 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration
                 p.Property(p => p.StartDate).HasColumnName("StartDate");
                 p.Property(p => p.EndDate).HasColumnName("EndDate");
             });
-            builder.HasMany(x => x.Sessions).WithOne(x => x.Event).HasForeignKey("FK_Event");
+            builder.Navigation(x => x.Sessions).AutoInclude(true);
+            builder.HasMany(x => x.Sessions).WithOne(x => x.Event).HasForeignKey("FK_Event");            
         }        
     }
 }

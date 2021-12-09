@@ -39,7 +39,7 @@
         </form>
     </div>
     <div class="col-md-6">
-        <p>Sessions</p>        
+        <p>Sessions</p>
         <table class="table">
             <thead>
                 <tr>
@@ -69,7 +69,51 @@
                 }
             </tbody>
         </table>
-        @await Html.PartialAsync("_AddSession", new ECO.Sample.Presentation.Areas.Events.Models.SessionEditViewModel())
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sessionModal">
+            Add New            
+        </button>
+        <div class="modal" tabindex="-1" id="sessionModal">            
+            <form asp-action="AddSession" method="post">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New session</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input asp-for="EventCode" type="hidden" />
+                            <div class="form-group">
+                                <label asp-for="NewSession.Title" class="control-label"></label>
+                                <input asp-for="NewSession.Title" class="form-control" />
+                                <span asp-validation-for="NewSession.Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NewSession.Description" class="control-label"></label>
+                                <input asp-for="NewSession.Description" class="form-control" />
+                                <span asp-validation-for="NewSession.Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NewSession.Level" class="control-label"></label>
+                                <input asp-for="NewSession.Level" class="form-control" />
+                                <span asp-validation-for="NewSession.Level" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NewSession.SpeakerCode" class="control-label"></label>
+                                <input asp-for="NewSession.SpeakerCode" class="form-control" />
+                                <span asp-validation-for="NewSession.SpeakerCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
