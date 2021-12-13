@@ -7,15 +7,17 @@ namespace ECO.Data
     {
         #region Private_Fields
 
-        private readonly IList<IDataTransaction> _Transactions;
+        private bool _disposed = false;
+
+        private readonly IList<IDataTransaction> _Transactions = new List<IDataTransaction>();
 
         #endregion
 
         #region Public_Properties
 
-        public Guid TransactionContextId { get; }
+        public Guid TransactionContextId { get; } = Guid.NewGuid();
 
-        public TransactionStatus Status { get; private set; }
+        public TransactionStatus Status { get; private set; } = TransactionStatus.Alive;
 
         public bool AutoCommit { get; }
 
@@ -29,13 +31,7 @@ namespace ECO.Data
 
         }
 
-        internal TransactionContext(bool autoCommit)
-        {
-            _Transactions = new List<IDataTransaction>();
-            TransactionContextId = Guid.NewGuid();
-            Status = TransactionStatus.Alive;
-            AutoCommit = autoCommit;
-        }
+        internal TransactionContext(bool autoCommit) => AutoCommit = autoCommit;
 
         ~TransactionContext()
         {
@@ -46,11 +42,7 @@ namespace ECO.Data
 
         #region Public_Methods
 
-        public void EnlistDataTransaction(IDataTransaction transaction)
-        {
-
-            _Transactions.Add(transaction);
-        }
+        public void EnlistDataTransaction(IDataTransaction transaction) => _Transactions.Add(transaction);
 
         public void Commit()
         {
@@ -81,6 +73,9 @@ namespace ECO.Data
 
         private void Dispose(bool isDisposing)
         {
+            if (_disposed)
+                return;
+
             if (isDisposing)
             {
                 if (Status == TransactionStatus.Alive)
@@ -89,11 +84,13 @@ namespace ECO.Data
                     {
                         Commit();
                     }
-                    else
-                    {
-                        Rollback();
-                    }
+                    Status = TransactionStatus.Committed;
                 }
+                foreach (IDataTransaction tx in _Transactions)
+                {
+                    tx.Dispose();
+                }
+                _disposed = true;
             }
         }
 

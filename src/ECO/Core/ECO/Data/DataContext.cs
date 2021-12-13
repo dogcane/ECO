@@ -8,19 +8,21 @@ namespace ECO.Data
     {
         #region Private_Fields
 
+        private bool _disposed = false;
+
         private readonly object _SyncLock = new object();
 
-        private readonly IPersistenceUnitFactory _PersistenceUnitFactory;
-
-        private readonly IDictionary<string, IPersistenceContext> _Contexts;
+        private readonly IPersistenceUnitFactory _PersistenceUnitFactory;        
 
         private readonly ILogger<DataContext> _Logger;
+
+        private readonly IDictionary<string, IPersistenceContext> _Contexts = new Dictionary<string, IPersistenceContext>();
 
         #endregion
 
         #region Public_Properties
 
-        public Guid DataContextId { get; }
+        public Guid DataContextId { get; } = Guid.NewGuid();
 
         public ITransactionContext Transaction { get; private set; }
 
@@ -28,13 +30,11 @@ namespace ECO.Data
 
         #region ~Ctor
 
-        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext> logger)
+        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext> logger = null)
         {
-            DataContextId = Guid.NewGuid();
             _PersistenceUnitFactory = persistenceUnitFactory;
-            _Contexts = new Dictionary<string, IPersistenceContext>();
             _Logger = logger;
-            _Logger.LogDebug("Data context is opening");
+            _Logger?.LogDebug($"Data context '{DataContextId}' is opening");
         }
 
         ~DataContext()
@@ -56,19 +56,16 @@ namespace ECO.Data
                 {
                     if (!_Contexts.ContainsKey(persistenceUnitName))
                     {
-                        _Logger.LogDebug("Initialization of persistence context for entity {entityType}", entityType);
+                        _Logger?.LogDebug($"Initialization of persistence context for entity '{entityType}'");
                         IPersistenceContext context = persistenceUnit.CreateContext();
                         _Contexts.Add(persistenceUnitName, context);
-                        if (Transaction != null)
-                        {
-                            IDataTransaction tx = context.BeginTransaction();
-                            Transaction.EnlistDataTransaction(tx);
-                        }
-                        _Logger.LogDebug("Persistence context for entity {entityType} already initialized => {persistenceUnitName}:{persistenceContextId}", entityType, persistenceUnitName, _Contexts[persistenceUnitName].PersistenceContextId);
+                        if (Transaction != null)                        
+                            Transaction.EnlistDataTransaction(context.BeginTransaction());                        
+                        _Logger?.LogDebug($"Persistence context for entity {entityType} already initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
                     }
                     else
                     {
-                        _Logger.LogDebug("Persistence context for entity {entityType} initialized => {persistenceUnitName}:{persistenceContextId}", entityType, persistenceUnitName, _Contexts[persistenceUnitName].PersistenceContextId);
+                        _Logger?.LogDebug($"Persistence context for entity {entityType} initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
                     }
                 }
             }
@@ -83,23 +80,24 @@ namespace ECO.Data
 
         public ITransactionContext BeginTransaction(bool autoCommit)
         {
-            if (Transaction == null)
+            if (Transaction == null || Transaction?.Status != TransactionStatus.Alive)
             {
                 lock (_SyncLock)
                 {
-                    if (Transaction == null)
+                    if (Transaction == null || Transaction?.Status != TransactionStatus.Alive)
                     {
                         Transaction = new TransactionContext(autoCommit);
-                        _Logger.LogDebug("Starting a new transaction context : {transactionContextId}", Transaction.TransactionContextId);
+                        _Logger?.LogDebug($"Starting a new transaction context '{Transaction.TransactionContextId}'");
                         foreach (IPersistenceContext persistenceContext in _Contexts.Values)
                         {
                             IDataTransaction tx = persistenceContext.BeginTransaction();
                             Transaction.EnlistDataTransaction(tx);
                         }
+                        return Transaction;
                     }
                 }
             }
-            return Transaction;
+            throw new InvalidOperationException($"There is already an active transaction context with id '{Transaction?.TransactionContextId}'");
         }
 
         public void Attach<T, K>(T entity)
@@ -129,7 +127,6 @@ namespace ECO.Data
                     persistenceContext.SaveChanges();
                 }
             }
-            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -138,6 +135,7 @@ namespace ECO.Data
 
         public void Close()
         {
+            _Logger?.LogDebug($"Data context '{DataContextId}' is closing");
             Dispose(true);
         }
 
@@ -148,8 +146,13 @@ namespace ECO.Data
 
         private void Dispose(bool isDisposing)
         {
+            if (_disposed)
+                return;
+
             if (isDisposing)
             {
+                _Logger?.LogDebug($"Data context '{DataContextId}' is disposing");
+
                 lock (_SyncLock)
                 {
                     if (Transaction != null)
@@ -158,9 +161,10 @@ namespace ECO.Data
                     }
                     foreach (IPersistenceContext persistenceContext in _Contexts.Values)
                     {
-                        persistenceContext.Close();
+                        persistenceContext.Dispose();
                     }
                 }
+                _disposed = true;
                 GC.SuppressFinalize(this);
             }
         }

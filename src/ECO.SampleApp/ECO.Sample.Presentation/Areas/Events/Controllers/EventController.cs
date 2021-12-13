@@ -4,6 +4,7 @@ using ECO.Sample.Application.Events.Queries;
 using ECO.Sample.Presentation.Areas.Events.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Resulz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,10 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult> Index(DateTime? start, DateTime? end, string eventName)
+        public async Task<ActionResult> Index(DateTime? start, DateTime? end, string eventName, bool error = false)
         {
+            if (error) ViewBag.IsInError = true;
+
             var result = await _Mediator.Send(new SearchEvents.Query(start, end, eventName));
             var model = new EventListViewModel();
             if (result.Success)
@@ -61,8 +64,10 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
         }
 
         [HttpGet("{id}/edit")]
-        public async Task<ActionResult> Edit(Guid? id)
+        public async Task<ActionResult> Edit(Guid? id, bool error = false)
         {
+            if (error) ViewBag.IsInError = true;
+
             if (id == null)
                 return NotFound();
 
@@ -100,24 +105,24 @@ namespace ECO.Sample.Presentation.Areas.Events.Controllers
 
             var result = await _Mediator.Send(new DeleteEvent.Command(id.Value));
             if (!result.Success)
-                return RedirectToAction(nameof(Index), new { deleteError = true });
+                return RedirectToAction(nameof(Index), new { error = true });
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost("{id}/addsession")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddSession(Guid? id, SessionEditViewModel model)
+        public async Task<ActionResult> AddSession(Guid? id, EventViewModel model)
         {
             if (id == null)
                 return NotFound();
 
-            var result = await _Mediator.Send(new AddSessionToEvent.Command(model.EventCode, model.Title, model.Description, model.Level, model.SpeakerCode));
+            var result = await _Mediator.Send(new AddSessionToEvent.Command(model.EventCode, model.NewSession.Title, model.NewSession.Description, model.NewSession.Level, model.NewSession.SpeakerCode));
             if (!result.Success)
             {
-                result.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Context, error.Description));
-                return View(model);
+                return RedirectToAction(nameof(Edit), new { id, error = true });
             }
+
             return RedirectToAction(nameof(Edit), new { id });
         }
 

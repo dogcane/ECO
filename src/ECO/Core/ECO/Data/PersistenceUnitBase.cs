@@ -33,11 +33,11 @@ namespace ECO.Data
 
         #region Ctor
 
-        protected PersistenceUnitBase(string name, ILoggerFactory loggerFactory)
+        protected PersistenceUnitBase(string name, ILoggerFactory loggerFactory = null)
         {
             _Name = name;
             _LoggerFactory = loggerFactory;
-            _Logger = loggerFactory.CreateLogger<P>();
+            _Logger = loggerFactory?.CreateLogger<P>();
         }
 
         #endregion

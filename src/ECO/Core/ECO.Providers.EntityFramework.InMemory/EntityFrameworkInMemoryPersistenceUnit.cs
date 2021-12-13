@@ -16,7 +16,7 @@ namespace ECO.Providers.EntityFramework.InMemory
 
         #region Ctor
 
-        public EntityFrameworkInMemoryPersistenceUnit(string name, ILoggerFactory loggerFactory) : base(name, loggerFactory)
+        public EntityFrameworkInMemoryPersistenceUnit(string name, ILoggerFactory loggerFactory = null) : base(name, loggerFactory)
         {
 
         }

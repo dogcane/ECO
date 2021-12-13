@@ -18,10 +18,7 @@ namespace ECO.Providers.EntityFramework
 
         public EntityFrameworkPersistenceContext Context { get; private set; }
 
-        IPersistenceContext IDataTransaction.Context
-        {
-            get { return Context; }
-        }
+        IPersistenceContext IDataTransaction.Context => Context;
 
         #endregion
 
@@ -38,10 +35,7 @@ namespace ECO.Providers.EntityFramework
             Dispose(false);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         private void Dispose(bool isDisposing)
         {
@@ -65,27 +59,9 @@ namespace ECO.Providers.EntityFramework
 
         #region Public_Methods
 
-        public void Commit()
-        {
-            try
-            {
-                Transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                if (Transaction != null)
-                {
-                    Transaction.Rollback();
-                    Transaction.Dispose();
-                }
-                throw ex;
-            }
-        }
+        public void Commit() => Transaction.Commit();
 
-        public void Rollback()
-        {
-            Transaction.Rollback();
-        }
+        public void Rollback() => Transaction.Rollback();
 
         #endregion
     }

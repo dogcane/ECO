@@ -6,6 +6,12 @@ namespace ECO.Providers.NHibernate
 {
     public class NHDataTransaction : IDataTransaction
     {
+        #region Fields
+
+        private bool _disposed = false;
+
+        #endregion
+
         #region Public_Properties
 
         public nh.ITransaction Transaction { get; protected set; }
@@ -32,13 +38,13 @@ namespace ECO.Providers.NHibernate
             Dispose(false);
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         private void Dispose(bool isDisposing)
         {
+            if (_disposed)
+                return;
+
             if (isDisposing)
             {
                 if (Transaction != null)
@@ -47,6 +53,7 @@ namespace ECO.Providers.NHibernate
                 }
                 GC.SuppressFinalize(this);
             }
+            _disposed = true;
             Transaction = null;
             Context = null;
         }
@@ -55,29 +62,9 @@ namespace ECO.Providers.NHibernate
 
         #region Public_Methods
 
-        public void Commit()
-        {
-            try
-            {
-                Context.Session.Flush();
-                Transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                if (Transaction != null)
-                {
-                    Transaction.Rollback();
-                    Transaction.Dispose();
-                }
-                throw ex;
-            }
-        }
+        public void Commit() => Transaction.Commit();
 
-        public void Rollback()
-        {
-            Context.Session.Clear();
-            Transaction.Rollback();
-        }
+        public void Rollback() => Transaction.Rollback();
 
         #endregion
     }

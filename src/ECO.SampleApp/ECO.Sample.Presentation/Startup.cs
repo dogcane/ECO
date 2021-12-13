@@ -25,9 +25,7 @@ namespace ECO.Sample.Presentation
             //ECO            
             services.AddDataContext(options =>
             {
-                options
-                    .UsingConfiguration(Configuration)
-                    .RequireTransaction();
+                options.UsingConfiguration(Configuration);
             });
 
             //MediatR

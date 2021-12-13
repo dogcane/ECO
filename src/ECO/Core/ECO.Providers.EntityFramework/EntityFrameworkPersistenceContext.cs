@@ -14,32 +14,16 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        public EntityFrameworkPersistenceContext(IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext> logger, DbContext context)
-            : base(persistenceUnit, logger)
-        {
-            Context = context;
-        }
+        public EntityFrameworkPersistenceContext(DbContext context, IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext> logger = null)
+            : base(persistenceUnit, logger) => Context = context;
 
         #endregion
 
         #region Public_Methods
 
-        protected override IDataTransaction OnBeginTransaction()
-        {
-            return new EntityFrameworkDataTransaction(this);
-        }
+        protected override IDataTransaction OnBeginTransaction() => new EntityFrameworkDataTransaction(this);
 
-        protected override void OnSaveChanges()
-        {
-            base.OnSaveChanges();
-            Context.SaveChanges();
-        }
-
-        protected override void OnClose()
-        {
-            base.OnClose();
-            Context.SaveChanges();
-        }
+        protected override void OnSaveChanges() => Context.SaveChanges();
 
         #endregion
     }

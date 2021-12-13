@@ -70,10 +70,10 @@
             </tbody>
         </table>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sessionModal">
-            Add New            
+            Add New
         </button>
         <div class="modal" tabindex="-1" id="sessionModal">            
-            <form asp-action="AddSession" method="post">
+            <form asp-action="AddSession" asp-route-id="@Model.EventCode" method="post">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">

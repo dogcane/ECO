@@ -1,5 +1,7 @@
-﻿using ECO.Sample.Domain;
+﻿using ECO.Data;
+using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -13,19 +15,40 @@ namespace ECO.Sample.Application.Speakers.Commands
 
         public class Handler : IRequestHandler<Command, OperationResult>
         {
+            private readonly IDataContext _DataContext;
+
             private ISpeakerRepository _SpeakerRepository;
 
-            public Handler(ISpeakerRepository speakerRepository) => _SpeakerRepository = speakerRepository;
+            private readonly ILogger<DeleteSpeaker.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, ISpeakerRepository speakerRepository, ILogger<DeleteSpeaker.Handler> logger)
+            {
+                _DataContext = dataContext;
+                _SpeakerRepository = speakerRepository;
+                _Logger = logger;
+            }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
-                if (speakerEntity == null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
+                    if (speakerEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    }
+                    _SpeakerRepository.Remove(speakerEntity);
+                    _DataContext.SaveChanges();
+                    transactionContext.Commit();
+                    return await Task.FromResult(OperationResult.MakeSuccess());
                 }
-                _SpeakerRepository.Remove(speakerEntity);
-                return await Task.FromResult(OperationResult.MakeSuccess());
+                catch (Exception ex)
+                {
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                }
+                
             }
         }
     }

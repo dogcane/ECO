@@ -29,7 +29,7 @@ namespace ECO.Providers.NHibernate
 
         #region Ctor
 
-        public NHPersistenceUnit(string name, ILoggerFactory loggerFactory) : base(name, loggerFactory)
+        public NHPersistenceUnit(string name, ILoggerFactory loggerFactory = null) : base(name, loggerFactory)
         {
 
         }

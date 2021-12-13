@@ -1,6 +1,9 @@
-﻿using ECO.Sample.Application.Speakers.DTO;
+﻿using AutoMapper;
+using ECO.Data;
+using ECO.Sample.Application.Speakers.DTO;
 using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -14,24 +17,43 @@ namespace ECO.Sample.Application.Speakers.Queries
 
         public class Handler : IRequestHandler<Query, OperationResult<SpeakerDetail>>
         {
+            private readonly IDataContext _DataContext;
+
             private ISpeakerRepository _SpeakerRepository;
 
-            public Handler(ISpeakerRepository speakerRepository) => _SpeakerRepository = speakerRepository;
+            private IMapper _Mapper;
+
+            private readonly ILogger<GetSpeaker.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, ISpeakerRepository speakerRepository, IMapper mapper, ILogger<GetSpeaker.Handler> logger)
+            {
+                _DataContext = dataContext;
+                _SpeakerRepository = speakerRepository;
+                _Mapper = mapper;
+                _Logger = logger;
+            }
 
             public async Task<OperationResult<SpeakerDetail>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Speaker speaker = _SpeakerRepository.Load(request.SpeakerCode);
-                if (speaker != null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(
-                        OperationResult<SpeakerDetail>.MakeSuccess(
-                            new SpeakerDetail(speaker.Identity, speaker.Name, speaker.Surname, speaker.Age, speaker.Description)
-                    ));
+                    Speaker speaker = _SpeakerRepository.Load(request.SpeakerCode);
+                    if (speaker != null)
+                    {
+                        SpeakerDetail speakerDetail = _Mapper.Map<SpeakerDetail>(speaker);
+                        return await Task.FromResult(OperationResult<SpeakerDetail>.MakeSuccess(speakerDetail));
+                    }
+                    else
+                    {
+                        return await Task.FromResult(OperationResult<SpeakerDetail>.MakeFailure());
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return await Task.FromResult(OperationResult<SpeakerDetail>.MakeFailure());
-                }
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                }                
             }
         }
     }

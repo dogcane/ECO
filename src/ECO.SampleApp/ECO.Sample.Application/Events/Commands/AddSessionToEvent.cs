@@ -1,5 +1,7 @@
-﻿using ECO.Sample.Domain;
+﻿using ECO.Data;
+using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -13,38 +15,51 @@ namespace ECO.Sample.Application.Events.Commands
 
         public class Handler : IRequestHandler<Command, OperationResult>
         {
-            private IEventRepository _EventRepository;
+            private readonly IDataContext _DataContext;
 
-            private ISpeakerRepository _SpeakerRepository;
+            private readonly IEventRepository _EventRepository;
 
-            public Handler(IEventRepository eventRepository, ISpeakerRepository speakerRepository)
+            private readonly ISpeakerRepository _SpeakerRepository;
+
+            private readonly ILogger<Handler> _Logger;
+
+            public Handler(IDataContext dataContext, IEventRepository eventRepository, ISpeakerRepository speakerRepository, ILogger<AddSessionToEvent.Handler> logger)
             {
+                _DataContext = dataContext;
                 _EventRepository = eventRepository;
                 _SpeakerRepository = speakerRepository;
+                _Logger = logger;
             }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                Event eventEntity = _EventRepository.Load(request.EventCode);
-                if (eventEntity == null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    Event eventEntity = _EventRepository.Load(request.EventCode);
+                    if (eventEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    }
+                    Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
+                    if (speakerEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    }
+                    var sessionResult = eventEntity.AddSession(request.Title, request.Description, request.Level, speakerEntity);
+                    if (sessionResult.Success)
+                    {
+                        _EventRepository.Update(eventEntity);
+                    }
+                    _DataContext.SaveChanges();
+                    transactionContext.Commit();
+                    return await Task.FromResult(sessionResult);
                 }
-                Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
-                if (speakerEntity == null)
+                catch (Exception ex)
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
                 }
-                var sessionResult = eventEntity.AddSession(request.Title, request.Description, request.Level, speakerEntity);
-                if (sessionResult.Success)
-                {
-                    _EventRepository.Update(eventEntity);
-                }
-                return await Task.FromResult(
-                    sessionResult.Success ?
-                        OperationResult.MakeSuccess() :
-                        OperationResult.MakeFailure(sessionResult.Errors)
-                );
             }
         }
     }

@@ -12,13 +12,19 @@ namespace ECO.Data
 
         private readonly IDictionary<Type, IPersistenceUnit> _Classes = new Dictionary<Type, IPersistenceUnit>();
 
+        private readonly ILoggerFactory _LoggerFactory;
+
         private readonly ILogger<PersistenceUnitFactory> _Logger;
 
         #endregion
 
         #region ~Ctor
 
-        public PersistenceUnitFactory(ILogger<PersistenceUnitFactory> logger) => _Logger = logger;
+        public PersistenceUnitFactory(ILoggerFactory loggerFactory = null)
+        {
+            _LoggerFactory = loggerFactory;
+            _Logger = _LoggerFactory?.CreateLogger<PersistenceUnitFactory>();
+        }
 
         #endregion
 

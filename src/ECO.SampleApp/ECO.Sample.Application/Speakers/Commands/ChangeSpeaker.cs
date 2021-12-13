@@ -1,5 +1,7 @@
-﻿using ECO.Sample.Domain;
+﻿using ECO.Data;
+using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -13,23 +15,43 @@ namespace ECO.Sample.Application.Speakers.Commands
 
         public class Handler : IRequestHandler<Command, OperationResult>
         {
-            private ISpeakerRepository _SpeakerRepository;
+            private readonly IDataContext _DataContext;
 
-            public Handler(ISpeakerRepository speakerRepository) => _SpeakerRepository = speakerRepository;
+            private readonly ISpeakerRepository _SpeakerRepository;
+
+            private readonly ILogger<ChangeSpeaker.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, ISpeakerRepository speakerRepository, ILogger<ChangeSpeaker.Handler> logger)
+            {
+                _DataContext = dataContext;
+                _SpeakerRepository = speakerRepository;
+                _Logger = logger;
+            }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
-                if (speakerEntity == null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
+                    if (speakerEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND")));
+                    }
+                    var speakerResult = speakerEntity.ChangeInformation(request.Name, request.Surname, request.Description, request.Age);
+                    if (speakerResult.Success)
+                    {
+                        _SpeakerRepository.Update(speakerEntity);
+                    }
+                    _DataContext.SaveChanges();
+                    transactionContext.Commit();
+                    return await Task.FromResult(speakerResult);
                 }
-                var speakerResult = speakerEntity.ChangeInformation(request.Name, request.Surname, request.Description, request.Age);
-                if (speakerResult.Success)
+                catch (Exception ex)
                 {
-                    _SpeakerRepository.Update(speakerEntity);
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
                 }
-                return await Task.FromResult(speakerResult);
             }
         }
     }

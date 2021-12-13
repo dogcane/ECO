@@ -17,8 +17,7 @@ namespace ECO.Configuration
             serviceCollection.AddSingleton<IPersistenceUnitFactory, PersistenceUnitFactory>(fact =>
             {
                 var loggerFactory = fact.GetRequiredService<ILoggerFactory>();
-                var logger = fact.GetRequiredService<ILogger<PersistenceUnitFactory>>();
-                var persistenceUnitFactory = new PersistenceUnitFactory(logger);
+                var persistenceUnitFactory = new PersistenceUnitFactory(loggerFactory);
                 options.PersistenceUnitFactoryOptions(persistenceUnitFactory, loggerFactory);
                 return persistenceUnitFactory;
             });

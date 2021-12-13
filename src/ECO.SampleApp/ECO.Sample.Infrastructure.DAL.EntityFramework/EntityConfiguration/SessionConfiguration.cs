@@ -20,9 +20,9 @@ namespace ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration
             builder.Property(x => x.Description);
             builder.Property(x => x.Level);
             builder.Navigation(x => x.Event).AutoInclude(true);
-            builder.HasOne(x => x.Event).WithMany(x => x.Sessions).HasForeignKey(x => x.Identity);
+            builder.HasOne(x => x.Event).WithMany(x => x.Sessions).HasForeignKey("FK_Event");
             builder.Navigation(x => x.Speaker).AutoInclude(true);
-            builder.HasOne(x => x.Speaker).WithOne().HasForeignKey<Speaker>(x => x.Identity);
+            builder.HasOne(x => x.Speaker).WithMany().HasForeignKey("FK_Speaker");
         }        
     }
 }

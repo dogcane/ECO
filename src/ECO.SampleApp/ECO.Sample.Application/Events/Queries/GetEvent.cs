@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using ECO.Data;
 using ECO.Sample.Application.Events.DTO;
 using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -15,26 +17,41 @@ namespace ECO.Sample.Application.Events.Queries
 
         public class Handler : IRequestHandler<Query, OperationResult<EventDetail>>
         {
+            private readonly IDataContext _DataContext;
+
             private IEventRepository _EventRepository;
 
             private IMapper _Mapper;
 
-            public Handler(IEventRepository eventRepository, IMapper mapper)
+            private readonly ILogger<GetEvent.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, IEventRepository eventRepository, IMapper mapper, ILogger<GetEvent.Handler> logger)
             {
+                _DataContext = dataContext;
                 _EventRepository = eventRepository;
                 _Mapper = mapper;
+                _Logger = logger;
             }
 
             public async Task<OperationResult<EventDetail>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Event @event = _EventRepository.Load(request.EventCode);
-                if (@event != null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult<EventDetail>.MakeSuccess(_Mapper.Map<EventDetail>(@event)));
+                    Event @event = _EventRepository.Load(request.EventCode);
+                    if (@event != null)
+                    {
+                        return await Task.FromResult(OperationResult<EventDetail>.MakeSuccess(_Mapper.Map<EventDetail>(@event)));
+                    }
+                    else
+                    {
+                        return await Task.FromResult(OperationResult<EventDetail>.MakeFailure());
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return await Task.FromResult(OperationResult<EventDetail>.MakeFailure());
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
                 }
             }
         }

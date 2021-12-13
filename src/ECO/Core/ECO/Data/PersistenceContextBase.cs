@@ -16,7 +16,7 @@ namespace ECO.Data
 
         #region Ctor
 
-        protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P> logger)
+        protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P> logger = null)
         {
             PersistenceContextId = Guid.NewGuid();
             PersistenceUnit = persistenceUnit;
@@ -64,10 +64,7 @@ namespace ECO.Data
 
         }
 
-        protected virtual PersistenceState OnGetPersistenceState<T, K>(T entity)
-        {
-            return PersistenceState.Unknown;
-        }
+        protected virtual PersistenceState OnGetPersistenceState<T, K>(T entity) => PersistenceState.Unknown;
 
         #endregion
 
@@ -82,33 +79,34 @@ namespace ECO.Data
         public void Attach<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            _Logger.LogDebug("Attaching entity {entityName}:{entityId} in {persistenceUnitName}:{persistenceContextId}", entity.GetType().Name, entity.Identity, PersistenceUnit.Name, PersistenceContextId); ;
+            _Logger?.LogDebug($"Attaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnAttach<T, K>(entity);
         }
 
         public void Detach<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            _Logger.LogDebug("Detaching entity {entityName}:{entityId} in {persistenceUnitName}:{persistenceContextId}", entity.GetType().Name, entity.Identity, PersistenceUnit.Name, PersistenceContextId); ;
+            _Logger?.LogDebug($"Detaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnDetach<T, K>(entity);
         }
 
         public void Refresh<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
-            _Logger.LogDebug("Refresh entity {entityName}:{entityId} in {persistenceUnitName}:{persistenceContextId}", entity.GetType().Name, entity.Identity, PersistenceUnit.Name, PersistenceContextId); ;
+            _Logger?.LogDebug($"Refreshing entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnRefresh<T, K>(entity);
         }
 
         public PersistenceState GetPersistenceState<T, K>(T entity)
             where T : IAggregateRoot<K>
         {
+            _Logger?.LogDebug($"Get Persistence State for entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             return OnGetPersistenceState<T, K>(entity);
         }
 
         public IDataTransaction BeginTransaction()
         {
-            _Logger.LogDebug("Begin transaction in {persistenceUnitName}:{persistenceContextId}", PersistenceUnit.Name, PersistenceContextId); ;
+            _Logger?.LogDebug($"Begin transaction in {PersistenceUnit.Name}:{PersistenceContextId}");
             Transaction = OnBeginTransaction();
             return Transaction;
         }
@@ -121,7 +119,7 @@ namespace ECO.Data
 
         public void SaveChanges()
         {
-            _Logger.LogDebug("Save changes in {persistenceUnitName}:{persistenceContextId}", PersistenceUnit.Name, PersistenceContextId); ;
+            _Logger?.LogDebug($"Save changes in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnSaveChanges();
         }
 

@@ -1,5 +1,7 @@
-﻿using ECO.Sample.Domain;
+﻿using ECO.Data;
+using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Threading;
@@ -13,23 +15,43 @@ namespace ECO.Sample.Application.Events.Commands
 
         public class Handler : IRequestHandler<Command, OperationResult>
         {
-            private IEventRepository _EventRepository;
+            private readonly IDataContext _DataContext;
 
-            public Handler(IEventRepository eventRepository) => _EventRepository = eventRepository;
+            private readonly IEventRepository _EventRepository;
+
+            private readonly ILogger<ChangeEvent.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, IEventRepository eventRepository, ILogger<ChangeEvent.Handler> logger)
+            {
+                _DataContext = dataContext;
+                _EventRepository = eventRepository;
+                _Logger = logger;
+            }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                Event eventEventity = _EventRepository.Load(request.EventCode);
-                if (eventEventity == null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    Event eventEventity = _EventRepository.Load(request.EventCode);
+                    if (eventEventity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    }
+                    var eventResult = eventEventity.ChangeInformation(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
+                    if (eventResult.Success)
+                    {
+                        _EventRepository.Update(eventEventity);
+                    }
+                    _DataContext.SaveChanges();
+                    transactionContext.Commit();
+                    return await Task.FromResult(eventResult.TranslateContext("Period.StartDate", "StartDate"));
                 }
-                var eventResult = eventEventity.ChangeInformation(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
-                if (eventResult.Success)
+                catch (Exception ex)
                 {
-                    _EventRepository.Update(eventEventity);
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
                 }
-                return await Task.FromResult(eventResult.TranslateContext("Period.StartDate", "StartDate"));                
             }
         }
     }

@@ -1,5 +1,7 @@
-﻿using ECO.Sample.Domain;
+﻿using ECO.Data;
+using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
 using System;
 using System.Linq;
@@ -14,32 +16,48 @@ namespace ECO.Sample.Application.Events.Commands
 
         public class Handler : IRequestHandler<Command, OperationResult>
         {
-            private IEventRepository _EventRepository;
+            private readonly IDataContext _DataContext;
 
-            public Handler(IEventRepository eventRepository) => _EventRepository = eventRepository;
+            private readonly IEventRepository _EventRepository;
+
+            private readonly ILogger<RemoveSessionFromEvent.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, IEventRepository eventRepository, ILogger<RemoveSessionFromEvent.Handler> logger)
+            {
+                _DataContext = dataContext;
+                _EventRepository = eventRepository;
+                _Logger = logger;
+            }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                Event eventEntity = _EventRepository.Load(request.EventCode);
-                if (eventEntity == null)
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    Event eventEntity = _EventRepository.Load(request.EventCode);
+                    if (eventEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                    }
+                    Session sessionEntity = eventEntity.Sessions.FirstOrDefault(s => s.Identity == request.SessionCode);
+                    if (sessionEntity == null)
+                    {
+                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Session", "SESSION_NOT_FOUND")));
+                    }
+                    var sessionResult = eventEntity.RemoveSession(sessionEntity);
+                    if (sessionResult.Success)
+                    {
+                        _EventRepository.Update(eventEntity);
+                    }
+                    _DataContext.SaveChanges();
+                    transactionContext.Commit();
+                    return await Task.FromResult(sessionResult);                    
                 }
-                Session sessionEntity = eventEntity.Sessions.FirstOrDefault(s => s.Identity == request.SessionCode);
-                if (sessionEntity == null)
+                catch (Exception ex)
                 {
-                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Session", "SESSION_NOT_FOUND")));
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
                 }
-                var sessionResult = eventEntity.RemoveSession(sessionEntity);
-                if (sessionResult.Success)
-                {
-                    _EventRepository.Update(eventEntity);
-                }
-                return await Task.FromResult(
-                    sessionResult.Success ?
-                        OperationResult.MakeSuccess() :
-                        OperationResult.MakeFailure(sessionResult.Errors)
-                );
             }
         }
     }

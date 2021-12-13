@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using ECO.Data;
 using ECO.Sample.Application.Speakers.DTO;
 using ECO.Sample.Domain;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Resulz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,25 +19,40 @@ namespace ECO.Sample.Application.Speakers.Queries
 
         public class Handler : IRequestHandler<Query, OperationResult<IEnumerable<SpeakerItem>>>
         {
+            private readonly IDataContext _DataContext;
+
             private ISpeakerRepository _SpeakerRepository;
 
             private IMapper _Mapper;
 
-            public Handler(ISpeakerRepository speakerRepository, IMapper mapper)
+            private readonly ILogger<SearchSpeakers.Handler> _Logger;
+
+            public Handler(IDataContext dataContext, ISpeakerRepository speakerRepository, IMapper mapper, ILogger<SearchSpeakers.Handler> logger)
             {
+                _DataContext = dataContext;
                 _SpeakerRepository = speakerRepository;
                 _Mapper = mapper;
+                _Logger = logger;
             }
 
             public async Task<OperationResult<IEnumerable<SpeakerItem>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _SpeakerRepository.AsQueryable();
-                if (!string.IsNullOrEmpty(request.NameOrSurname))
+                using var transactionContext = _DataContext.BeginTransaction();
+                try
                 {
-                    query = query.Where(entity => entity.Name.Contains(request.NameOrSurname) || entity.Surname.Contains(request.NameOrSurname));
+                    var query = _SpeakerRepository.AsQueryable();
+                    if (!string.IsNullOrEmpty(request.NameOrSurname))
+                    {
+                        query = query.Where(entity => entity.Name.Contains(request.NameOrSurname) || entity.Surname.Contains(request.NameOrSurname));
+                    }
+                    var speakers = _Mapper.ProjectTo<SpeakerItem>(query);
+                    return await Task.FromResult(OperationResult<IEnumerable<SpeakerItem>>.MakeSuccess(speakers));
                 }
-                var speakers = _Mapper.ProjectTo<SpeakerItem>(query);
-                return await Task.FromResult(OperationResult<IEnumerable<SpeakerItem>>.MakeSuccess(speakers));
+                catch (Exception ex)
+                {
+                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                }
             }
         }
     }
