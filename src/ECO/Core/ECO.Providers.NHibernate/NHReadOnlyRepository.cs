@@ -26,7 +26,7 @@ namespace ECO.Providers.NHibernate
 
         #region IEnumerable<T> Members
 
-        public IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
+        public virtual IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
 
         #endregion
 
@@ -38,11 +38,11 @@ namespace ECO.Providers.NHibernate
 
         #region IQueryable Members
 
-        public Type ElementType => GetCurrentSession().Query<T>().ElementType;
+        public virtual Type ElementType => GetCurrentSession().Query<T>().ElementType;
 
-        public System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
+        public virtual System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
 
-        public IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
+        public virtual IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
 
         #endregion
     }

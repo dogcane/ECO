@@ -18,7 +18,7 @@ namespace ECO.Providers.InMemory
 
         #region IRepository<T> Membri di
 
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             if (!_IdentityMap.ContainsKey(item.Identity))
             {
@@ -33,9 +33,9 @@ namespace ECO.Providers.InMemory
             }
         }
 
-        public async Task AddAsync(T item) => await Task.Run(() => Add(item));
+        public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item));
 
-        public void Update(T item)
+        public virtual void Update(T item)
         {
             if (_IdentityMap.ContainsKey(item.Identity))
             {
@@ -49,9 +49,9 @@ namespace ECO.Providers.InMemory
             }
         }
 
-        public async Task UpdateAsync(T item) => await Task.Run(() => Update(item));
+        public virtual async Task UpdateAsync(T item) => await Task.Run(() => Update(item));
 
-        public void Remove(T item)
+        public virtual void Remove(T item)
         {
             if (_IdentityMap.ContainsKey(item.Identity))
             {
@@ -66,7 +66,7 @@ namespace ECO.Providers.InMemory
             }
         }
 
-        public async Task RemoveAsync(T item) => await Task.Run(() => Remove(item));
+        public virtual async Task RemoveAsync(T item) => await Task.Run(() => Remove(item));
 
         #endregion
     }

@@ -19,15 +19,15 @@ namespace ECO.Providers.EntityFramework
 
         #region IReadOnlyRepository<T,K> Members
 
-        public T Load(K identity) => DbContext.Set<T>().Find(identity);
+        public virtual T Load(K identity) => DbContext.Set<T>().Find(identity);
 
-        public async Task<T> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
+        public virtual async Task<T> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
 
         #endregion
 
         #region IEnumerable<T> Members
 
-        public IEnumerator<T> GetEnumerator() => DbContext.Set<T>().AsEnumerable().GetEnumerator();
+        public virtual IEnumerator<T> GetEnumerator() => DbContext.Set<T>().AsEnumerable().GetEnumerator();
 
         #endregion
 
@@ -39,11 +39,11 @@ namespace ECO.Providers.EntityFramework
 
         #region IQueryable Members
 
-        public Type ElementType => DbContext.Set<T>().AsQueryable().ElementType;
+        public virtual Type ElementType => DbContext.Set<T>().AsQueryable().ElementType;
 
-        public System.Linq.Expressions.Expression Expression => DbContext.Set<T>().AsQueryable().Expression;
+        public virtual System.Linq.Expressions.Expression Expression => DbContext.Set<T>().AsQueryable().Expression;
 
-        public IQueryProvider Provider => DbContext.Set<T>().AsQueryable().Provider;
+        public virtual IQueryProvider Provider => DbContext.Set<T>().AsQueryable().Provider;
 
         #endregion
     }

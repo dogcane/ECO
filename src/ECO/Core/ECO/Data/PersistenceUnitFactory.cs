@@ -77,6 +77,11 @@ namespace ECO.Data
             throw new PersistentClassNotRegisteredException(entityType);
         }
 
+        public IDataContext OpenDataContext()
+        {
+            return new DataContext(this, _LoggerFactory.CreateLogger<DataContext>());
+        }
+
         #endregion
     }
 }

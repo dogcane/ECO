@@ -21,10 +21,7 @@ namespace ECO.Sample.Domain
 
         public virtual Period Period { get; protected set; }
 
-        public virtual IEnumerable<Session> Sessions
-        {
-            get { return _Sessions; }
-        }
+        public virtual IEnumerable<Session> Sessions => _Sessions;
 
         #endregion
 

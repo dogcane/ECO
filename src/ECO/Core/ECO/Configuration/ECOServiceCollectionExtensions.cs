@@ -24,8 +24,7 @@ namespace ECO.Configuration
             serviceCollection.AddScoped<IDataContext>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
-                var logger = fact.GetRequiredService<ILogger<DataContext>>();
-                var dataContext = new DataContext(persistenceUnitFactory, logger);
+                var dataContext = persistenceUnitFactory.OpenDataContext();
                 if (options.RequireTransaction) dataContext.BeginTransaction(true);
                 return dataContext;
             });

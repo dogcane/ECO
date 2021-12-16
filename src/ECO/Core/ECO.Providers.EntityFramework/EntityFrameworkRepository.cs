@@ -16,17 +16,17 @@ namespace ECO.Providers.EntityFramework
 
         #region IRepository<T,K> Members
 
-        public void Add(T item) => DbContext.Set<T>().Add(item);
+        public virtual void Add(T item) => DbContext.Set<T>().Add(item);
 
-        public async Task AddAsync(T item) => await DbContext.Set<T>().AddAsync(item);
+        public virtual async Task AddAsync(T item) => await DbContext.Set<T>().AddAsync(item);
 
-        public void Update(T item) => DbContext.Set<T>().Update(item);
+        public virtual void Update(T item) => DbContext.Set<T>().Update(item);
 
-        public async Task UpdateAsync(T item) => await Task.Run(() => Update(item));
+        public virtual async Task UpdateAsync(T item) => await Task.Run(() => Update(item));
 
-        public void Remove(T item) => DbContext.Set<T>().Remove(item);
+        public virtual void Remove(T item) => DbContext.Set<T>().Remove(item);
 
-        public async Task RemoveAsync(T item) => await Task.Run(() => Remove(item));
+        public virtual async Task RemoveAsync(T item) => await Task.Run(() => Remove(item));
 
         #endregion
     }
