@@ -34,7 +34,7 @@ namespace ECO.Sample.Application.Utils
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     //Speakers
@@ -48,9 +48,8 @@ namespace ECO.Sample.Application.Utils
                     event01.AddSession("Blazor", "Blazor full immersion", 300, speaker01);
                     event01.AddSession("Bootstrap", "Bootstrap full immersion", 100, speaker02);
                     await _EventRepository.AddAsync(event01);
-                    //Save changes & commit
-                    _DataContext.SaveChanges();
-                    transactionContext.Commit();
+                    await _DataContext.SaveChangesAsync();
+                    await transactionContext.CommitAsync();
                     return await Task.FromResult(OperationResult.MakeSuccess());
                 }
                 catch (Exception ex)

@@ -1,4 +1,7 @@
-﻿namespace ECO.Data
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace ECO.Data
 {
     public sealed class NullDataTransaction : IDataTransaction
     {
@@ -30,6 +33,10 @@
         {
 
         }
+
+        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());        
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Rollback());
 
         #endregion
     }

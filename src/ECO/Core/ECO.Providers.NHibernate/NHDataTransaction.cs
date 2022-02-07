@@ -1,5 +1,7 @@
 using ECO.Data;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
@@ -65,6 +67,10 @@ namespace ECO.Providers.NHibernate
         public void Commit() => Transaction.Commit();
 
         public void Rollback() => Transaction.Rollback();
+
+        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Transaction.CommitAsync(cancellationToken);
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Transaction.RollbackAsync(cancellationToken);
 
         #endregion
     }

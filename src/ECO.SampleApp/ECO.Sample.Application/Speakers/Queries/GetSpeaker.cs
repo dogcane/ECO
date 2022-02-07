@@ -35,7 +35,7 @@ namespace ECO.Sample.Application.Speakers.Queries
 
             public async Task<OperationResult<SpeakerDetail>> Handle(Query request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     Speaker speaker = _SpeakerRepository.Load(request.SpeakerCode);

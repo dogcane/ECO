@@ -1,6 +1,8 @@
 
 using ECO.Data;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
@@ -26,11 +28,18 @@ namespace ECO.Providers.NHibernate
 
         protected override IDataTransaction OnBeginTransaction() => new NHDataTransaction(this);
 
+        protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await Task.FromResult(OnBeginTransaction());
+
         protected override void OnClose() => Session.Close();
 
         protected override void OnSaveChanges()
         {
             Session.Flush();
+            Session.Clear();
+        }
+        protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            await Session.FlushAsync(cancellationToken);
             Session.Clear();
         }
 

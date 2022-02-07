@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -26,9 +28,13 @@ namespace ECO.Data
 
         IDataTransaction BeginTransaction();
 
+        Task<IDataTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default(CancellationToken));
+
         void Close();
 
         void SaveChanges();
+
+        Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
     }

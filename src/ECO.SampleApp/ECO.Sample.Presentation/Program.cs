@@ -17,6 +17,8 @@ namespace ECO.Sample.Presentation
                 {
                     config.AddJsonFile("ecosettings.efcore.sqlserver.json");
                     //config.AddJsonFile("ecosettings.nhibernate.json");
+                    //config.AddJsonFile("ecosettings.inmemory.json");
+                    //config.AddJsonFile("ecosettings.efcore.memory.json");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

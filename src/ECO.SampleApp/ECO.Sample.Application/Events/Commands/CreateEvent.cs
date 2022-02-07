@@ -30,26 +30,23 @@ namespace ECO.Sample.Application.Events.Commands
 
             public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     var eventResult = Event.Create(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
-                    if (eventResult.Success)
+                    if (!eventResult.Success)
                     {
-                        _EventRepository.Add(eventResult.Value);
+                        return OperationResult<Guid>.MakeFailure(eventResult.TranslateContext("Period.StartDate", "StartDate").TranslateContext("Period.EndDate", "EndDate").Errors);
                     }
-                    _DataContext.SaveChanges();
-                    transactionContext.Commit();
-                    return await Task.FromResult(
-                        eventResult.Success ?
-                            OperationResult<Guid>.MakeSuccess(eventResult.Value.Identity) :
-                            OperationResult<Guid>.MakeFailure(eventResult.Errors).TranslateContext("Period.StartDate", "StartDate")
-                    );
+                    await _EventRepository.AddAsync(eventResult.Value);
+                    await _DataContext.SaveChangesAsync();
+                    await transactionContext.CommitAsync();
+                    return OperationResult<Guid>.MakeSuccess(eventResult.Value.Identity);                    
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
                 }
             }
         }

@@ -35,23 +35,20 @@ namespace ECO.Sample.Application.Events.Queries
 
             public async Task<OperationResult<EventDetail>> Handle(Query request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event @event = _EventRepository.Load(request.EventCode);
-                    if (@event != null)
+                    Event eventEntity = await _EventRepository.LoadAsync(request.EventCode);
+                    if (eventEntity == null)
                     {
-                        return await Task.FromResult(OperationResult<EventDetail>.MakeSuccess(_Mapper.Map<EventDetail>(@event)));
+                        return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
-                    else
-                    {
-                        return await Task.FromResult(OperationResult<EventDetail>.MakeFailure());
-                    }
+                    return OperationResult<EventDetail>.MakeSuccess(_Mapper.Map<EventDetail>(eventEntity));
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
                 }
             }
         }

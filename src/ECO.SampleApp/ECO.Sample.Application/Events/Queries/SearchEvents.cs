@@ -37,7 +37,7 @@ namespace ECO.Sample.Application.Events.Queries
 
             public async Task<OperationResult<IEnumerable<EventItem>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();                
+                using var transactionContext = await _DataContext.BeginTransactionAsync();                
                 try
                 {
                     var query = _EventRepository.AsQueryable();

@@ -1,6 +1,8 @@
 ﻿using ECO.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.EntityFramework
 {
@@ -24,9 +26,9 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        internal EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context)
+        private EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context, IDbContextTransaction transaction)
         {
-            Transaction = context.Context.Database.BeginTransaction();
+            Transaction = transaction;
             Context = context;
         }
 
@@ -34,6 +36,34 @@ namespace ECO.Providers.EntityFramework
         {
             Dispose(false);
         }
+
+        #endregion
+
+        #region Factory_Methods
+
+        internal static EntityFrameworkDataTransaction CreateEntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context)
+        {
+            var transaction = context.Context.Database.BeginTransaction();
+            return new EntityFrameworkDataTransaction(context, transaction);
+        }
+
+        internal static async Task<EntityFrameworkDataTransaction> CreateEntityFrameworkDataTransactionAsync(EntityFrameworkPersistenceContext context, CancellationToken cancellationToken = default)
+        {
+            var transaction = await context.Context.Database.BeginTransactionAsync();
+            return new EntityFrameworkDataTransaction(context, transaction);
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void Commit() => Transaction.Commit();
+
+        public void Rollback() => Transaction.Rollback();
+
+        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Transaction.CommitAsync(cancellationToken);        
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Transaction.RollbackAsync(cancellationToken);
 
         public void Dispose() => Dispose(true);
 
@@ -54,14 +84,6 @@ namespace ECO.Providers.EntityFramework
             Transaction = null;
             Context = null;
         }
-
-        #endregion
-
-        #region Public_Methods
-
-        public void Commit() => Transaction.Commit();
-
-        public void Rollback() => Transaction.Rollback();
 
         #endregion
     }

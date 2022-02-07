@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -27,6 +29,16 @@ namespace ECO.Data
         /// Method that rollbacks the transaction
         /// </summary>
         void Rollback();
+
+        /// <summary>
+        /// Method that commits the transaction asynchronously
+        /// </summary>
+        Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Method that rollbacks the transaction asynchronously
+        /// </summary>
+        Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
     }

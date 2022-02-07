@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -34,6 +36,8 @@ namespace ECO.Data
 
         protected abstract IDataTransaction OnBeginTransaction();
 
+        protected abstract Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default);
+
         protected virtual void OnClose()
         {
 
@@ -48,6 +52,7 @@ namespace ECO.Data
         {
 
         }
+        protected virtual async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Task.Run(() => OnSaveChanges());
 
         protected virtual void OnAttach<T, K>(T entity) where T : IAggregateRoot<K>
         {
@@ -111,6 +116,13 @@ namespace ECO.Data
             return Transaction;
         }
 
+        public async Task<IDataTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            _Logger?.LogDebug($"Begin transaction in {PersistenceUnit.Name}:{PersistenceContextId}");
+            Transaction = await OnBeginTransactionAsync(cancellationToken);
+            return Transaction;
+        }
+
         public void Close()
         {
             OnClose();
@@ -121,6 +133,12 @@ namespace ECO.Data
         {
             _Logger?.LogDebug($"Save changes in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnSaveChanges();
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            _Logger?.LogDebug($"Save changes in {PersistenceUnit.Name}:{PersistenceContextId}");
+            await OnSaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -144,7 +162,7 @@ namespace ECO.Data
             }
 
             _disposed = true;
-        }
+        }        
 
         #endregion
     }

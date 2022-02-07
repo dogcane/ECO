@@ -19,6 +19,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<None Remove="Data\IDataContext.cs~RF318a7bd.TMP" />
 		<None Remove="Microsoft.Extensions.Logging.Abstractions" />
 	</ItemGroup>
 	

@@ -30,26 +30,23 @@ namespace ECO.Sample.Application.Speakers.Commands
 
             public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     var speakerResult = Speaker.Create(request.Name, request.Surname, request.Description, request.Age);
-                    if (speakerResult.Success)
+                    if (!speakerResult.Success)
                     {
-                        _SpeakerRepository.Add(speakerResult.Value);
-                    }                    
-                    _DataContext.SaveChanges();
-                    transactionContext.Commit();
-                    return await Task.FromResult(
-                        speakerResult.Success ?
-                            OperationResult<Guid>.MakeSuccess(speakerResult.Value.Identity) :
-                            OperationResult<Guid>.MakeFailure(speakerResult.Errors)
-                    );
+                        return OperationResult<Guid>.MakeFailure(speakerResult.Errors);
+                    }
+                    await _SpeakerRepository.AddAsync(speakerResult.Value);
+                    await _DataContext.SaveChangesAsync();                    
+                    await transactionContext.CommitAsync();
+                    return OperationResult<Guid>.MakeSuccess(speakerResult.Value.Identity);
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
                 }
                 
             }

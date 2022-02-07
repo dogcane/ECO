@@ -30,27 +30,28 @@ namespace ECO.Sample.Application.Events.Commands
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     Event eventEventity = _EventRepository.Load(request.EventCode);
                     if (eventEventity == null)
                     {
-                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                        return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
                     var eventResult = eventEventity.ChangeInformation(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
-                    if (eventResult.Success)
+                    if (!eventResult.Success)
                     {
-                        _EventRepository.Update(eventEventity);
+                        return eventResult.TranslateContext("Period.StartDate", "StartDate").TranslateContext("Period.EndDate", "EndDate");                        
                     }
-                    _DataContext.SaveChanges();
-                    transactionContext.Commit();
-                    return await Task.FromResult(eventResult.TranslateContext("Period.StartDate", "StartDate"));
+                    await _EventRepository.UpdateAsync(eventEventity);
+                    await _DataContext.SaveChangesAsync();
+                    await transactionContext.CommitAsync();
+                    return OperationResult.MakeSuccess();
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
                 }
             }
         }

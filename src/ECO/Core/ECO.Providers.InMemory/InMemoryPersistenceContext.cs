@@ -1,5 +1,7 @@
 ﻿using ECO.Data;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.InMemory
 {
@@ -18,6 +20,8 @@ namespace ECO.Providers.InMemory
         #region Methods
 
         protected override IDataTransaction OnBeginTransaction() => new NullDataTransaction(this);
+
+        protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await Task.FromResult(OnBeginTransaction());
 
         #endregion
     }

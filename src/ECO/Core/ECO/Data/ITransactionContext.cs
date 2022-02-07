@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -12,15 +14,21 @@ namespace ECO.Data
 
         TransactionStatus Status { get; }
 
+        IDataContext DataContext { get; }
+
         #endregion
 
         #region Methods
 
         void EnlistDataTransaction(IDataTransaction dataTransaction);
 
-        void Commit();
+        void Commit();        
 
         void Rollback();
+
+        Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
     }

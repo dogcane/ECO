@@ -31,32 +31,33 @@ namespace ECO.Sample.Application.Events.Commands
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = _DataContext.BeginTransaction();
+                using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
                     Event eventEntity = _EventRepository.Load(request.EventCode);
                     if (eventEntity == null)
                     {
-                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND")));
+                        return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
                     Session sessionEntity = eventEntity.Sessions.FirstOrDefault(s => s.Identity == request.SessionCode);
                     if (sessionEntity == null)
                     {
-                        return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Session", "SESSION_NOT_FOUND")));
+                        return OperationResult.MakeFailure(ErrorMessage.Create("Session", "SESSION_NOT_FOUND"));
                     }
                     var sessionResult = eventEntity.RemoveSession(sessionEntity);
-                    if (sessionResult.Success)
+                    if (!sessionResult.Success)
                     {
-                        _EventRepository.Update(eventEntity);
+                        return sessionResult;                        
                     }
-                    _DataContext.SaveChanges();
-                    transactionContext.Commit();
-                    return await Task.FromResult(sessionResult);                    
+                    await _EventRepository.UpdateAsync(eventEntity);
+                    await _DataContext.SaveChangesAsync();
+                    await transactionContext.CommitAsync();
+                    return OperationResult.MakeSuccess();
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
                 }
             }
         }

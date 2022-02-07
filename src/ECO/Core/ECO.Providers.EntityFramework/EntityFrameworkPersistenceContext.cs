@@ -1,6 +1,8 @@
 ﻿using ECO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.EntityFramework
 {
@@ -21,9 +23,13 @@ namespace ECO.Providers.EntityFramework
 
         #region Public_Methods
 
-        protected override IDataTransaction OnBeginTransaction() => new EntityFrameworkDataTransaction(this);
+        protected override IDataTransaction OnBeginTransaction() => EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransaction(this);
+
+        protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransactionAsync(this, cancellationToken);
 
         protected override void OnSaveChanges() => Context.SaveChanges();
+
+        protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Context.SaveChangesAsync(cancellationToken);
 
         #endregion
     }

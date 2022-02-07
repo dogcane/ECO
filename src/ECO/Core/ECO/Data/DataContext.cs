@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -9,8 +11,6 @@ namespace ECO.Data
         #region Private_Fields
 
         private bool _disposed = false;
-
-        private readonly object _SyncLock = new object();
 
         private readonly IPersistenceUnitFactory _PersistenceUnitFactory;        
 
@@ -52,22 +52,16 @@ namespace ECO.Data
             string persistenceUnitName = persistenceUnit.Name;
             if (!_Contexts.ContainsKey(persistenceUnitName))
             {
-                lock (_SyncLock)
-                {
-                    if (!_Contexts.ContainsKey(persistenceUnitName))
-                    {
-                        _Logger?.LogDebug($"Initialization of persistence context for entity '{entityType}'");
-                        IPersistenceContext context = persistenceUnit.CreateContext();
-                        _Contexts.Add(persistenceUnitName, context);
-                        if (Transaction != null)                        
-                            Transaction.EnlistDataTransaction(context.BeginTransaction());                        
-                        _Logger?.LogDebug($"Persistence context for entity {entityType} already initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
-                    }
-                    else
-                    {
-                        _Logger?.LogDebug($"Persistence context for entity {entityType} initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
-                    }
-                }
+                _Logger?.LogDebug($"Initialization of persistence context for entity '{entityType}'");
+                IPersistenceContext context = persistenceUnit.CreateContext();
+                _Contexts.Add(persistenceUnitName, context);
+                if (Transaction != null)                        
+                    Transaction.EnlistDataTransaction(context.BeginTransaction());                        
+                _Logger?.LogDebug($"Persistence context for entity {entityType} already initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
+            }
+            else
+            {
+                _Logger?.LogDebug($"Persistence context for entity {entityType} initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
             }
             return _Contexts[persistenceUnitName];
         }
@@ -82,22 +76,41 @@ namespace ECO.Data
         {
             if (Transaction == null || Transaction?.Status != TransactionStatus.Alive)
             {
-                lock (_SyncLock)
+                Transaction = new TransactionContext(this, autoCommit);
+                _Logger?.LogDebug($"Starting a new transaction context '{Transaction.TransactionContextId}'");
+                foreach (IPersistenceContext persistenceContext in _Contexts.Values)
                 {
-                    if (Transaction == null || Transaction?.Status != TransactionStatus.Alive)
-                    {
-                        Transaction = new TransactionContext(autoCommit);
-                        _Logger?.LogDebug($"Starting a new transaction context '{Transaction.TransactionContextId}'");
-                        foreach (IPersistenceContext persistenceContext in _Contexts.Values)
-                        {
-                            IDataTransaction tx = persistenceContext.BeginTransaction();
-                            Transaction.EnlistDataTransaction(tx);
-                        }
-                        return Transaction;
-                    }
+                    IDataTransaction tx = persistenceContext.BeginTransaction();
+                    Transaction.EnlistDataTransaction(tx);
                 }
+                return Transaction;
             }
-            throw new InvalidOperationException($"There is already an active transaction context with id '{Transaction?.TransactionContextId}'");
+            else
+            {
+                throw new InvalidOperationException($"There is already an active transaction context with id '{Transaction?.TransactionContextId}'");
+            }
+        }
+
+        public async Task<ITransactionContext> BeginTransactionAsync(CancellationToken cancellationToken = default) => await BeginTransactionAsync(false, cancellationToken);
+        
+
+        public async Task<ITransactionContext> BeginTransactionAsync(bool autoCommit, CancellationToken cancellationToken = default)
+        {
+            if (Transaction == null || Transaction?.Status != TransactionStatus.Alive)
+            {
+                Transaction = new TransactionContext(this, autoCommit);
+                _Logger?.LogDebug($"Starting a new transaction context '{Transaction.TransactionContextId}'");
+                foreach (IPersistenceContext persistenceContext in _Contexts.Values)
+                {
+                    IDataTransaction tx = await persistenceContext.BeginTransactionAsync();
+                    Transaction.EnlistDataTransaction(tx);
+                }
+                return Transaction;
+            }
+            else
+            {
+                throw new InvalidOperationException($"There is already an active transaction context with id '{Transaction?.TransactionContextId}'");
+            }
         }
 
         public void Attach<T, K>(T entity)
@@ -120,14 +133,19 @@ namespace ECO.Data
 
         public void SaveChanges()
         {
-            lock (_SyncLock)
+            foreach (IPersistenceContext persistenceContext in _Contexts.Values)
             {
-                foreach (IPersistenceContext persistenceContext in _Contexts.Values)
-                {
-                    persistenceContext.SaveChanges();
-                }
+                persistenceContext.SaveChanges();
             }
         }
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            foreach (IPersistenceContext persistenceContext in _Contexts.Values)
+            {
+                await persistenceContext.SaveChangesAsync(cancellationToken);
+            }
+        }
+
 
         #endregion
 
@@ -152,22 +170,18 @@ namespace ECO.Data
             if (isDisposing)
             {
                 _Logger?.LogDebug($"Data context '{DataContextId}' is disposing");
-
-                lock (_SyncLock)
+                if (Transaction != null)
                 {
-                    if (Transaction != null)
-                    {
-                        Transaction.Dispose();
-                    }
-                    foreach (IPersistenceContext persistenceContext in _Contexts.Values)
-                    {
-                        persistenceContext.Dispose();
-                    }
+                    Transaction.Dispose();
+                }
+                foreach (IPersistenceContext persistenceContext in _Contexts.Values)
+                {
+                    persistenceContext.Dispose();
                 }
                 _disposed = true;
                 GC.SuppressFinalize(this);
             }
-        }
+        }        
 
         #endregion
     }

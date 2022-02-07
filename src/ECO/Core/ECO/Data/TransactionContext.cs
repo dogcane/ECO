@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -21,17 +23,23 @@ namespace ECO.Data
 
         public bool AutoCommit { get; }
 
+        public IDataContext DataContext { get; private set; }
+
         #endregion
 
         #region ~Ctor
 
-        internal TransactionContext()
-            : this(false)
+        internal TransactionContext(IDataContext dataContext)
+            : this(dataContext, false)
         {
 
         }
 
-        internal TransactionContext(bool autoCommit) => AutoCommit = autoCommit;
+        internal TransactionContext(IDataContext dataContext, bool autoCommit)
+        {
+            DataContext = dataContext;
+            AutoCommit = autoCommit;
+        }
 
         ~TransactionContext()
         {
@@ -58,6 +66,24 @@ namespace ECO.Data
             foreach (IDataTransaction tx in _Transactions)
             {
                 tx.Rollback();
+            }
+            Status = TransactionStatus.RolledBack;
+        }
+
+        public async Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            foreach (IDataTransaction tx in _Transactions)
+            {
+                await tx.CommitAsync(cancellationToken);
+            }
+            Status = TransactionStatus.Committed;
+        }
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            foreach (IDataTransaction tx in _Transactions)
+            {
+                await tx.RollbackAsync(cancellationToken);
             }
             Status = TransactionStatus.RolledBack;
         }
@@ -92,7 +118,7 @@ namespace ECO.Data
                 }
                 _disposed = true;
             }
-        }
+        }        
 
         #endregion
     }
