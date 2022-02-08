@@ -1,26 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	
+﻿<Project Sdk="Microsoft.NET.Sdk">	
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<AssemblyTitle>ECO</AssemblyTitle>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<FileVersion>2.0.0.0</FileVersion>
+		<Version>2.0.0</Version>
 		<Product>Enterprise CLR Objects</Product>
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
-		<SignAssembly>False</SignAssembly>		
-	</PropertyGroup>
-	
+	</PropertyGroup>	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Remove="Data\IDataContext.cs~RF318a7bd.TMP" />
-		<None Remove="Microsoft.Extensions.Logging.Abstractions" />
-	</ItemGroup>
-	
+	</ItemGroup>	
 </Project>

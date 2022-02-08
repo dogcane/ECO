@@ -1,18 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
-    <ProjectReference Include="..\ECO\ECO.csproj" />
-  </ItemGroup>
-
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<AssemblyTitle>ECO.Providers.InMemory</AssemblyTitle>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<FileVersion>2.0.0.0</FileVersion>
+		<Version>2.0.0</Version>
+		<Product>Enterprise CLR Objects - In Memory provider</Product>
+		<Authors>Andrea Canegrati</Authors>
+		<Copyright>Andrea Canegrati © 2007</Copyright>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
+		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>
 </Project>

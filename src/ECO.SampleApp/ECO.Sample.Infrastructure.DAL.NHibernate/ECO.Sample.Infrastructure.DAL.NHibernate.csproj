@@ -11,9 +11,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Mapping\SessionMapping.cs~RF6798c727.TMP" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
     <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
   </ItemGroup>

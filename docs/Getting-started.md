@@ -37,7 +37,7 @@ public class Event : AggregateRoot<Guid>
     ...
     public virtual OperationResult ChangeInformation(string name, string description, Period period)
     {
-        ...
+    ...
     }
     ...
     public virtual OperationResult<Session> AddSession(string title, string description, int level, Speaker speaker)
@@ -47,7 +47,7 @@ public class Event : AggregateRoot<Guid>
     ...
     public virtual OperationResult RemoveSession(Session session)
     {
-       ...
+    ...
     }
 }
 
@@ -140,47 +140,28 @@ With these commands we:
 - A "Scoped" DataContext it's created on every request
 - We can "inject" a DataContext and our Repositories into our controllers or our services
 
-~~~ c#
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-    services.AddDataContext(options =>
-    {
-        options.UsingConfiguration(Configuration);
-    });
-    services.AddScoped<IEventRepository, EventMemoryRepository>();
-    ...
-}
-~~~
-
 In our example we use MediatR to manage Commands/Queries Handlers and from a specific handler we can have:
 
 ~~~ c#
-public async Task<OperationResult<IEnumerable<EventItem>>> Handle(Query request, CancellationToken cancellationToken)
+public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken)
 {
-    using var transactionContext = _DataContext.BeginTransaction();
+    using var transactionContext = await _DataContext.BeginTransactionAsync();
     try
     {
-        var query = _EventRepository.AsQueryable();
-        if (request.FromDate.HasValue)
+        var eventResult = Event.Create(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
+        if (!eventResult.Success)
         {
-            query = query.Where(entity => entity.Period.StartDate >= request.FromDate.Value);
+            return OperationResult<Guid>.MakeFailure(eventResult.TranslateContext("Period.StartDate", "StartDate").TranslateContext("Period.EndDate", "EndDate").Errors);
         }
-        if (request.ToDate.HasValue)
-        {
-            query = query.Where(entity => entity.Period.EndDate <= request.ToDate.Value);
-        }
-        if (!string.IsNullOrEmpty(request.EventName))
-        {
-            query = query.Where(entity => entity.Name.Contains(request.EventName));
-        }
-        var events = _Mapper.ProjectTo<EventItem>(query);
-        return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(events));
+        await _EventRepository.AddAsync(eventResult.Value);
+        await _DataContext.SaveChangesAsync();
+        await transactionContext.CommitAsync();
+        return OperationResult<Guid>.MakeSuccess(eventResult.Value.Identity);                    
     }
     catch (Exception ex)
     {
         _Logger.LogError("Error during the execution of the handler : {0}", ex);
-        return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+        return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
     }
 }
 ~~~

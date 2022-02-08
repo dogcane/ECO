@@ -25,4 +25,4 @@ using (var transactionContext = dataContext.BeginTransation())
 }
 ~~~
 
-Check the [Getting started guide](docs/Getting-started.md)
+Check the [Getting started guide](docs/Getting-started.md) or go to the [Summary](docs/Summary.md) of the docs.

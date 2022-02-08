@@ -8,17 +8,14 @@
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="NHibernate" Version="5.3.10" />
 	</ItemGroup>
-
 	<ItemGroup>
 	  <Folder Include="Configuration\" />
 	</ItemGroup>

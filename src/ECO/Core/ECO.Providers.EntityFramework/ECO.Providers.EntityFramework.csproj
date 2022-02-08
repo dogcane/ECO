@@ -4,15 +4,15 @@
 		<AssemblyTitle>ECO.Providers.EntityFramework</AssemblyTitle>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<FileVersion>2.0.0.0</FileVersion>
+		<Version>2.0.0</Version>
 		<Product>Enterprise CLR Objects - Entity Framework provider</Product>
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <ProjectReference Include="..\ECO\ECO.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>
 </Project>

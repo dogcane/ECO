@@ -1,0 +1,3 @@
+# Aggregates, Entities and value objects
+
+To do...
