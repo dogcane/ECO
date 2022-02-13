@@ -1,6 +1,6 @@
 # Entities, aggregates and value objects
 
-[These objects](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/microservice-domain-model){:target="_blank"} are the skeleton of every "DDD" software and ECO helps to create your objects without rewriting again the same "old" stuff.
+[These objects](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/microservice-domain-model) are the skeleton of every "DDD" software and ECO helps to create your objects without rewriting again the same "old" stuff.
 
 ## Entities
 

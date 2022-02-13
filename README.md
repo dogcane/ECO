@@ -1,4 +1,8 @@
-# What is ECO
+# ECO
+
+<!---
+[![NuGet](http://img.shields.io/nuget/vpre/ECO.svg?label=NuGet)](https://github.com/dogcane/ECO/)
+--->
 
 ECO is a library that contains some base classes for DDD-development. It helps to avoid the creation of standard classes like Entity, AggregateRoot or ValueObject and it is based on the concept of "persistent unit".
 

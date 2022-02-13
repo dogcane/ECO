@@ -1,6 +1,6 @@
 # Repositories
 
-This is a "standard" implementation of the [repository pattern](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design#:~:text=The%20Repository%20pattern%20Repositories%20are%20classes%20or%20components,to%20access%20databases%20from%20the%20domain%20model%20layer.){:target="_blank"}:
+This is a "standard" implementation of the [repository pattern](https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design#:~:text=The%20Repository%20pattern%20Repositories%20are%20classes%20or%20components,to%20access%20databases%20from%20the%20domain%20model%20layer.):
 
 Every aggregate root can define its repository kind. ECO allows two kinds of repositories:
 
