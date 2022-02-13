@@ -1,13 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<AssemblyTitle>ECO.Providers.InMemory</AssemblyTitle>
+		<AssemblyTitle>ECO.Providers.EntityFramework.InMemory</AssemblyTitle>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<FileVersion>2.0.0.0</FileVersion>
 		<Version>2.0.0</Version>
-		<Product>Enterprise CLR Objects - In Memory provider</Product>
+		<Product>Enterprise CLR Objects - Entity Framework In Memory provider</Product>
+		<Description>ECO.Providers.EntityFramework.InMemory is the specific package for EFCore - In Memory and its persistence unit implementation. It requires the base ECO.Providers.EntityFramework package.</Description>
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Providers.EntityFramework.InMemory</PackageId>
+		<PackageVersion>2.0.0</PackageVersion>
+		<PackageTags>ddd aggregate entity repository persistence efcore inmemory</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />

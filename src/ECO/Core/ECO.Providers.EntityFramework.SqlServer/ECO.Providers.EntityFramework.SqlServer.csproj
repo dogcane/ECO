@@ -6,8 +6,17 @@
 		<FileVersion>2.0.0.0</FileVersion>
 		<Version>2.0.0</Version>
 		<Product>Enterprise CLR Objects - Entity Framework SqlServer provider</Product>
+		<Description>ECO.Providers.EntityFramework.SqlServer is the specific package for EFCore - Sql Server and its persistence unit implementation. It requires the base ECO.Providers.EntityFramework package.</Description>
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Providers.EntityFramework.SqlServer</PackageId>
+		<PackageVersion>2.0.0</PackageVersion>
+		<PackageTags>ddd aggregate entity repository persistence efcore sqlserver</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />

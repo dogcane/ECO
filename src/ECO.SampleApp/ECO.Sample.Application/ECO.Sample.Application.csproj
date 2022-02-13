@@ -9,6 +9,7 @@
 		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
 		<RestorePackages>true</RestorePackages>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />

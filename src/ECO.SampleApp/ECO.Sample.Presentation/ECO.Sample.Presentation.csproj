@@ -1,41 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="NHibernate" Version="5.3.10" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="NHibernate" Version="5.3.10" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.SqlServer\ECO.Providers.EntityFramework.SqlServer.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.NHibernate\ECO.Sample.Infrastructure.DAL.NHibernate.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.SqlServer\ECO.Providers.EntityFramework.SqlServer.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Application\ECO.Sample.Application.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.EntityFramework\ECO.Sample.Infrastructure.DAL.EntityFramework.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.InMemory\ECO.Sample.Infrastructure.DAL.InMemory.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Infrastructure.DAL.NHibernate\ECO.Sample.Infrastructure.DAL.NHibernate.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Areas\Events\Controllers\EventController.cs~RF335f2b3.TMP" />
-    <None Remove="Microsoft.Extensions.Logging.Abstractions" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Areas\Events\Controllers\EventController.cs~RF335f2b3.TMP" />
+		<None Remove="Microsoft.Extensions.Logging.Abstractions" />
+	</ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 </Project>

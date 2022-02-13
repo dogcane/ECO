@@ -6,8 +6,17 @@
 		<FileVersion>2.0.0.0</FileVersion>
 		<Version>2.0.0</Version>
 		<Product>Enterprise CLR Objects - Entity Framework provider</Product>
+		<Description>ECO.Providers.EntityFramework is the base package for EFCore. It contains all the basic EFCore stuff (repositories, contexts) but it's required to install also the EFCore specific provider (es. ECO.Providers.EntityFramework.SqlServer).</Description>
 		<Authors>Andrea Canegrati</Authors>
 		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>		
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Providers.EntityFramework</PackageId>
+		<PackageVersion>2.0.0</PackageVersion>
+		<PackageTags>ddd aggregate entity repository persistence efcore</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />

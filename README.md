@@ -25,4 +25,4 @@ using (var transactionContext = dataContext.BeginTransation())
 }
 ~~~
 
-Check the [Getting started guide](docs/Getting-started.md) or go to the [Summary](docs/Summary.md) of the docs.
+Check the [Getting started guide](https://github.com/dogcane/ECO/blob/master/docs/Getting-started.md) or go to the [Summary](https://github.com/dogcane/ECO/blob/master/docs/Summary.md) of the docs.

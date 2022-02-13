@@ -167,3 +167,5 @@ public async Task<OperationResult<Guid>> Handle(Command request, CancellationTok
 ~~~
 
 Our persistence stack is up & running!
+
+Go to the [Summary](https://github.com/dogcane/ECO/blob/master/docs/Summary.md) of the docs.
