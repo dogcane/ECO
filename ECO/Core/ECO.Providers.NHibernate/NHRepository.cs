@@ -26,7 +26,8 @@ namespace ECO.Providers.NHibernate
 
         public virtual async Task AddAsync(T item)
         {
-            await Task.Run(() => Add(item));
+            await GetCurrentSession().SaveAsync(item);
+
         }
 
         public virtual void Update(T item)
@@ -36,7 +37,8 @@ namespace ECO.Providers.NHibernate
 
         public virtual async Task UpdateAsync(T item)
         {
-            await Task.Run(() => Update(item));
+            //await Task.Run(() => Update(item));
+            await GetCurrentSession().UpdateAsync(item);
         }
 
         public virtual void Remove(T item)
@@ -46,7 +48,7 @@ namespace ECO.Providers.NHibernate
 
         public virtual async Task RemoveAsync(T item)
         {
-            await Task.Run(() => Remove(item));
+            await GetCurrentSession().DeleteAsync(item);
         }
 
         #endregion

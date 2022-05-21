@@ -25,7 +25,9 @@ namespace ECO.Providers.NHibernate
 
         public virtual async Task<T> LoadAsync(K identity)
         {
-            return await Task.Run(() => Load(identity));
+            //return await Task.Run(() => Load(identity));
+            if (typeof(K).IsClass && identity == null) return default(T);
+            return await GetCurrentSession().GetAsync<T>(identity);
         }
 
         #endregion
@@ -34,7 +36,7 @@ namespace ECO.Providers.NHibernate
 
         public IEnumerator<T> GetEnumerator()
         {
-            return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).AsEnumerable().GetEnumerator();
+            return GetCurrentSession().Query<T>().AsEnumerable().GetEnumerator();
         }
 
         #endregion
@@ -52,17 +54,17 @@ namespace ECO.Providers.NHibernate
 
         public Type ElementType
         {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).ElementType; }
+            get { return GetCurrentSession().Query<T>().ElementType; }
         }
 
         public System.Linq.Expressions.Expression Expression
         {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).Expression; }
+            get { return GetCurrentSession().Query<T>().Expression; }
         }
 
         public System.Linq.IQueryProvider Provider
         {
-            get { return nhl.LinqExtensionMethods.Query<T>(GetCurrentSession()).Provider; }
+            get { return GetCurrentSession().Query<T>().Provider; }
         }
 
         #endregion

@@ -1,17 +1,13 @@
-﻿using System;
+﻿using Automatonymous;
+using ECO.Data;
+using GreenPipes;
+using MassTransit;
+using MassTransit.Saga;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Automatonymous;
-using ECO.Data;
-using GreenPipes;
-using Magnum.StateMachine;
-using MassTransit;
-using MassTransit.Exceptions;
-using MassTransit.Pipeline;
-using MassTransit.Saga;
 
 namespace ECO.Integrations.MassTransit
 {

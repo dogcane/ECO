@@ -1,5 +1,5 @@
-﻿using System.Web.Http.Filters;
-using ECO.Data;
+﻿using ECO.Data;
+using System.Web.Http.Filters;
 
 namespace ECO.Integrations.Web.MVC
 {
@@ -23,6 +23,6 @@ namespace ECO.Integrations.Web.MVC
         {
             base.OnActionExecuted(actionExecutedContext);
             DataContext.Current.Close();
-        }        
+        }
     }
 }
