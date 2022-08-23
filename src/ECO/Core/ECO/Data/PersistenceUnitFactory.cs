@@ -32,6 +32,7 @@ namespace ECO.Data
 
         public IPersistenceUnitFactory AddPersistenceUnit(IPersistenceUnit persistenceUnit)
         {
+            if (persistenceUnit == null) throw new ArgumentNullException(nameof(persistenceUnit));
             _Units.Add(persistenceUnit.Name, persistenceUnit);
             foreach (var classType in persistenceUnit.Classes)
             {
@@ -42,6 +43,7 @@ namespace ECO.Data
 
         public IPersistenceUnit GetPersistenceUnit(string name)
         {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             if (_Units.ContainsKey(name))
             {
                 return _Units[name];
@@ -59,6 +61,7 @@ namespace ECO.Data
 
         public IPersistenceUnit GetPersistenceUnit(Type entityType)
         {
+            if (entityType == null) throw new ArgumentNullException(nameof(entityType));
             if (_Classes.ContainsKey(entityType))
             {
                 return _Classes[entityType];
@@ -68,8 +71,9 @@ namespace ECO.Data
                 foreach (Type registeredType in _Classes.Keys)
                 {
                     if (entityType.IsSubclassOf(registeredType))
-                    {
+                    {                        
                         IPersistenceUnit persistenceUnit = GetPersistenceUnit(registeredType);
+                        _Classes.Add(entityType, persistenceUnit);
                         return persistenceUnit;
                     }
                 }

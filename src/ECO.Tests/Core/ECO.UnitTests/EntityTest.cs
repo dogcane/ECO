@@ -1,4 +1,6 @@
 using ECO.UnitTests.Utils;
+using ECO.UnitTests.Utils.Foos;
+using System;
 using Xunit;
 
 namespace ECO.UnitTests
@@ -9,7 +11,7 @@ namespace ECO.UnitTests
         public void Should_identity_default_with_empty_constructor()
         {
             var entity = new EntityFoo();
-            Assert.Equal(default(int), entity.Identity);            
+            Assert.Equal(default, entity.Identity);            
         }
 
         [Fact]
@@ -44,11 +46,27 @@ namespace ECO.UnitTests
         }
 
         [Fact]
+        public void Should_entity_not_equal_to_null_value()
+        {
+            var entity1 = new EntityFoo(1);
+            Assert.False(object.Equals(entity1, null));
+            Assert.False(object.Equals(null, entity1));
+            Assert.False(entity1.Equals(null));
+        }
+
+        [Fact]
         public void Should_hashcode_equals_with_same_identity()
         {
             var entity1 = new EntityFoo(1);
             var entity2 = new EntityFoo(1);
             Assert.Equal(entity1.GetHashCode(), entity2.GetHashCode());
+        }
+
+        [Fact]
+        public void Should_hashcode_equals_to_static_combine_method()
+        {
+            var entity1 = new EntityFoo(1);
+            Assert.Equal(entity1.GetHashCode(), HashCode.Combine(1, typeof(EntityFoo)));
         }
     }
 }

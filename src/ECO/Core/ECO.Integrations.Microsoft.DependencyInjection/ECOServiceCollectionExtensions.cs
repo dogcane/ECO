@@ -1,9 +1,10 @@
-﻿using ECO.Data;
+﻿using ECO.Configuration;
+using ECO.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace ECO.Configuration
+namespace ECO.Integrations.Microsoft.DependencyInjection
 {
     public static class ECOServiceCollectionExtensions
     {

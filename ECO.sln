@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.UnitTests", "src\ECO.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{4B130EC4-28DE-49DE-AD54-6A6DE4F6A52B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Microsoft.DependencyInjection", "src\ECO\Core\ECO.Integrations.Microsoft.DependencyInjection\ECO.Integrations.Microsoft.DependencyInjection.csproj", "{092F0853-C157-4BB4-BE75-BF48D6F7D421}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{2E9EC597-A7EB-43DA-B66E-499F0C4DD526}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E9EC597-A7EB-43DA-B66E-499F0C4DD526}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E9EC597-A7EB-43DA-B66E-499F0C4DD526}.Release|Any CPU.Build.0 = Release|Any CPU
+		{092F0853-C157-4BB4-BE75-BF48D6F7D421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{092F0853-C157-4BB4-BE75-BF48D6F7D421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{092F0853-C157-4BB4-BE75-BF48D6F7D421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{092F0853-C157-4BB4-BE75-BF48D6F7D421}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,7 @@ Global
 		{C0914925-C762-4FDA-BFA0-F78C597232BA} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
 		{2E9EC597-A7EB-43DA-B66E-499F0C4DD526} = {4B130EC4-28DE-49DE-AD54-6A6DE4F6A52B}
 		{4B130EC4-28DE-49DE-AD54-6A6DE4F6A52B} = {D0C97673-5035-4ADF-92D5-386C3AF7C07E}
+		{092F0853-C157-4BB4-BE75-BF48D6F7D421} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

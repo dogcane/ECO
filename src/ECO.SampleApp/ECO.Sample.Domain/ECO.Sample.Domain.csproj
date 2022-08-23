@@ -8,6 +8,6 @@
 		<ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Resulz" Version="1.0.0" />
+		<PackageReference Include="Resulz" Version="1.1.0" />
 	</ItemGroup>
 </Project>

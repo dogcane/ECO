@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ECO.Configuration;
+using ECO.Integrations.Microsoft.DependencyInjection;
 using MediatR;
 using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.Repositories;

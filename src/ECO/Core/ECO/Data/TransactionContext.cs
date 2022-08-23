@@ -37,6 +37,7 @@ namespace ECO.Data
 
         internal TransactionContext(IDataContext dataContext, bool autoCommit)
         {
+            if (dataContext == null) throw new ArgumentNullException(nameof(dataContext));
             DataContext = dataContext;
             AutoCommit = autoCommit;
         }
@@ -50,7 +51,11 @@ namespace ECO.Data
 
         #region Public_Methods
 
-        public void EnlistDataTransaction(IDataTransaction transaction) => _Transactions.Add(transaction);
+        public void EnlistDataTransaction(IDataTransaction transaction)
+        {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            _Transactions.Add(transaction);
+        }
 
         public void Commit()
         {
@@ -70,7 +75,7 @@ namespace ECO.Data
             Status = TransactionStatus.RolledBack;
         }
 
-        public async Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             foreach (IDataTransaction tx in _Transactions)
             {
@@ -79,7 +84,7 @@ namespace ECO.Data
             Status = TransactionStatus.Committed;
         }
 
-        public async Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             foreach (IDataTransaction tx in _Transactions)
             {

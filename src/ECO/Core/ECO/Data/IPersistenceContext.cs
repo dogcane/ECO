@@ -18,23 +18,23 @@ namespace ECO.Data
 
         #region Methods
 
-        void Attach<T, K>(T entity) where T : IAggregateRoot<K>;
+        void Attach<T>(IAggregateRoot<T> entity);
 
-        void Detach<T, K>(T entity) where T : IAggregateRoot<K>;
+        void Detach<T>(IAggregateRoot<T> entity);
 
-        void Refresh<T, K>(T entity) where T : IAggregateRoot<K>;
+        void Refresh<T>(IAggregateRoot<T> entity);
 
-        PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>;
+        PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity);
 
         IDataTransaction BeginTransaction();
 
-        Task<IDataTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<IDataTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 
         void Close();
 
         void SaveChanges();
 
-        Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
         #endregion
     }

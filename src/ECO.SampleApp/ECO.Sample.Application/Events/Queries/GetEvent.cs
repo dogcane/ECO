@@ -48,7 +48,7 @@ namespace ECO.Sample.Application.Events.Queries
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
+                    return OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message));
                 }
             }
         }

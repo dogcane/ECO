@@ -35,6 +35,7 @@ namespace ECO.Data
 
         protected PersistenceUnitBase(string name, ILoggerFactory loggerFactory = null)
         {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             _Name = name;
             _LoggerFactory = loggerFactory;
             _Logger = loggerFactory?.CreateLogger<P>();
@@ -72,7 +73,7 @@ namespace ECO.Data
         #region Public_Methods
         public virtual void Initialize(IDictionary<string, string> extededAttributes)
         {
-            OnInitialize(extededAttributes);
+            if (extededAttributes != null) OnInitialize(extededAttributes);
         }
 
         public virtual IPersistenceContext CreateContext()
@@ -85,6 +86,7 @@ namespace ECO.Data
 
         public virtual IPersistenceUnit AddClass(Type classType)
         {
+            if (classType == null) throw new ArgumentNullException(nameof(classType));
             _Classes.Add(classType);
             return this;
         }
@@ -96,6 +98,7 @@ namespace ECO.Data
 
         public virtual IPersistenceUnit RemoveClass(Type classType)
         {
+            if (classType == null) throw new ArgumentNullException(nameof(classType));
             _Classes.Remove(classType);
             return this;
         }
@@ -107,12 +110,14 @@ namespace ECO.Data
 
         public virtual IPersistenceUnit AddUnitListener(IPersistenceUnitListener listener)
         {
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
             _Listeners.Add(listener);
             return this;
         }
 
         public virtual IPersistenceUnit RemoveUnitListener(IPersistenceUnitListener listener)
         {
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
             _Listeners.Remove(listener);
             return this;
         }

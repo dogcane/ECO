@@ -1,3 +1,5 @@
+using System;
+
 namespace ECO.Data
 {
     public abstract class PersistenceManagerBase<T, K> : IPersistenceManager<T, K>
@@ -16,7 +18,11 @@ namespace ECO.Data
 
         #region ~Ctor
 
-        protected PersistenceManagerBase(IDataContext dataContext) => _PersistenceContext = dataContext.GetCurrentContext(typeof(T));
+        protected PersistenceManagerBase(IDataContext dataContext)
+        {
+            if (dataContext == null) throw new ArgumentNullException(nameof(dataContext));
+            _PersistenceContext = dataContext.GetCurrentContext(typeof(T));
+        }
 
         #endregion
     }

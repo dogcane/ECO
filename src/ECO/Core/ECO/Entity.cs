@@ -23,7 +23,7 @@ namespace ECO
         /// <summary>
         /// Ctor
         /// </summary>
-        protected Entity() => Identity = default(T);
+        protected Entity() => Identity = default;
 
         /// <summary>
         /// Ctor
@@ -67,7 +67,7 @@ namespace ECO
         /// Method that returns the hash code for the current entity
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode() => HashCode.Combine(Identity, typeof(T));
+        public override int GetHashCode() => HashCode.Combine(Identity, GetType());
 
         #endregion
     }

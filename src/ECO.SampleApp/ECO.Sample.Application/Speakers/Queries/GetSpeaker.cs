@@ -38,21 +38,17 @@ namespace ECO.Sample.Application.Speakers.Queries
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Speaker speaker = _SpeakerRepository.Load(request.SpeakerCode);
-                    if (speaker != null)
+                    Speaker speaker = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
+                    if (speaker == null)
                     {
-                        SpeakerDetail speakerDetail = _Mapper.Map<SpeakerDetail>(speaker);
-                        return await Task.FromResult(OperationResult<SpeakerDetail>.MakeSuccess(speakerDetail));
+                        return OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND"));
                     }
-                    else
-                    {
-                        return await Task.FromResult(OperationResult<SpeakerDetail>.MakeFailure());
-                    }
+                    return OperationResult<SpeakerDetail>.MakeSuccess(_Mapper.Map<SpeakerDetail>(speaker));
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message));
                 }                
             }
         }

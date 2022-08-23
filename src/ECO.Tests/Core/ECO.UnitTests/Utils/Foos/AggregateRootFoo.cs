@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECO.UnitTests.Utils
+namespace ECO.UnitTests.Utils.Foos
 {
     public class AggregateRootFoo : AggregateRoot<int>
     {

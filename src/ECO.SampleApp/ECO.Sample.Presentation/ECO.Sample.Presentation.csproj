@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\ECO\Core\ECO.Integrations.Microsoft.DependencyInjection\ECO.Integrations.Microsoft.DependencyInjection.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.SqlServer\ECO.Providers.EntityFramework.SqlServer.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />

@@ -28,6 +28,8 @@ namespace ECO.Providers.EntityFramework
 
         private EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context, IDbContextTransaction transaction)
         {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            if (context == null) throw new ArgumentNullException(nameof(context));
             Transaction = transaction;
             Context = context;
         }

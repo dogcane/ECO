@@ -18,9 +18,9 @@ namespace ECO.Data
         void Close();
         void SaveChanges();
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
-        void Attach<T, K>(T entity) where T : IAggregateRoot<K>;
-        void Detach<T, K>(T entity) where T : IAggregateRoot<K>;
-        void Refresh<T, K>(T entity) where T : IAggregateRoot<K>;
+        void Attach<T>(IAggregateRoot<T> entity);
+        void Detach<T>(IAggregateRoot<T> entity);
+        void Refresh<T>(IAggregateRoot<T> entity);
         ITransactionContext BeginTransaction();
         ITransactionContext BeginTransaction(bool autoCommit);
         Task<ITransactionContext> BeginTransactionAsync(CancellationToken cancellationToken = default);
@@ -28,7 +28,7 @@ namespace ECO.Data
         IPersistenceContext GetCurrentContext<T>();
         IPersistenceContext GetCurrentContext(object entity);
         IPersistenceContext GetCurrentContext(Type entityType);
-        PersistenceState GetPersistenceState<T, K>(T entity) where T : IAggregateRoot<K>;
+        PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity);
 
         #endregion
     }

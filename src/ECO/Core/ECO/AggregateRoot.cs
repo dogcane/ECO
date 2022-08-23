@@ -11,21 +11,13 @@
         /// <summary>
         /// Ctor
         /// </summary>
-        protected AggregateRoot()
-            : base()
-        {
-
-        }
+        protected AggregateRoot() : base() { }
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="identity"></param>
-        protected AggregateRoot(T identity)
-            : base(identity)
-        {
-
-        }
+        protected AggregateRoot(T identity) : base(identity) { }
 
         #endregion
     }

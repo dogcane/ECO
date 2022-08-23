@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ECO.Data
@@ -7,7 +8,11 @@ namespace ECO.Data
     {
         #region Ctor
 
-        public NullDataTransaction(IPersistenceContext context) => Context = context;
+        public NullDataTransaction(IPersistenceContext context)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            Context = context;
+        }
 
         #endregion
 

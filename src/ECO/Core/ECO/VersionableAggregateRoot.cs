@@ -23,16 +23,14 @@ namespace ECO
         /// <summary>
         /// Ctor
         /// </summary>
-        protected VersionableAggregateRoot()
-            : base() => Version = 1;
+        protected VersionableAggregateRoot() : base() => Version = 1;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="id"></param>
         /// <param name="version"></param>
-        protected VersionableAggregateRoot(T id, int version)
-            : base(id) => Version = version;
+        protected VersionableAggregateRoot(T id, int version) : base(id) => Version = version;
 
         #endregion
     }

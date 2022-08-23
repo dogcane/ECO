@@ -32,6 +32,7 @@ namespace ECO.Data
 
         public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext> logger = null)
         {
+            if (persistenceUnitFactory == null) throw new ArgumentNullException(nameof(persistenceUnitFactory));
             _PersistenceUnitFactory = persistenceUnitFactory;
             _Logger = logger;
             _Logger?.LogDebug($"Data context '{DataContextId}' is opening");
@@ -48,6 +49,7 @@ namespace ECO.Data
 
         private IPersistenceContext InitializeOrReturnContext(Type entityType)
         {
+            if (entityType == null) throw new ArgumentNullException(nameof(entityType));
             IPersistenceUnit persistenceUnit = _PersistenceUnitFactory.GetPersistenceUnit(entityType);
             string persistenceUnitName = persistenceUnit.Name;
             if (!_Contexts.ContainsKey(persistenceUnitName))
@@ -113,17 +115,13 @@ namespace ECO.Data
             }
         }
 
-        public void Attach<T, K>(T entity)
-            where T : IAggregateRoot<K> => GetCurrentContext(entity).Attach<T, K>(entity);
+        public void Attach<T>(IAggregateRoot<T> entity) => GetCurrentContext(entity).Attach(entity);
 
-        public void Detach<T, K>(T entity)
-            where T : IAggregateRoot<K> => GetCurrentContext(entity).Detach<T, K>(entity);
+        public void Detach<T>(IAggregateRoot<T> entity) => GetCurrentContext(entity).Detach(entity);
 
-        public void Refresh<T, K>(T entity)
-            where T : IAggregateRoot<K> => GetCurrentContext(entity).Refresh<T, K>(entity);
+        public void Refresh<T>(IAggregateRoot<T> entity) => GetCurrentContext(entity).Refresh(entity);
 
-        public PersistenceState GetPersistenceState<T, K>(T entity)
-            where T : IAggregateRoot<K> => GetCurrentContext(entity).GetPersistenceState<T, K>(entity);
+        public PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity) => GetCurrentContext(entity).GetPersistenceState(entity);
 
         public IPersistenceContext GetCurrentContext<T>() => GetCurrentContext(typeof(T));
 
@@ -138,7 +136,7 @@ namespace ECO.Data
                 persistenceContext.SaveChanges();
             }
         }
-        public async Task SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (IPersistenceContext persistenceContext in _Contexts.Values)
             {

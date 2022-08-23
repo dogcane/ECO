@@ -36,12 +36,12 @@ namespace ECO.Sample.Application.Events.Commands
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event eventEntity = _EventRepository.Load(request.EventCode);
+                    Event eventEntity = await _EventRepository.LoadAsync(request.EventCode);
                     if (eventEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
-                    Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
+                    Speaker speakerEntity = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
                     if (speakerEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND"));
@@ -52,14 +52,14 @@ namespace ECO.Sample.Application.Events.Commands
                         return sessionResult;
                     }
                     await _EventRepository.UpdateAsync(eventEntity);
-                    await _DataContext.SaveChangesAsync();
-                    await transactionContext.CommitAsync();
+                    await _DataContext.SaveChangesAsync(cancellationToken);
+                    await transactionContext.CommitAsync(cancellationToken);
                     return OperationResult.MakeSuccess();
                 }
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
+                    return OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message));
                 }
             }
         }

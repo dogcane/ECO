@@ -21,7 +21,13 @@ namespace ECO.Providers.EntityFramework
 
         #endregion
 
-        #region Public_Methods
+        #region Protected_Methods
+
+        protected override void OnAttach<T>(IAggregateRoot<T> entity) => Context.Attach(entity);
+
+        protected override void OnRefresh<T>(IAggregateRoot<T> entity) => Context.Entry(entity).Reload();
+
+        protected override void OnDetach<T>(IAggregateRoot<T> entity) => Context.Entry(entity).State = EntityState.Detached;
 
         protected override IDataTransaction OnBeginTransaction() => EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransaction(this);
 

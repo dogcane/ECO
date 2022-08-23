@@ -18,7 +18,7 @@ namespace ECO.Providers.EntityFramework
 
         public virtual void Add(T item) => DbContext.Set<T>().Add(item);
 
-        public virtual async Task AddAsync(T item) => await DbContext.Set<T>().AddAsync(item);
+        public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item));
 
         public virtual void Update(T item) => DbContext.Set<T>().Update(item);
 

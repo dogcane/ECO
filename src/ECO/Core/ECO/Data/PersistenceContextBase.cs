@@ -20,6 +20,7 @@ namespace ECO.Data
 
         protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P> logger = null)
         {
+            if (persistenceUnit == null) throw new ArgumentNullException(nameof(persistenceUnit));
             PersistenceContextId = Guid.NewGuid();
             PersistenceUnit = persistenceUnit;
             _Logger = logger;
@@ -54,22 +55,22 @@ namespace ECO.Data
         }
         protected virtual async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Task.Run(() => OnSaveChanges());
 
-        protected virtual void OnAttach<T, K>(T entity) where T : IAggregateRoot<K>
+        protected virtual void OnAttach<T>(IAggregateRoot<T> entity)
         {
 
         }
 
-        protected virtual void OnDetach<T, K>(T entity) where T : IAggregateRoot<K>
+        protected virtual void OnDetach<T>(IAggregateRoot<T> entity)
         {
 
         }
 
-        protected virtual void OnRefresh<T, K>(T entity) where T : IAggregateRoot<K>
+        protected virtual void OnRefresh<T>(IAggregateRoot<T> entity)
         {
 
         }
 
-        protected virtual PersistenceState OnGetPersistenceState<T, K>(T entity) => PersistenceState.Unknown;
+        protected virtual PersistenceState OnGetPersistenceState<T>(IAggregateRoot<T> entity) => PersistenceState.Unknown;
 
         #endregion
 
@@ -81,32 +82,32 @@ namespace ECO.Data
 
         public IDataTransaction Transaction { get; private set; }
 
-        public void Attach<T, K>(T entity)
-            where T : IAggregateRoot<K>
+        public void Attach<T>(IAggregateRoot<T> entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Attaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
-            OnAttach<T, K>(entity);
+            OnAttach(entity);
         }
 
-        public void Detach<T, K>(T entity)
-            where T : IAggregateRoot<K>
+        public void Detach<T>(IAggregateRoot<T> entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Detaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
-            OnDetach<T, K>(entity);
+            OnDetach(entity);
         }
 
-        public void Refresh<T, K>(T entity)
-            where T : IAggregateRoot<K>
+        public void Refresh<T>(IAggregateRoot<T> entity)            
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Refreshing entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
-            OnRefresh<T, K>(entity);
+            OnRefresh(entity);
         }
 
-        public PersistenceState GetPersistenceState<T, K>(T entity)
-            where T : IAggregateRoot<K>
+        public PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity)            
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Get Persistence State for entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
-            return OnGetPersistenceState<T, K>(entity);
+            return OnGetPersistenceState(entity);
         }
 
         public IDataTransaction BeginTransaction()

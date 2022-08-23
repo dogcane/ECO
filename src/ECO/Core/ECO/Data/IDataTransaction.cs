@@ -33,12 +33,12 @@ namespace ECO.Data
         /// <summary>
         /// Method that commits the transaction asynchronously
         /// </summary>
-        Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task CommitAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Method that rollbacks the transaction asynchronously
         /// </summary>
-        Task RollbackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task RollbackAsync(CancellationToken cancellationToken = default);
 
         #endregion
     }

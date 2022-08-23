@@ -51,7 +51,7 @@ namespace ECO.Sample.Application.Speakers.Queries
                 catch (Exception ex)
                 {
                     _Logger.LogError("Error during the execution of the handler : {0}", ex);
-                    return await Task.FromResult(OperationResult.MakeFailure().AppendError("Handle", ex.Message));
+                    return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message)));
                 }
             }
         }

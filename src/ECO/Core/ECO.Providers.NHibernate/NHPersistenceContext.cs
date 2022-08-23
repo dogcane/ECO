@@ -43,23 +43,23 @@ namespace ECO.Providers.NHibernate
             Session.Clear();
         }
 
-        protected override void OnAttach<T, K>(T entity)
+        protected override void OnAttach<T>(IAggregateRoot<T> entity)
         {
             try
             {
                 Session.Lock(entity, nh.LockMode.None);
             }
             catch (nh.NonUniqueObjectException)
-            {
-                entity = Session.Load<T>(entity.Identity);
+            {   
+                entity = Session.Load(entity.GetType(), entity.Identity) as IAggregateRoot<T>;
             }
         }
 
-        protected override void OnDetach<T, K>(T entity) => Session.Evict(entity);
+        protected override void OnDetach<T>(IAggregateRoot<T> entity) => Session.Evict(entity);
 
-        protected override void OnRefresh<T, K>(T entity) => Session.Refresh(entity);
+        protected override void OnRefresh<T>(IAggregateRoot<T> entity) => Session.Refresh(entity);
 
-        protected override PersistenceState OnGetPersistenceState<T, K>(T entity)
+        protected override PersistenceState OnGetPersistenceState<T>(IAggregateRoot<T> entity)
         {
             if (Session.Contains(entity))
             {

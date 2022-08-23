@@ -13,7 +13,7 @@ namespace ECO.Data
         #region Ctor
 
         public PersistentClassNotRegisteredException(Type persistenClassType)
-            : base($"Persistent class '{persistenClassType.Name}' not registered") => PersistentClassType = persistenClassType;
+            : base($"Persistent class '{persistenClassType?.Name}' not registered") => PersistentClassType = persistenClassType;
 
         #endregion
     }

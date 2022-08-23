@@ -19,16 +19,14 @@ namespace ECO
         /// <summary>
         /// Ctor
         /// </summary>
-        protected VersionableEntity()
-            : base() => Version = 1;
+        protected VersionableEntity() : base() => Version = 1;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="id"></param>
         /// <param name="version"></param>
-        protected VersionableEntity(T id, int version)
-            : base(id) => Version = version;
+        protected VersionableEntity(T id, int version) : base(id) => Version = version;
 
         #endregion
     }

@@ -1,4 +1,5 @@
 using ECO.UnitTests.Utils;
+using ECO.UnitTests.Utils.Foos;
 using Xunit;
 
 namespace ECO.UnitTests
