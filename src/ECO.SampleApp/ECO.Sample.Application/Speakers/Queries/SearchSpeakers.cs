@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ECO.Data;
+using ECO.Sample.Application.Events.DTO;
 using ECO.Sample.Application.Speakers.DTO;
 using ECO.Sample.Domain;
 using MediatR;
@@ -45,7 +46,11 @@ namespace ECO.Sample.Application.Speakers.Queries
                     {
                         query = query.Where(entity => entity.Name.Contains(request.NameOrSurname) || entity.Surname.Contains(request.NameOrSurname));
                     }
+#if !MONGODB
                     var speakers = _Mapper.ProjectTo<SpeakerItem>(query);
+#else
+                    var speakers = _Mapper.Map<IEnumerable<SpeakerItem>>(query);
+#endif                    
                     return await Task.FromResult(OperationResult<IEnumerable<SpeakerItem>>.MakeSuccess(speakers));
                 }
                 catch (Exception ex)

@@ -1,50 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MongoDB.Bson;
+﻿using ECO.Data;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Driver.Linq;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.MongoDB
 {
     public class MongoRepository<T, K> : MongoReadOnlyRepository<T, K>, IRepository<T, K>
         where T : class, IAggregateRoot<K>
     {
+        #region Ctor
+
+        public MongoRepository(string collectionName, IDataContext dataContext)
+            : base(collectionName, dataContext)
+        {
+
+        }
+
+        public MongoRepository(IDataContext dataContext)
+            : base(dataContext)
+        {
+
+        }
+
+        #endregion
+
         #region IRepository<T,K> Members
 
-        public void Add(T item)
-        {
-            GetCurrentCollection().Save(item);
-        }
+        public void Add(T item) => Collection.InsertOne(item);
 
-        public async Task AddAsync(T item)
-        {
-            await Task.Run(() => Add(item));
-        }
+        public async Task AddAsync(T item) => await Collection.InsertOneAsync(item);
 
-        public void Update(T item)
-        {
-            GetCurrentCollection().Save(item);
-        }
+        public void Update(T item) => Collection.ReplaceOne(Builders<T>.Filter.Eq("Identity", item.Identity), item);
 
-        public async Task UpdateAsync(T item)
-        {
-            await Task.Run(() => Update(item));
-        }
+        public async Task UpdateAsync(T item) => await Collection.ReplaceOneAsync(Builders<T>.Filter.Eq("Identity", item.Identity), item);
 
-        public void Remove(T item)
-        {
-            GetCurrentCollection().Remove(Query<T>.EQ(e => e.Identity, item.Identity));
-        }
+        public void Remove(T item) => Collection.DeleteOne(Builders<T>.Filter.Eq("Identity", item.Identity));
 
-        public async Task RemoveAsync(T item)
-        {
-            await Task.Run(() => Remove(item));
-        }
+        public async Task RemoveAsync(T item) => await Collection.DeleteOneAsync(Builders<T>.Filter.Eq("Identity", item.Identity));
 
         #endregion
     }

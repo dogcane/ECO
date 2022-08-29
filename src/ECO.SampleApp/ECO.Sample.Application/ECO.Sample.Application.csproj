@@ -11,14 +11,22 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Resulz" Version="1.1.0" />
-  </ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;MONGODB</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;MONGODB</DefineConstants>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Resulz" Version="1.1.0" />
+	</ItemGroup>
 </Project>

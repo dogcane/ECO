@@ -35,9 +35,9 @@ namespace ECO.Data
 
         #region Protected_Methods
 
-        protected abstract IDataTransaction OnBeginTransaction();
+        protected virtual IDataTransaction OnBeginTransaction() => new NullDataTransaction(this);
 
-        protected abstract Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default);
+        protected virtual async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await Task.FromResult(OnBeginTransaction());
 
         protected virtual void OnClose()
         {

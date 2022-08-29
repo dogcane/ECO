@@ -53,7 +53,11 @@ namespace ECO.Sample.Application.Events.Queries
                     {
                         query = query.Where(entity => entity.Name.Contains(request.EventName));
                     }
+#if !MONGODB
                     var events = _Mapper.ProjectTo<EventItem>(query);
+#else
+                    var events = _Mapper.Map<IEnumerable<EventItem>>(query);
+#endif
                     return await Task.FromResult(OperationResult<IEnumerable<EventItem>>.MakeSuccess(events));
                 }
                 catch (Exception ex)

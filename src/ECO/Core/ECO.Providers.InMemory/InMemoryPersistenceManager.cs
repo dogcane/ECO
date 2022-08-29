@@ -1,4 +1,5 @@
 ﻿using ECO.Data;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ECO.Providers.InMemory
@@ -8,11 +9,7 @@ namespace ECO.Providers.InMemory
     {
         #region Fields - Memory Storage
 
-        protected static object _SycnLock = new object();
-
-        protected static IDictionary<K, T> _IdentityMap = new Dictionary<K, T>();
-
-        protected static IList<T> _EntitySet = new List<T>();
+        protected static ConcurrentDictionary<K, T> _EntitySet = new ConcurrentDictionary<K, T>();
 
         #endregion
 

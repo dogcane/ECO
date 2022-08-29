@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ECO.Data;
-using ECO.Providers.MongoDB.Serializers;
-using MongoDB.Bson.Serialization;
+﻿using ECO.Data;
 using MongoDB.Driver;
 
 namespace ECO.Providers.MongoDB
@@ -14,29 +8,27 @@ namespace ECO.Providers.MongoDB
     {
         #region Ctor
 
-        protected MongoPersistenceManager()
+        protected MongoPersistenceManager(IDataContext dataContext) : this(typeof(T).Name, dataContext)
         {
-            
+
+        }
+
+        protected MongoPersistenceManager(string collectionName, IDataContext dataContext) : base(dataContext)
+        {
+            Database = (PersistenceContext as MongoPersistenceContext).Database;
+            IdentityMap = (PersistenceContext as MongoPersistenceContext).IdentityMap;
+            Collection = Database.GetCollection<T>(collectionName);
         }
 
         #endregion
 
-        #region Protected_Methods
+        #region Properties
 
-        protected MongoDatabase GetCurrentDatabase()
-        {
-            return (GetCurrentContext() as MongoPersistenceContext).Database;
-        }
+        public IMongoDatabase Database { get; }
 
-        protected MongoCollection GetCurrentCollection()
-        {
-            return GetCurrentDatabase().SafeGetCollectionForType<T>();
-        }
+        public MongoIdentityMap IdentityMap { get; }
 
-        protected MongoIdentityMap GetCurrentIdentityMap()
-        {
-            return (GetCurrentContext() as MongoPersistenceContext).IdentityMap;
-        }
+        public IMongoCollection<T> Collection { get; }
 
         #endregion
     }

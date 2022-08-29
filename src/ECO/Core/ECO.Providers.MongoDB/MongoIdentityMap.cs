@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECO.Providers.MongoDB
 {
@@ -11,53 +7,25 @@ namespace ECO.Providers.MongoDB
     {
         #region Fields
 
-        private IDictionary<object, object> _Map = new Dictionary<object, object>();
+        private ConcurrentDictionary<object, object> _Map = new ConcurrentDictionary<object, object>();
 
         #endregion
 
         #region Properties
 
-        public IEnumerable<object> Keys
-        {
-            get { return _Map.Keys; }
-        }
+        public IEnumerable<object> Keys => _Map.Keys;
 
         public object this[object indexer]
         {
-            get
-            {
-                return _Map.ContainsKey(indexer) ? _Map[indexer] : null;
-            }
-            set
-            {
-                if (!_Map.ContainsKey(indexer))
-                {
-                    _Map.Add(indexer, value);
-                }
-                else
-                {
-                    _Map[indexer] = value;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Ctor
-
-        public MongoIdentityMap()
-        {
-
+            get => _Map.ContainsKey(indexer) ? _Map[indexer] : null;
+            set => _Map.AddOrUpdate(indexer, value, (@old, @new) => @new);
         }
 
         #endregion
 
         #region Methods
 
-        public bool ContainsIdentity(object identity)
-        {
-            return _Map.ContainsKey(identity);
-        }
+        public bool ContainsIdentity(object identity) => _Map.ContainsKey(identity);
 
         #endregion
     }

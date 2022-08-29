@@ -21,14 +21,7 @@ namespace ECO.Providers.InMemory
 
         #region IReadOnlyRepository<T,K> Membri di
 
-        public virtual T Load(K identity)
-        {
-            lock (_SycnLock)
-            {
-                _IdentityMap.TryGetValue(identity, out T entity);
-                return entity;
-            }
-        }
+        public virtual T Load(K identity) => _EntitySet.TryGetValue(identity, out T entity) ? entity : null;
 
         public virtual async Task<T> LoadAsync(K identity) => await Task.FromResult(Load(identity));
 
@@ -36,25 +29,13 @@ namespace ECO.Providers.InMemory
 
         #region IEnumerable<T> Membri di
 
-        public virtual IEnumerator<T> GetEnumerator()
-        {
-            lock (_SycnLock)
-            {
-                return _EntitySet.ToList().GetEnumerator();
-            }
-        }
+        public virtual IEnumerator<T> GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
 
         #endregion
 
         #region IEnumerable Membri di
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            lock (_SycnLock)
-            {
-                return _EntitySet.ToList().GetEnumerator();
-            }
-        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
 
         #endregion
 

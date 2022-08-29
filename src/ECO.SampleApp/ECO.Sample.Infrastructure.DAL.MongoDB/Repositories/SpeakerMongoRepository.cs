@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ECO;
+﻿using ECO.Data;
 using ECO.Providers.MongoDB;
-
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.IdGenerators;
-
 using ECO.Sample.Domain;
+using System;
 
 namespace ECO.Sample.Infrastructure.Repositories
 {
     public class SpeakerMongoRepository : MongoRepository<Speaker, Guid>, ISpeakerRepository
     {
+        public SpeakerMongoRepository(IDataContext dataContext)
+            : base(dataContext)
+        {
 
+        }
     }
 }

@@ -16,13 +16,5 @@ namespace ECO.Providers.InMemory
         }
 
         #endregion
-
-        #region Methods
-
-        protected override IDataTransaction OnBeginTransaction() => new NullDataTransaction(this);
-
-        protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await Task.FromResult(OnBeginTransaction());
-
-        #endregion
     }
 }

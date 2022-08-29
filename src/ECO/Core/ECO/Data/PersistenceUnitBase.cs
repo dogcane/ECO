@@ -68,6 +68,26 @@ namespace ECO.Data
             }
         }
 
+        protected virtual void OnClassAdded(Type classType)
+        {
+
+        }
+
+        protected virtual void OnClassRemoved(Type classType)
+        {
+
+        }
+
+        protected virtual void OnUnitListenerAdded(IPersistenceUnitListener listener)
+        {
+
+        }
+
+        protected virtual void OnUnitListenerRemoved(IPersistenceUnitListener listener)
+        {
+
+        }
+
         #endregion
 
         #region Public_Methods
@@ -88,6 +108,7 @@ namespace ECO.Data
         {
             if (classType == null) throw new ArgumentNullException(nameof(classType));
             _Classes.Add(classType);
+            OnClassAdded(classType);
             return this;
         }
 
@@ -100,6 +121,7 @@ namespace ECO.Data
         {
             if (classType == null) throw new ArgumentNullException(nameof(classType));
             _Classes.Remove(classType);
+            OnClassRemoved(classType);
             return this;
         }
 
@@ -112,6 +134,7 @@ namespace ECO.Data
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
             _Listeners.Add(listener);
+            OnUnitListenerAdded(listener);
             return this;
         }
 
@@ -119,6 +142,7 @@ namespace ECO.Data
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
             _Listeners.Remove(listener);
+            OnUnitListenerRemoved(listener);
             return this;
         }
 

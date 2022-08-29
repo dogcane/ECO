@@ -18,53 +18,15 @@ namespace ECO.Providers.InMemory
 
         #region IRepository<T> Membri di
 
-        public virtual void Add(T item)
-        {
-            if (!_IdentityMap.ContainsKey(item.Identity))
-            {
-                lock (_SycnLock)
-                {
-                    if (!_IdentityMap.ContainsKey(item.Identity))
-                    {
-                        _IdentityMap.Add(item.Identity, item);
-                        _EntitySet.Add(item);
-                    }
-                }
-            }
-        }
+        public virtual void Add(T item) => _EntitySet.TryAdd(item.Identity, item);
 
         public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item));
 
-        public virtual void Update(T item)
-        {
-            if (_IdentityMap.ContainsKey(item.Identity))
-            {
-                lock (_SycnLock)
-                {
-                    if (_IdentityMap.ContainsKey(item.Identity))
-                    {
-                        _EntitySet[_EntitySet.IndexOf(item)] = item;
-                    }
-                }
-            }
-        }
+        public virtual void Update(T item) => _EntitySet.TryUpdate(item.Identity, item, _EntitySet[item.Identity]);
 
         public virtual async Task UpdateAsync(T item) => await Task.Run(() => Update(item));
 
-        public virtual void Remove(T item)
-        {
-            if (_IdentityMap.ContainsKey(item.Identity))
-            {
-                lock (_SycnLock)
-                {
-                    if (_IdentityMap.ContainsKey(item.Identity))
-                    {
-                        _IdentityMap.Remove(item.Identity);
-                        _EntitySet.Remove(item);
-                    }
-                }
-            }
-        }
+        public virtual void Remove(T item) => _EntitySet.TryRemove(item.Identity, out _);
 
         public virtual async Task RemoveAsync(T item) => await Task.Run(() => Remove(item));
 

@@ -1,80 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson.IO;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Reflection;
+//using System.Text;
+//using System.Threading.Tasks;
+//using ECO.Data;
+//using MongoDB.Bson.IO;
+//using MongoDB.Bson.Serialization;
+//using MongoDB.Bson.Serialization.Serializers;
 
-namespace ECO.Providers.MongoDB.Serializers
-{
-    /// <summary>
-    /// ??? WORK IN PROGRESS
-    /// </summary>
-    public class IdentityMapSerializer : BsonBaseSerializer
-    {
-        #region Private_Methods
+//namespace ECO.Providers.MongoDB.Serializers
+//{
+//    /// <summary>
+//    /// ??? WORK IN PROGRESS
+//    /// </summary>
+//    public class IdentityMapSerializer<T, K> : ClassSerializerBase<T> where T : class, IAggregateRoot<K>
+//    {
 
-        private MongoIdentityMap GetCurrentIdentityMap(Type nominalType)
-        {
-            return ((MongoPersistenceContext)ECO.Data.PersistenceUnitFactory.Instance.GetPersistenceUnit(nominalType).GetCurrentContext()).IdentityMap;
-        }
+//        #region Ctor
 
-        private object GetECOIdentity(object @entity)
-        {
-            var property = @entity.GetType().GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-            return property.GetValue(@entity);
-        }
+//        public IdentityMapSerializer()
+//        {
+//        }
 
-        #endregion
+//        #endregion
 
-        #region Properties
+//        #region Private_Methods
 
-        private static IdentityMapSerializer _Instance = new IdentityMapSerializer();
+//        private MongoIdentityMap GetCurrentIdentityMap(Type nominalType)
+//        {            
+//            return ((MongoPersistenceContext)ECO.Data.PersistenceUnitFactory.Instance.GetPersistenceUnit(nominalType).GetCurrentContext()).IdentityMap;
+//        }
 
-        public static IdentityMapSerializer Instance
-        {
-            get { return _Instance; }
-        }
+//        private object GetECOIdentity(object @entity)
+//        {
+//            var property = @entity.GetType().GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+//            return property.GetValue(@entity);
+//        }
 
-        #endregion
+//        #endregion
 
-        #region IBsonSerializer Members
+//        #region Properties
 
-        public override object Deserialize(BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
-        {
-            var entityMap = GetCurrentIdentityMap(nominalType);
-            var entity = base.Deserialize(bsonReader, nominalType, options);
-            var identity = GetECOIdentity(entity);
-            var entityFromMap = entityMap[identity];
-            if (entityFromMap == null)
-            {
-                entityMap[identity] = entity;
-            }
-            return entityFromMap ?? entity;
-        }
+//        private static IdentityMapSerializer _Instance = new IdentityMapSerializer();
 
-        public override object Deserialize(BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
-        {
-            var entityMap = GetCurrentIdentityMap(nominalType);
-            var entity = base.Deserialize(bsonReader, nominalType, actualType, options);
-            var identity = GetECOIdentity(entity);
-            var entityFromMap = entityMap[identity];
-            if (entityFromMap == null)
-            {
-                entityMap[identity] = entity;
-            }
-            return entityFromMap ?? entity;
-        }
+//        public static IdentityMapSerializer Instance
+//        {
+//            get { return _Instance; }
+//        }
 
-        public override void Serialize(BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
-        {
-            base.Serialize(bsonWriter, nominalType, value, options);
-            GetCurrentIdentityMap(nominalType)[GetECOIdentity(value)] = value;
-        }
+//        public Type ValueType => throw new NotImplementedException();
 
-        #endregion
-    }
-}
+//        #endregion
+
+//        #region IBsonSerializer Members
+
+//        public object Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        public void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        /*
+//        public override object Deserialize(BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
+//        {
+//            var entityMap = GetCurrentIdentityMap(nominalType);
+//            var entity = base.Deserialize(bsonReader, nominalType, actualType, options);
+//            var identity = GetECOIdentity(entity);
+//            var entityFromMap = entityMap[identity];
+//            if (entityFromMap == null)
+//            {
+//                entityMap[identity] = entity;
+//            }
+//            return entityFromMap ?? entity;
+//        }
+
+//        public override void Serialize(BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
+//        {
+//            base.Serialize(bsonWriter, nominalType, value, options);
+//            GetCurrentIdentityMap(nominalType)[GetECOIdentity(value)] = value;
+//        }
+//        */
+
+//        #endregion
+//    }
+//}

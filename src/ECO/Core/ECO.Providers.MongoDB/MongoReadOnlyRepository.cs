@@ -1,75 +1,69 @@
-﻿using System;
+﻿using ECO.Data;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Driver.Linq;
 
 namespace ECO.Providers.MongoDB
 {
     public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
         where T : class, IAggregateRoot<K>
     {
+        #region Ctor
+
+        public MongoReadOnlyRepository(string collectionName, IDataContext dataContext)
+            : base(collectionName, dataContext)
+        {
+
+        }
+
+        public MongoReadOnlyRepository(IDataContext dataContext)
+            : base(dataContext)
+        {
+
+        }
+
+        #endregion
+
         #region IReadOnlyRepository<T,K> Members
 
-        public T Load(K identity)
+        public virtual T Load(K identity)
         {
             if (typeof(K).IsClass && identity == null) return default(T);
-            if (GetCurrentIdentityMap().ContainsIdentity(identity))
+            if (IdentityMap.ContainsIdentity(identity))
             {
-                return (T)GetCurrentIdentityMap()[identity];
+                return (T)IdentityMap[identity];
             }
             else
             {
-                return GetCurrentCollection().FindOneAs<T>(Query.EQ("_id", BsonValue.Create(identity)));
+                return Collection.Find(Builders<T>.Filter.Eq("Identity", identity)).FirstOrDefault();
             }
         }
 
-        public async Task<T> LoadAsync(K identity)
-        {
-            return await Task.Run(() => Load(identity));
-        }
+        public virtual async Task<T> LoadAsync(K identity) => await Task.Run(() => Load(identity));
 
         #endregion
 
         #region IEnumerable<T> Members
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return GetCurrentCollection().AsQueryable<T>().GetEnumerator();
-        }
+        public virtual IEnumerator<T> GetEnumerator() => Collection.AsQueryable().GetEnumerator();
 
         #endregion
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetCurrentCollection().AsQueryable<T>().GetEnumerator();
-        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => Collection.AsQueryable().GetEnumerator();
 
         #endregion
 
         #region IQueryable Members
 
-        public Type ElementType
-        {
-            get { return GetCurrentCollection().AsQueryable<T>().ElementType; }
-        }
+        public Type ElementType => Collection.AsQueryable().ElementType;
 
-        public System.Linq.Expressions.Expression Expression
-        {
-            get { return GetCurrentCollection().AsQueryable<T>().Expression; }
-        }
+        public System.Linq.Expressions.Expression Expression => Collection.AsQueryable().Expression;
 
-        public IQueryProvider Provider
-        {
-            get { return GetCurrentCollection().AsQueryable<T>().Provider; }
-        }
+        public IQueryProvider Provider => Collection.AsQueryable().Provider;
 
         #endregion
     }
