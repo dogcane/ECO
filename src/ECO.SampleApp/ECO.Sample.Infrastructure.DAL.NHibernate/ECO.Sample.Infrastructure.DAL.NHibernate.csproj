@@ -16,6 +16,6 @@
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NHibernate" Version="5.3.10" />
+		<PackageReference Include="NHibernate" Version="5.4.0" />
 	</ItemGroup>
 </Project>

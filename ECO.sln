@@ -56,7 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Files", "_Files", "{8D966F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLServer", "SQLServer", "{C0914925-C762-4FDA-BFA0-F78C597232BA}"
 	ProjectSection(SolutionItems) = preProject
-		src\ECO.SampleApp\_Files\01_Create_Database.sql = src\ECO.SampleApp\_Files\01_Create_Database.sql
+		src\ECO.SampleApp\_Files\SQLServer\01_Create_Database.sql = src\ECO.SampleApp\_Files\SQLServer\01_Create_Database.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D0C97673-5035-4ADF-92D5-386C3AF7C07E}"
@@ -70,6 +70,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Providers.MongoDB", "src\ECO\Core\ECO.Providers.MongoDB\ECO.Providers.MongoDB.csproj", "{7D0AD4DB-D6B7-4A3D-8169-EE4A2D720196}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Infrastructure.DAL.MongoDB", "src\ECO.SampleApp\ECO.Sample.Infrastructure.DAL.MongoDB\ECO.Sample.Infrastructure.DAL.MongoDB.csproj", "{236C7061-45D8-499A-B166-780CEF2BDA6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgreSQL", "PostgreSQL", "{8B23EA32-C595-485A-9908-E2BE757EB7C2}"
+	ProjectSection(SolutionItems) = preProject
+		src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql = src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,6 +180,7 @@ Global
 		{092F0853-C157-4BB4-BE75-BF48D6F7D421} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{7D0AD4DB-D6B7-4A3D-8169-EE4A2D720196} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{236C7061-45D8-499A-B166-780CEF2BDA6A} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{8B23EA32-C595-485A-9908-E2BE757EB7C2} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

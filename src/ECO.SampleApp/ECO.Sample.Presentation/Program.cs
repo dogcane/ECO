@@ -17,8 +17,10 @@ builder.Host.ConfigureAppConfiguration(config =>
     config.AddJsonFile("ecosettings.efcore.sqlserver.json");
 #elif EFMEMORY
     config.AddJsonFile("ecosettings.efcore.memory.json");
-#elif NH
-    config.AddJsonFile("ecosettings.nhibernate.json");
+#elif NHSQL
+    config.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
+#elif NHPOSTGRE
+    config.AddJsonFile("ecosettings.nhibernate.postgresql.json");
 #elif MONGODB
     config.AddJsonFile("ecosettings.mongodb.json");
 #endif
@@ -43,7 +45,7 @@ builder.Services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
 #elif EFSQL || EFMEMORY
 builder.Services.AddScoped<IEventRepository, EventEFRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerEFRepository>();
-#elif NH
+#elif NHSQL || NHPOSTGRE
 builder.Services.AddScoped<IEventRepository, EventNHRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerNHRepository>();
 #elif MONGODB

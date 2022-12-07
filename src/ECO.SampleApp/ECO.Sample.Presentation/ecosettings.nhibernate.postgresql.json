@@ -6,19 +6,16 @@
         "type": "ECO.Providers.NHibernate.NHPersistenceUnit, ECO.Providers.NHibernate",
         "attributes": {
           "connection.provider": "NHibernate.Connection.DriverConnectionProvider",
-          "connection.driver_class": "NHibernate.Driver.SqlClientDriver",
-          "connection.connection_string": "Server=(localdb)\\mssqllocaldb;Database=ECOSampleApp;Trusted_Connection=True;",
-          //"connection.connection_string_name": "ECOSampleAppNH",
+          "connection.connection_string": "Server=127.0.0.1;Port=5432;Database=ECOSampleApp;User Id=ecosample;Password=ecosample;",
           "show_sql": "false",
-          "dialect": "NHibernate.Dialect.MsSql2012Dialect",
+          "dialect": "NHibernate.Dialect.PostgreSQL83Dialect",
           "connection.isolation": "ReadCommitted",
           "adonet.batch_size": "100",
           "cache.use_query_cache": "true",
           "cache.provider_class": "NHibernate.Cache.HashtableCacheProvider",
-          "default_schema": "dbo",
+          "default_schema": "public",
           "max_fetch_depth": "2",
-          "sqlDialect": "MsSql2012Dialect",
-          "sqlDriver": "SqlClientDriver",
+          "sqlDialect": "PostgreSQL83Dialect",
           "mappingAssemblies": "ECO.Sample.Infrastructure.DAL.NHibernate"
         }
       }
