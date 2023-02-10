@@ -76,6 +76,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgreSQL", "PostgreSQL", 
 		src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql = src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.EntityFramework.PostgreSQL", "src\ECO\Core\ECO.Providers.EntityFramework.PostgreSQL\ECO.Providers.EntityFramework.PostgreSQL.csproj", "{753419A5-CACD-4850-A133-BCEFE56AE84E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +152,10 @@ Global
 		{236C7061-45D8-499A-B166-780CEF2BDA6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{236C7061-45D8-499A-B166-780CEF2BDA6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{236C7061-45D8-499A-B166-780CEF2BDA6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		{7D0AD4DB-D6B7-4A3D-8169-EE4A2D720196} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{236C7061-45D8-499A-B166-780CEF2BDA6A} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{8B23EA32-C595-485A-9908-E2BE757EB7C2} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
+		{753419A5-CACD-4850-A133-BCEFE56AE84E} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

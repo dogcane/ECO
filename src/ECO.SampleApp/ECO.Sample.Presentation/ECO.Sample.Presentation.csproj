@@ -23,13 +23,14 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 		<PackageReference Include="NHibernate" Version="5.4.0" />
-		<PackageReference Include="Npgsql" Version="7.0.0" />
+		<PackageReference Include="Npgsql" Version="5.0.15" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\ECO\Core\ECO.Integrations.Microsoft.DependencyInjection\ECO.Integrations.Microsoft.DependencyInjection.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.PostgreSQL\ECO.Providers.EntityFramework.PostgreSQL.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.SqlServer\ECO.Providers.EntityFramework.SqlServer.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />

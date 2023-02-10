@@ -17,6 +17,8 @@ builder.Host.ConfigureAppConfiguration(config =>
     config.AddJsonFile("ecosettings.efcore.sqlserver.json");
 #elif EFMEMORY
     config.AddJsonFile("ecosettings.efcore.memory.json");
+#elif EFPOSTGRE
+    config.AddJsonFile("ecosettings.efcore.postgresql.json");
 #elif NHSQL
     config.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
 #elif NHPOSTGRE
@@ -42,7 +44,7 @@ builder.Services.AddAutoMapper(
 #if INMEMORY
 builder.Services.AddScoped<IEventRepository, EventMemoryRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
-#elif EFSQL || EFMEMORY
+#elif EFSQL || EFMEMORY || EFPOSTGRE
 builder.Services.AddScoped<IEventRepository, EventEFRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerEFRepository>();
 #elif NHSQL || NHPOSTGRE
