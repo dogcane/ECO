@@ -76,7 +76,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgreSQL", "PostgreSQL", 
 		src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql = src\ECO.SampleApp\_Files\PostgreSQL\01_Create_Database.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.EntityFramework.PostgreSQL", "src\ECO\Core\ECO.Providers.EntityFramework.PostgreSQL\ECO.Providers.EntityFramework.PostgreSQL.csproj", "{753419A5-CACD-4850-A133-BCEFE56AE84E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Providers.EntityFramework.PostgreSQL", "src\ECO\Core\ECO.Providers.EntityFramework.PostgreSQL\ECO.Providers.EntityFramework.PostgreSQL.csproj", "{753419A5-CACD-4850-A133-BCEFE56AE84E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.EventSourcing", "src\ECO\Core\ECO.EventSourcing\ECO.EventSourcing.csproj", "{DA98FEB4-D44F-4331-ABC3-75AC1AC85193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Providers.Marten", "src\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj", "{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,6 +160,14 @@ Global
 		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{753419A5-CACD-4850-A133-BCEFE56AE84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +200,8 @@ Global
 		{236C7061-45D8-499A-B166-780CEF2BDA6A} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{8B23EA32-C595-485A-9908-E2BE757EB7C2} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
 		{753419A5-CACD-4850-A133-BCEFE56AE84E} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
+		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193} = {94C9423D-4BD2-495A-8FDC-72974CC574A3}
+		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

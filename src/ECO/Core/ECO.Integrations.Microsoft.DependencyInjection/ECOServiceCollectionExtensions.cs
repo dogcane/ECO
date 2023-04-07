@@ -11,9 +11,9 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
 
         public static IServiceCollection AddDataContext(
             this IServiceCollection serviceCollection,
-            Action<DataContextOptions> optionsAction)
+            Action<DataContextOptionsExtended> optionsAction)
         {
-            DataContextOptions options = new DataContextOptions();
+            DataContextOptionsExtended options = new DataContextOptionsExtended(serviceCollection);
             optionsAction(options);
             serviceCollection.AddSingleton<IPersistenceUnitFactory, PersistenceUnitFactory>(fact =>
             {
