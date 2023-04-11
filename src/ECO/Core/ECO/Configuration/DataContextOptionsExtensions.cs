@@ -13,7 +13,7 @@ namespace ECO.Configuration
             return dataContextOptions;
         }
 
-        public static DataContextOptions UsingConfiguration(this DataContextOptions dataContextOptions, IConfiguration configuration)
+        public static DataContextOptions UseConfiguration(this DataContextOptions dataContextOptions, IConfiguration configuration)
         {
             if (dataContextOptions == null) throw new ArgumentNullException(nameof(dataContextOptions));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));

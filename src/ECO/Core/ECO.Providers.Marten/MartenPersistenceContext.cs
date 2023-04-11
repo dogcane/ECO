@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ECO.Providers.Marten
 {
@@ -25,6 +27,10 @@ namespace ECO.Providers.Marten
         #endregion
 
         #region Protected_Methods
+
+        protected override void OnSaveChanges() => Session.SaveChanges();
+
+        protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Session.SaveChangesAsync(cancellationToken);
 
         #endregion
     }

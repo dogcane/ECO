@@ -1,5 +1,8 @@
 ﻿using ECO.Data;
 using Marten;
+using Marten.Internal.Storage;
+using Marten.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,12 +16,6 @@ namespace ECO.Providers.Marten
 
         private static readonly string CONNECTIONSTRING_ATTRIBUTE = "connectionString";
 
-        private static readonly string DATABASE_ATTRIBUTE = "database";
-
-        private static readonly string MAPPINGASSEMBLIES_ATTRIBUTE = "mappingAssemblies";
-
-        private static readonly string ES_USES_ATTRIBUTE = "eventSourcing.useSelfAggregates";
-
         private IDocumentStore _DocumentStore;
 
         #endregion
@@ -30,9 +27,9 @@ namespace ECO.Providers.Marten
 
         }
 
-        public MartenPersistenceUnit(string name, IDocumentStore documentStore, ILoggerFactory loggerFactory) : base(name, loggerFactory)
+        public MartenPersistenceUnit(string name, ILoggerFactory loggerFactory, IDocumentStore documentStore) : base(name, loggerFactory)
         {
-            _DocumentStore = documentStore;
+            _DocumentStore = documentStore;            
         }
 
         #endregion
@@ -43,7 +40,11 @@ namespace ECO.Providers.Marten
         {
             if (_DocumentStore == null)
             {
-                //Try to build from configuration
+                //Try to build from configuration??
+            }
+            if (_DocumentStore == null)
+            {
+                throw new ArgumentNullException();
             }
         }
 
@@ -57,24 +58,15 @@ namespace ECO.Providers.Marten
             BuildDocumentStore();
         }
 
+        protected override IPersistenceContext OnCreateContext() => new MartenPersistenceContext(_DocumentStore.OpenSession(), this, _LoggerFactory.CreateLogger<MartenPersistenceContext>());
+
         #endregion
 
         #region Public_Methods
 
-        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
-        {
-            throw new NotImplementedException();
-        }
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) => new MartenReadOnlyRepository<T, K>(dataContext);        
 
-        public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override IPersistenceContext OnCreateContext()
-        {
-            throw new NotImplementedException();
-        }
+        public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) => new MartenRepository<T, K>(dataContext);        
 
         #endregion
     }

@@ -53,7 +53,7 @@ namespace ECO.Sample.Application.Events.Queries
                     {
                         query = query.Where(entity => entity.Name.Contains(request.EventName));
                     }
-#if !MONGODB
+#if !MONGODB && !MARTEN && !INMEMORY
                     var events = _Mapper.ProjectTo<EventItem>(query);
 #else
                     var events = _Mapper.Map<IEnumerable<EventItem>>(query);

@@ -8,12 +8,11 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
 {
     public static class ECOServiceCollectionExtensions
     {
-
         public static IServiceCollection AddDataContext(
             this IServiceCollection serviceCollection,
-            Action<DataContextOptionsExtended> optionsAction)
+            Action<DataContextOptions> optionsAction)
         {
-            DataContextOptionsExtended options = new DataContextOptionsExtended(serviceCollection);
+            DataContextOptions options = new DataContextOptions();
             optionsAction(options);
             serviceCollection.AddSingleton<IPersistenceUnitFactory, PersistenceUnitFactory>(fact =>
             {
@@ -28,6 +27,32 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
                 var dataContext = persistenceUnitFactory.OpenDataContext();
                 if (options.RequireTransaction) dataContext.BeginTransaction(true);
                 return dataContext;
+            });
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddReadOnlyRepository<T,K>(this IServiceCollection serviceCollection)
+            where T : class, IAggregateRoot<K>
+        {
+            serviceCollection.AddSingleton<IReadOnlyRepository<T, K>>(fact =>
+            {
+                var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
+                var persistenceUnit = persistenceUnitFactory.GetPersistenceUnit<T>();
+                var dataContext = fact.GetRequiredService<IDataContext>();
+                return persistenceUnit.BuildReadOnlyRepository<T, K>(dataContext);
+            });
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddRepository<T, K>(this IServiceCollection serviceCollection)
+            where T : class, IAggregateRoot<K>
+        {
+            serviceCollection.AddSingleton<IRepository<T, K>>(fact =>
+            {
+                var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
+                var persistenceUnit = persistenceUnitFactory.GetPersistenceUnit<T>();
+                var dataContext = fact.GetRequiredService<IDataContext>();
+                return persistenceUnit.BuildRepository<T, K>(dataContext);
             });
             return serviceCollection;
         }

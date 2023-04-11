@@ -78,6 +78,10 @@ namespace ECO.Providers.MongoDB
 
         protected override IPersistenceContext OnCreateContext() => new MongoPersistenceContext(_Database, this, _LoggerFactory.CreateLogger<MongoPersistenceContext>());
 
+        #endregion
+
+        #region Public_Methods
+
         public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) => new MongoRepository<T, K>(dataContext);
 
         public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) => new MongoRepository<T, K>(dataContext);

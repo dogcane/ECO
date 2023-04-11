@@ -1,0 +1,17 @@
+{
+  "eco": {
+    "persistenceUnits": [
+      {
+        "name": "ecosampleapp.marten",
+        "type": "ECO.Providers.Marten.MartenPersistenceUnit, ECO.Providers.Marten",
+        "classes": [
+          "ECO.Sample.Domain.Event, ECO.Sample.Domain",
+          "ECO.Sample.Domain.Speaker, ECO.Sample.Domain"
+        ],
+        "attributes": {
+          
+        }
+      }
+    ]
+  }
+}

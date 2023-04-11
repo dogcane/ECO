@@ -88,25 +88,15 @@ namespace ECO.Providers.NHibernate
             BuildSessionFactory();
         }
 
-        protected override IPersistenceContext OnCreateContext()
-        {            
-            nh.ISession session = _SessionFactory.OpenSession();
-            return new NHPersistenceContext(session, this, _LoggerFactory);
-        }
+        protected override IPersistenceContext OnCreateContext() => new NHPersistenceContext(_SessionFactory.OpenSession(), this, _LoggerFactory.CreateLogger<NHPersistenceContext>());
 
         #endregion
 
         #region Public_Methods
 
-        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
-        {
-            return new NHReadOnlyRepository<T, K>(dataContext);
-        }
+        public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) => new NHReadOnlyRepository<T, K>(dataContext);
 
-        public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
-        {
-            return new NHRepository<T, K>(dataContext);
-        }
+        public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) => new NHRepository<T, K>(dataContext);
 
         #endregion
     }

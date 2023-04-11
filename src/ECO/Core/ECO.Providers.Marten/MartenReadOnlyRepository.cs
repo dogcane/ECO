@@ -24,32 +24,24 @@ namespace ECO.Providers.Marten
 
         #region IReadOnlyEntityManager<T,K> Members
 
-        public virtual T Load(K identity)
+        public virtual T? Load(K identity) => typeof(K).Name switch
         {
-            if (identity == null) throw new InvalidOperationException();
-            return typeof(K).Name switch
-            {
-                nameof(String) => GetCurrentSession().Load<T>(Convert.ToString(identity)),
-                nameof(Int32) => GetCurrentSession().Load<T>(Convert.ToInt32(identity)),
-                nameof(Int64) => GetCurrentSession().Load<T>(Convert.ToInt64(identity)),
-                nameof(Guid) => GetCurrentSession().Load<T>(identity),
-                _ => throw new InvalidOperationException()
-            };            
-            
-        }
+            nameof(String) => GetCurrentSession().Load<T>(Convert.ToString(identity)),
+            nameof(Int32) => GetCurrentSession().Load<T>(Convert.ToInt32(identity)),
+            nameof(Int64) => GetCurrentSession().Load<T>(Convert.ToInt64(identity)),
+            nameof(Guid) => GetCurrentSession().Load<T>(Guid.Parse(Convert.ToString(identity))),
+            _ => throw new InvalidOperationException()
+        };
 
-        public virtual async Task<T> LoadAsync(K identity)
+
+        public virtual async Task<T?> LoadAsync(K identity) => typeof(K).Name switch
         {
-            if (identity == null) throw new InvalidOperationException();
-            return typeof(K).Name switch
-            {
-                nameof(String) => await GetCurrentSession().LoadAsync<T>(Convert.ToString(identity)),
-                nameof(Int32) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt32(identity)),
-                nameof(Int64) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt64(identity)),
-                nameof(Guid) => await GetCurrentSession().LoadAsync<T>(identity),
-                _ => throw new InvalidOperationException()
-            };
-        }
+            nameof(String) => await GetCurrentSession().LoadAsync<T>(Convert.ToString(identity)),
+            nameof(Int32) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt32(identity)),
+            nameof(Int64) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt64(identity)),
+            nameof(Guid) => await GetCurrentSession().LoadAsync<T>(Guid.Parse(Convert.ToString(identity))),
+            _ => throw new InvalidOperationException()
+        };
 
         #endregion
 

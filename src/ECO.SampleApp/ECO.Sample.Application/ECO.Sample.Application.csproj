@@ -13,10 +13,10 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;NHPOSTGRE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;MARTEN</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DefineConstants>$(DefineConstants)TRACE;NHPOSTGRE</DefineConstants>
+		<DefineConstants>$(DefineConstants)TRACE;MARTEN</DefineConstants>
 	</PropertyGroup>
 	
 	<ItemGroup>

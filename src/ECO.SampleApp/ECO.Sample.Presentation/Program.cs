@@ -7,12 +7,18 @@ using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.Repositories;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using ECO.Providers.Marten.Configuration;
+using ECO.Providers.InMemory.Configuration;
+using Weasel.Core;
+using Marten;
+using Newtonsoft.Json;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureAppConfiguration(config =>
 {
 #if INMEMORY
-    config.AddJsonFile("ecosettings.inmemory.json");
+    //config.AddJsonFile("ecosettings.inmemory.json"); => MOVED TO FLUENT "WAY"
 #elif EFSQL
     config.AddJsonFile("ecosettings.efcore.sqlserver.json");
 #elif EFMEMORY
@@ -25,15 +31,61 @@ builder.Host.ConfigureAppConfiguration(config =>
     config.AddJsonFile("ecosettings.nhibernate.postgresql.json");
 #elif MONGODB
     config.AddJsonFile("ecosettings.mongodb.json");
+#elif MARTEN
+    //config.AddJsonFile("ecosettings.marten.json");  => NOT YET SUPPORTED!
 #endif
 });
 
 builder.Services.AddControllersWithViews();
+
 //ECO            
+#if INMEMORY
+builder.Services.AddDataContext(options =>
+{
+    options.UseInMemory(opt =>
+    {
+        opt.Name = "ecosampleapp.efcore.memory";
+        opt.Classes = new[]
+        {
+            typeof(Event),
+            typeof(Speaker)
+        };
+    }, builder.Configuration);
+});
+#elif MARTEN
+builder.Services.AddDataContext(options =>
+{
+    options.UseMarten(opt =>
+    {
+        opt.Name = "ecosampleapp.marten";
+        opt.Classes = new[]
+        {
+            typeof(Event),
+            typeof(Speaker)
+        };
+        opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));        
+        opt.StoreOptions.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+        opt.StoreOptions.Schema.For<Event>().Identity(ent => ent.Identity);
+        opt.StoreOptions.Schema.For<Speaker>().Identity(ent => ent.Identity);
+        var serializer = new Marten.Services.JsonNetSerializer();        
+        serializer.EnumStorage = EnumStorage.AsString;
+        serializer.Customize(_ =>
+        {
+            _.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+            _.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
+            _.TypeNameHandling = TypeNameHandling.None;
+            _.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        });
+        serializer.NonPublicMembersStorage = NonPublicMembersStorage.NonPublicSetters;        
+        opt.StoreOptions.Serializer(serializer);
+    }, builder.Configuration);
+});
+#else
 builder.Services.AddDataContext(options =>
 {
     options.UsingConfiguration(builder.Configuration);
 });
+#endif
 //MediatR
 builder.Services.AddMediatR(typeof(ECO.Sample.Application.AssemblyMarker));
 //Automapper
@@ -53,6 +105,11 @@ builder.Services.AddScoped<ISpeakerRepository, SpeakerNHRepository>();
 #elif MONGODB
 builder.Services.AddScoped<IEventRepository, EventMongoRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerMongoRepository>();
+#elif MARTEN
+builder.Services.AddScoped<IEventRepository, EventMartenRepository>();
+builder.Services.AddScoped<ISpeakerRepository, SpeakerMartenRepository>();
+//builder.Services.AddRepository<Event, Guid>(); => WIP
+//builder.Services.AddRepository<Speaker, Guid>(); => WIP
 #endif
 
 var app = builder.Build();

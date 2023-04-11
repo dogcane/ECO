@@ -17,7 +17,7 @@ namespace ECO.Providers.NHibernate
 
         #region ~Ctor
 
-        public NHPersistenceContext(nh.ISession session, IPersistenceUnit persistenceUnit, ILoggerFactory loggerFactory) : base(persistenceUnit, loggerFactory.CreateLogger<NHPersistenceContext>())
+        public NHPersistenceContext(nh.ISession session, IPersistenceUnit persistenceUnit, ILogger<NHPersistenceContext> logger) : base(persistenceUnit, logger)
         {
             Session = session;
         }
