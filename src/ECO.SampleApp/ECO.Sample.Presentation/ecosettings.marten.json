@@ -9,7 +9,7 @@
           "ECO.Sample.Domain.Speaker, ECO.Sample.Domain"
         ],
         "attributes": {
-          
+          "connectionString": "Server=127.0.0.1;Port=5432;Database=ECOSampleApp_MT;User Id=ecosample;Password=ecosample;"
         }
       }
     ]

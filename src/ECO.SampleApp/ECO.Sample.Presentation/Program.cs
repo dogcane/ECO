@@ -83,7 +83,7 @@ builder.Services.AddDataContext(options =>
 #else
 builder.Services.AddDataContext(options =>
 {
-    options.UsingConfiguration(builder.Configuration);
+    options.UseConfiguration(builder.Configuration);
 });
 #endif
 //MediatR

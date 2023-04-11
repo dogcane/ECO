@@ -46,7 +46,7 @@ namespace ECO.Sample.Application.Speakers.Queries
                     {
                         query = query.Where(entity => entity.Name.Contains(request.NameOrSurname) || entity.Surname.Contains(request.NameOrSurname));
                     }
-#if !MONGODB && !MARTEN && !INMEMORY
+#if !MONGODB && !MARTEN && !INMEMORY && !EFMEMORY
                     var speakers = _Mapper.ProjectTo<SpeakerItem>(query);
 #else
                     var speakers = _Mapper.Map<IEnumerable<SpeakerItem>>(query);
