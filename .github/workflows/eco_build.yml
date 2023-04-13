@@ -1,0 +1,62 @@
+name: ECO Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types: [published]
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true  
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # Official NuGet Feed settings
+  #NUGET_FEED: https://api.nuget.org/v3/index.json
+  #NUGET_KEY: ${{ secrets.NUGET_KEY }}
+  # Github Packages Feed settings
+  GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
+  GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+         os: [ ubuntu-latest ]
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal    
+          
+  deploy:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Pack
+        run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source src/Resulz/Resulz.csproj
+      #- name: Push NuGet Feed
+      #  run: dotnet nuget push ./src/Resulz/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+      - name: Push Github Packages Feed
+        run: dotnet nuget push ./src/Resulz/bin/Release/*.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY
