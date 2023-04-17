@@ -10,13 +10,7 @@ on:
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true  
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # Official NuGet Feed settings
-  #NUGET_FEED: https://api.nuget.org/v3/index.json
-  #NUGET_KEY: ${{ secrets.NUGET_KEY }}
-  # Github Packages Feed settings
-  GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
-  GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}
+  DOTNET_CLI_TELEMETRY_OPTOUT: true  
 
 jobs:
   build:
@@ -24,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-         os: [ ubuntu-latest ]
+         os: [ ubuntu-latest ]         
 #        os: [ ubuntu-latest, windows-latest, macos-latest ]
     
     steps:
@@ -38,12 +32,27 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal    
+      run: dotnet test --no-restore --verbosity normal  
+    #- name: Save build artifacts
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #    name: build-artifact
+    #    path: ./src/ECO/Core/
+    #    retention-days: 1
           
   deploy:
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    env:
+      # Official NuGet Feed settings
+      #NUGET_FEED: https://api.nuget.org/v3/index.json
+      #NUGET_KEY: ${{ secrets.NUGET_KEY }}
+      # Github Packages Feed settings
+      GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
+      GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}  
+      ECO_PACKAGES: 'ECO;ECO.EventSourcing;ECO.Integrations.Microsoft.DependencyInjection;ECO.Providers.EntityFramework;ECO.Providers.EntityFramework.InMemory;ECO.Providers.EntityFramework.SqlServer;ECO.Providers.InMemory;ECO.Providers.MongoDB;ECO.Providers.NHibernate'
+      #ECO_PACKAGES: 'ECO;ECO.EventSourcing'
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
@@ -51,12 +60,29 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore      
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Pack
-        run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source src/Resulz/Resulz.csproj
-      #- name: Push NuGet Feed
-      #  run: dotnet nuget push ./src/Resulz/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-      - name: Push Github Packages Feed
-        run: dotnet nuget push ./src/Resulz/bin/Release/*.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY
+      #- name: Download build artifacts
+      #  uses: actions/download-artifact@v2
+      #  with:
+      #    name: build-artifact
+      #    path: ./src/ECO/Core/
+      - name: Pack        
+        run: |
+            pkgs=(${ECO_PACKAGES//;/ })
+            for pkg in $pkgs; do
+                dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/$pkg/$pkg.csproj
+            done        
+      #- name: Push NuGet Feed ECO
+      #  run: |
+      #      pkgs=(${ECO_PACKAGES//;/ })
+      #      for pkg in $pkgs; do
+      #          dotnet nuget push ./src/ECO/Core/$pkg/bin/Release/$pkg.*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY                
+      #      done 
+      - name: Push Github Packages Feed ECO
+        run: |
+            pkgs=(${ECO_PACKAGES//;/ })
+            for pkg in $pkgs; do
+                dotnet nuget push ./src/ECO/Core/$pkg/bin/Release/$pkg.*.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY                
+            done      
