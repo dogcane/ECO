@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ECO\Core\ECO.EventSourcing\ECO.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />
+    <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
+    <ProjectReference Include="..\ECO.Sample.EventSourcing.Domain\ECO.Sample.EventSourcing.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -83,7 +83,7 @@ namespace ECO.Data
 
         public IDataContext OpenDataContext()
         {
-            return new DataContext(this, _LoggerFactory.CreateLogger<DataContext>());
+            return new DataContext(this, _LoggerFactory?.CreateLogger<DataContext>());
         }
 
         #endregion

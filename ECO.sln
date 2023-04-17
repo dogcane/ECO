@@ -82,7 +82,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.EventSourcing", "src\EC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Providers.Marten", "src\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj", "{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.Infrastructure.DAL.Marten", "src\ECO.SampleApp\ECO.Sample.Infrastructure.DAL.Marten\ECO.Sample.Infrastructure.DAL.Marten.csproj", "{11265BBA-BD7B-437B-835E-242530060EB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.Infrastructure.DAL.Marten", "src\ECO.SampleApp\ECO.Sample.Infrastructure.DAL.Marten\ECO.Sample.Infrastructure.DAL.Marten.csproj", "{11265BBA-BD7B-437B-835E-242530060EB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ECO.Sample.EventSourcing", "ECO.Sample.EventSourcing", "{3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain.Layer", "Domain.Layer", "{CA9F7F7B-FBB3-4E80-B2AA-B346593E774C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.EventSourcing.Domain", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Domain\ECO.Sample.EventSourcing.Domain.csproj", "{00EC6497-D73A-43F1-BD82-23CE587D0FF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.Layer", "Infrastructure.Layer", "{47710F90-5375-4FEA-A0D0-3B5453CDE540}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation.Layer", "Presentation.Layer", "{74E8AC64-B775-441B-9921-CE5820D7C314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.EventSourcing.Console", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Console\ECO.Sample.EventSourcing.Console.csproj", "{25417C41-A70A-41DA-8349-4FC79976154C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.EventSourcing.Infrastructure.Marten", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Infrastructure.Marten\ECO.Sample.EventSourcing.Infrastructure.Marten.csproj", "{D148D682-0251-4950-B53E-058E4B54F381}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,6 +188,18 @@ Global
 		{11265BBA-BD7B-437B-835E-242530060EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11265BBA-BD7B-437B-835E-242530060EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11265BBA-BD7B-437B-835E-242530060EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EC6497-D73A-43F1-BD82-23CE587D0FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EC6497-D73A-43F1-BD82-23CE587D0FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EC6497-D73A-43F1-BD82-23CE587D0FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EC6497-D73A-43F1-BD82-23CE587D0FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25417C41-A70A-41DA-8349-4FC79976154C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25417C41-A70A-41DA-8349-4FC79976154C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25417C41-A70A-41DA-8349-4FC79976154C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25417C41-A70A-41DA-8349-4FC79976154C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D148D682-0251-4950-B53E-058E4B54F381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D148D682-0251-4950-B53E-058E4B54F381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D148D682-0251-4950-B53E-058E4B54F381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D148D682-0251-4950-B53E-058E4B54F381}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -209,6 +235,13 @@ Global
 		{DA98FEB4-D44F-4331-ABC3-75AC1AC85193} = {94C9423D-4BD2-495A-8FDC-72974CC574A3}
 		{F3E688BD-E10C-47FF-B1BE-165B7CDD5D9D} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{11265BBA-BD7B-437B-835E-242530060EB1} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
+		{CA9F7F7B-FBB3-4E80-B2AA-B346593E774C} = {3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6}
+		{00EC6497-D73A-43F1-BD82-23CE587D0FF6} = {CA9F7F7B-FBB3-4E80-B2AA-B346593E774C}
+		{47710F90-5375-4FEA-A0D0-3B5453CDE540} = {3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6}
+		{74E8AC64-B775-441B-9921-CE5820D7C314} = {3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6}
+		{25417C41-A70A-41DA-8349-4FC79976154C} = {74E8AC64-B775-441B-9921-CE5820D7C314}
+		{D148D682-0251-4950-B53E-058E4B54F381} = {47710F90-5375-4FEA-A0D0-3B5453CDE540}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}
