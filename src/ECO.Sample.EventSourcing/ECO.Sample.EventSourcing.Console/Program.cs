@@ -18,9 +18,11 @@ var documentStore = DocumentStore.For(opt =>
     opt.Connection("Server=127.0.0.1;Port=5432;Database=ECOSampleES_MT;User Id=ecosample;Password=ecosample;");
     opt.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
     opt.Projections.SelfAggregate<Order>();    
-    opt.Events.StreamIdentity = StreamIdentity.AsString;    
-    var serializer = new Marten.Services.JsonNetSerializer();
-    serializer.EnumStorage = EnumStorage.AsString;
+    opt.Events.StreamIdentity = StreamIdentity.AsString;
+    var serializer = new Marten.Services.JsonNetSerializer()
+    {
+        EnumStorage = EnumStorage.AsString
+    };
     serializer.Customize(_ =>
     {
         _.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;

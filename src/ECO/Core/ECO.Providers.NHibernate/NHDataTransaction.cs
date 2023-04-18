@@ -49,15 +49,10 @@ namespace ECO.Providers.NHibernate
 
             if (isDisposing)
             {
-                if (Transaction != null)
-                {
-                    Transaction.Dispose();
-                }
+                Transaction?.Dispose();
                 GC.SuppressFinalize(this);
             }
             _disposed = true;
-            Transaction = null;
-            Context = null;
         }
 
         #endregion

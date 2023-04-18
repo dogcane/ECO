@@ -16,8 +16,7 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIconUrl>icon.png</PackageIconUrl>
-		<PackageId>ECO.Integrations.Microsoft.DependencyInjection</PackageId>
-		<PackageVersion>2.1.0</PackageVersion>
+		<PackageId>ECO.Core.Integrations.Microsoft.DependencyInjection</PackageId>
 		<PackageTags>ddd aggregate entity repository persistence di</PackageTags>
 	</PropertyGroup>
 

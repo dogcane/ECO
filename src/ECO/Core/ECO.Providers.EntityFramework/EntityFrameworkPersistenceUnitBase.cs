@@ -17,15 +17,15 @@ namespace ECO.Providers.EntityFramework
 
         #region Private_Fields
 
-        protected Type _DbContextType;
+        protected Type? _DbContextType;
 
-        protected DbContextOptions _DbContextOptions;
+        protected DbContextOptions? _DbContextOptions;
 
         #endregion
 
         #region Ctor
 
-        protected EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory loggerFactory = null)
+        protected EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
             : base(name, loggerFactory)
         {
 
@@ -54,22 +54,19 @@ namespace ECO.Providers.EntityFramework
             }
             _DbContextOptions = CreateDbContextOptions(extendedAttributes);
             //Register class types
-            using (DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext)
+            using DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
+            foreach (var entity in context.Model.GetEntityTypes())
             {
-                foreach(var entity in context.Model.GetEntityTypes())
-                {
-                    var entityType = entity.ClrType;
-                    if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
-                        _Classes.Add(entity.ClrType);
-                }
+                var entityType = entity.ClrType;
+                if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
+                    _Classes.Add(entity.ClrType);
             }
-
         }
 
 
         protected override IPersistenceContext OnCreateContext()
         {
-            DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext;            
+            DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
             return new EntityFrameworkPersistenceContext(context, this, _LoggerFactory?.CreateLogger<EntityFrameworkPersistenceContext>());
         }
 

@@ -12,9 +12,9 @@ namespace ECO.Data
 
         private bool _disposed = false;
 
-        private readonly IPersistenceUnitFactory _PersistenceUnitFactory;        
+        private readonly IPersistenceUnitFactory _PersistenceUnitFactory;
 
-        private readonly ILogger<DataContext> _Logger;
+        private readonly ILogger<DataContext>? _Logger;
 
         private readonly IDictionary<string, IPersistenceContext> _Contexts = new Dictionary<string, IPersistenceContext>();
 
@@ -24,16 +24,15 @@ namespace ECO.Data
 
         public Guid DataContextId { get; } = Guid.NewGuid();
 
-        public ITransactionContext Transaction { get; private set; }
+        public ITransactionContext? Transaction { get; private set; } = null;
 
         #endregion
 
         #region ~Ctor
 
-        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext> logger = null)
+        public DataContext(IPersistenceUnitFactory persistenceUnitFactory, ILogger<DataContext>? logger = null)
         {
-            if (persistenceUnitFactory == null) throw new ArgumentNullException(nameof(persistenceUnitFactory));
-            _PersistenceUnitFactory = persistenceUnitFactory;
+            _PersistenceUnitFactory = persistenceUnitFactory ?? throw new ArgumentNullException(nameof(persistenceUnitFactory));
             _Logger = logger;
             _Logger?.LogDebug($"Data context '{DataContextId}' is opening");
         }
@@ -57,8 +56,7 @@ namespace ECO.Data
                 _Logger?.LogDebug($"Initialization of persistence context for entity '{entityType}'");
                 IPersistenceContext context = persistenceUnit.CreateContext();
                 _Contexts.Add(persistenceUnitName, context);
-                if (Transaction != null)                        
-                    Transaction.EnlistDataTransaction(context.BeginTransaction());                        
+                Transaction?.EnlistDataTransaction(context.BeginTransaction());
                 _Logger?.LogDebug($"Persistence context for entity {entityType} already initialized => '{persistenceUnitName}':'{_Contexts[persistenceUnitName].PersistenceContextId}'");
             }
             else
@@ -94,7 +92,7 @@ namespace ECO.Data
         }
 
         public async Task<ITransactionContext> BeginTransactionAsync(CancellationToken cancellationToken = default) => await BeginTransactionAsync(false, cancellationToken);
-        
+
 
         public async Task<ITransactionContext> BeginTransactionAsync(bool autoCommit, CancellationToken cancellationToken = default)
         {
@@ -168,10 +166,7 @@ namespace ECO.Data
             if (isDisposing)
             {
                 _Logger?.LogDebug($"Data context '{DataContextId}' is disposing");
-                if (Transaction != null)
-                {
-                    Transaction.Dispose();
-                }
+                Transaction?.Dispose();
                 foreach (IPersistenceContext persistenceContext in _Contexts.Values)
                 {
                     persistenceContext.Dispose();
@@ -179,7 +174,7 @@ namespace ECO.Data
                 _disposed = true;
                 GC.SuppressFinalize(this);
             }
-        }        
+        }
 
         #endregion
     }

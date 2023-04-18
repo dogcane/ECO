@@ -9,7 +9,7 @@ namespace ECO.Providers.InMemory
     {
         #region Ctor
 
-        public InMemoryPersistenceContext(IPersistenceUnit persistenceUnit, ILogger<InMemoryPersistenceContext> logger)
+        public InMemoryPersistenceContext(IPersistenceUnit persistenceUnit, ILogger<InMemoryPersistenceContext>? logger)
             : base(persistenceUnit, logger)
         {
 

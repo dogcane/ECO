@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">	
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO</AssemblyTitle>
-		<AssemblyVersion>2.0.0.0</AssemblyVersion>
-		<FileVersion>2.0.0.0</FileVersion>
-		<Version>2.0.0</Version>		
+		<AssemblyVersion>2.1.0.0</AssemblyVersion>
+		<FileVersion>2.1.0.0</FileVersion>
+		<Version>2.1.0</Version>		
 		<Product>Enterprise CLR Objects</Product>
 		<Description>ECO is a package that contains some base classes for DDD-development. It helps to avoid the creation of standard classes like Entity, AggregateRoot or ValueObject and it is based on the concept of "persistent unit".</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -14,8 +15,7 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIconUrl>icon.png</PackageIconUrl>
-		<PackageId>ECO</PackageId>		
-		<PackageVersion>2.0.0</PackageVersion>
+		<PackageId>ECO.Core</PackageId>
 		<PackageTags>DDD aggregate entity repository persistence</PackageTags>	
 	</PropertyGroup>	
 	<ItemGroup>

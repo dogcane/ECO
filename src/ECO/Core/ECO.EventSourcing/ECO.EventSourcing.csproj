@@ -1,16 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<AssemblyTitle>ECO.EventSourcing</AssemblyTitle>
+		<AssemblyVersion>2.1.0.0</AssemblyVersion>
+		<FileVersion>2.1.0.0</FileVersion>
+		<Version>2.1.0</Version>
+		<Product>Enterprise CLR Objects</Product>
+		<Description>ECO is a package that contains some base classes for DDD and Event Sourcing development. It helps to avoid the creation of standard classes like "event sourcing AggregateRoot" and all the "events stuff".</Description>
+		<Authors>Andrea Canegrati</Authors>
+		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Core.EventSourcing</PackageId>
+		<PackageTags>DDD aggregate entity repository persistence eventsourcing</PackageTags>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ECO\ECO.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>
 
 </Project>

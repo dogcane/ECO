@@ -47,7 +47,7 @@ namespace ECO
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public virtual bool Equals(IEntity<T> obj)
+        public virtual bool Equals(IEntity<T>? obj)
         {
             if (obj == null)
             {

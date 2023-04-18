@@ -16,7 +16,7 @@ namespace ECO.Providers.EntityFramework
 
         #region ~Ctor
 
-        public EntityFrameworkPersistenceContext(DbContext context, IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext> logger = null)
+        public EntityFrameworkPersistenceContext(DbContext context, IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext>? logger = null)
             : base(persistenceUnit, logger) => Context = context;
 
         #endregion

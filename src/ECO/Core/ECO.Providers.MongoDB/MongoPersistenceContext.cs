@@ -1,6 +1,7 @@
 ﻿using ECO.Data;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using System;
 
 namespace ECO.Providers.MongoDB
 {
@@ -16,24 +17,12 @@ namespace ECO.Providers.MongoDB
 
         #region Ctor
 
-        public MongoPersistenceContext(IMongoDatabase database, IPersistenceUnit persistenceUnit, ILogger<MongoPersistenceContext> logger)
+        public MongoPersistenceContext(IMongoDatabase database, IPersistenceUnit persistenceUnit, ILogger<MongoPersistenceContext>? logger)
             : base(persistenceUnit, logger)
         {
-            Database = database;
+            Database = database ?? throw new ArgumentNullException(nameof(database));
             IdentityMap = new MongoIdentityMap();
         }
-
-        #endregion
-
-        #region Methods
-
-        /*
-        protected override void OnRefresh<T>(IAggregateRoot<T> entity) => 
-            entity = Database            
-                .GetCollection<IAggregateRoot<T>>(entity.GetType().Name)
-                .Find(Builders<IAggregateRoot<T>>.Filter.Eq(e => e.Identity, entity.Identity))
-                .FirstOrDefault();
-        */
 
         #endregion
     }

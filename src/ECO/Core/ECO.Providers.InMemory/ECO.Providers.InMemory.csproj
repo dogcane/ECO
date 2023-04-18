@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.Providers.InMemory</AssemblyTitle>
-		<AssemblyVersion>2.0.0.0</AssemblyVersion>
-		<FileVersion>2.0.0.0</FileVersion>
-		<Version>2.0.0</Version>
+		<AssemblyVersion>2.1.0.0</AssemblyVersion>
+		<FileVersion>2.1.0.0</FileVersion>
+		<Version>2.1.0</Version>
 		<Product>Enterprise CLR Objects - In memory provider</Product>
 		<Description>ECO.Providers.InMemory is the package for In Memory provider. It is created for test purposes only, for a production project chose a different provider (such as EFcore).</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -14,8 +15,7 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIconUrl>icon.png</PackageIconUrl>
-		<PackageId>ECO.Providers.InMemory</PackageId>
-		<PackageVersion>2.0.0</PackageVersion>
+		<PackageId>ECO.Core.Providers.InMemory</PackageId>
 		<PackageTags>ddd aggregate entity repository persistence inmemory test</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>

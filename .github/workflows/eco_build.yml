@@ -46,13 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Official NuGet Feed settings
-      #NUGET_FEED: https://api.nuget.org/v3/index.json
-      #NUGET_KEY: ${{ secrets.NUGET_KEY }}
+      NUGET_FEED: https://api.nuget.org/v3/index.json
+      NUGET_KEY: ${{ secrets.NUGET_KEY }}
       # Github Packages Feed settings
-      GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
-      GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}  
-      ECO_PACKAGES: 'ECO;ECO.EventSourcing;ECO.Integrations.Microsoft.DependencyInjection;ECO.Providers.EntityFramework;ECO.Providers.EntityFramework.InMemory;ECO.Providers.EntityFramework.SqlServer;ECO.Providers.InMemory;ECO.Providers.MongoDB;ECO.Providers.NHibernate'
-      #ECO_PACKAGES: 'ECO;ECO.EventSourcing'
+      #GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
+      #GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
@@ -70,19 +68,30 @@ jobs:
       #    path: ./src/ECO/Core/
       - name: Pack        
         run: |
-            pkgs=(${ECO_PACKAGES//;/ })
-            for pkg in $pkgs; do
-                dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/$pkg/$pkg.csproj
-            done        
-      #- name: Push NuGet Feed ECO
-      #  run: |
-      #      pkgs=(${ECO_PACKAGES//;/ })
-      #      for pkg in $pkgs; do
-      #          dotnet nuget push ./src/ECO/Core/$pkg/bin/Release/$pkg.*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY                
-      #      done 
-      - name: Push Github Packages Feed ECO
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.EventSourcing.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.InMemory.csproj
+            #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.PostgreSQL.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.SqlServer.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.InMemory.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.Marten.csproj
+            #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
+      - name: Push NuGet Feed ECO
         run: |
-            pkgs=(${ECO_PACKAGES//;/ })
-            for pkg in $pkgs; do
-                dotnet nuget push ./src/ECO/Core/$pkg/bin/Release/$pkg.*.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY                
-            done      
+            dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.EventSourcing/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            #dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.PostgreSQL/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.SqlServer/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.Marten/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            #dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.NHibernate/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY            
+      #- name: Push Github Packages Feed ECO
+      #  run: |      
+      #      dotnet nuget push XXX.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY  

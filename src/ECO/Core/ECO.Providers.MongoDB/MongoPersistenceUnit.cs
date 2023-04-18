@@ -35,7 +35,7 @@ namespace ECO.Providers.MongoDB
 
         #region Fields
 
-        private IMongoDatabase _Database;
+        private IMongoDatabase? _Database;
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace ECO.Providers.MongoDB
                     .Select(tp => Activator.CreateInstance(tp) as IMapperDefinition);
                 foreach (var mappingDefinition in mappingDefinitions)
                 {
-                    mappingDefinition.BuildMapperDefition();
+                    mappingDefinition?.BuildMapperDefition();
                 }
             }
             //Serializers
@@ -76,7 +76,7 @@ namespace ECO.Providers.MongoDB
             _Database = new MongoClient(extendedAttributes[CONNECTIONSTRING_ATTRIBUTE]).GetDatabase(extendedAttributes[DATABASE_ATTRIBUTE]);
         }
 
-        protected override IPersistenceContext OnCreateContext() => new MongoPersistenceContext(_Database, this, _LoggerFactory.CreateLogger<MongoPersistenceContext>());
+        protected override IPersistenceContext OnCreateContext() => new MongoPersistenceContext(_Database, this, _LoggerFactory?.CreateLogger<MongoPersistenceContext>());
 
         #endregion
 

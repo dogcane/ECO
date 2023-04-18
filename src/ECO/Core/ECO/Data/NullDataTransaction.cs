@@ -10,8 +10,7 @@ namespace ECO.Data
 
         public NullDataTransaction(IPersistenceContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         #endregion
@@ -39,7 +38,7 @@ namespace ECO.Data
 
         }
 
-        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());        
+        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Rollback());
 

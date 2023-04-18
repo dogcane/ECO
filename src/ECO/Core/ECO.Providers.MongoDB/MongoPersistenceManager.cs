@@ -1,5 +1,6 @@
 ﻿using ECO.Data;
 using MongoDB.Driver;
+using System;
 
 namespace ECO.Providers.MongoDB
 {
@@ -15,8 +16,8 @@ namespace ECO.Providers.MongoDB
 
         protected MongoPersistenceManager(string collectionName, IDataContext dataContext) : base(dataContext)
         {
-            Database = (PersistenceContext as MongoPersistenceContext).Database;
-            IdentityMap = (PersistenceContext as MongoPersistenceContext).IdentityMap;
+            Database = (PersistenceContext as MongoPersistenceContext ?? throw new InvalidCastException(nameof(collectionName))).Database;
+            IdentityMap = (PersistenceContext as MongoPersistenceContext ?? throw new InvalidCastException(nameof(collectionName))).IdentityMap;
             Collection = Database.GetCollection<T>(collectionName);
         }
 

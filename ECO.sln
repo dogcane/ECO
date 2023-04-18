@@ -53,6 +53,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ECO.Sample.App", "ECO.Sample.App", "{103E6721-486F-40FF-957B-008357F2426E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Files", "_Files", "{8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}"
+	ProjectSection(SolutionItems) = preProject
+		src\ECO.SampleApp\Directory.Build.props = src\ECO.SampleApp\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQLServer", "SQLServer", "{C0914925-C762-4FDA-BFA0-F78C597232BA}"
 	ProjectSection(SolutionItems) = preProject
@@ -94,9 +97,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.Layer", "Inf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation.Layer", "Presentation.Layer", "{74E8AC64-B775-441B-9921-CE5820D7C314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.EventSourcing.Console", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Console\ECO.Sample.EventSourcing.Console.csproj", "{25417C41-A70A-41DA-8349-4FC79976154C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.EventSourcing.Console", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Console\ECO.Sample.EventSourcing.Console.csproj", "{25417C41-A70A-41DA-8349-4FC79976154C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Sample.EventSourcing.Infrastructure.Marten", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Infrastructure.Marten\ECO.Sample.EventSourcing.Infrastructure.Marten.csproj", "{D148D682-0251-4950-B53E-058E4B54F381}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Sample.EventSourcing.Infrastructure.Marten", "src\ECO.Sample.EventSourcing\ECO.Sample.EventSourcing.Infrastructure.Marten\ECO.Sample.EventSourcing.Infrastructure.Marten.csproj", "{D148D682-0251-4950-B53E-058E4B54F381}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Files", "_Files", "{91E1E880-C5EF-43BA-A633-4EDC6118456E}"
+	ProjectSection(SolutionItems) = preProject
+		src\ECO\Core\Directory.Build.props = src\ECO\Core\Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +215,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{94C9423D-4BD2-495A-8FDC-72974CC574A3} = {CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}
 		{D2EDE3E8-30D0-46F3-8EB3-F1C8530DCF5C} = {103E6721-486F-40FF-957B-008357F2426E}
 		{C16168B8-2BD4-4596-B981-4A3F2703F614} = {103E6721-486F-40FF-957B-008357F2426E}
 		{BD6544C0-DE77-4CBB-825F-08B485161398} = {103E6721-486F-40FF-957B-008357F2426E}
@@ -222,6 +233,7 @@ Global
 		{7142EBC4-2C32-46F9-AC69-9040F6D66F1E} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
 		{BD396E1B-C50E-48D0-9EB3-F0EFF531774D} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{D30B2AD9-928A-470C-9ACB-0258F324264E} = {C16168B8-2BD4-4596-B981-4A3F2703F614}
+		{056FE36F-6278-415F-B188-718CBEFEFFA1} = {CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}
 		{103E6721-486F-40FF-957B-008357F2426E} = {D8873A5D-0370-477A-BA72-9E6A0008A8BD}
 		{8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C} = {103E6721-486F-40FF-957B-008357F2426E}
 		{C0914925-C762-4FDA-BFA0-F78C597232BA} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
@@ -242,6 +254,7 @@ Global
 		{74E8AC64-B775-441B-9921-CE5820D7C314} = {3EFD57DB-DA05-46D2-A6D4-EC0C1C33E4F6}
 		{25417C41-A70A-41DA-8349-4FC79976154C} = {74E8AC64-B775-441B-9921-CE5820D7C314}
 		{D148D682-0251-4950-B53E-058E4B54F381} = {47710F90-5375-4FEA-A0D0-3B5453CDE540}
+		{91E1E880-C5EF-43BA-A633-4EDC6118456E} = {CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

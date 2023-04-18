@@ -23,13 +23,13 @@ namespace ECO.Providers.NHibernate
 
         private IDictionary<string, string> _ConfigurationProperties = new Dictionary<string, string>();
 
-        private nh.ISessionFactory _SessionFactory;
+        private nh.ISessionFactory? _SessionFactory;
 
         #endregion
 
         #region Ctor
 
-        public NHPersistenceUnit(string name, ILoggerFactory loggerFactory = null) : base(name, loggerFactory)
+        public NHPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : base(name, loggerFactory)
         {
 
         }
@@ -46,8 +46,8 @@ namespace ECO.Providers.NHibernate
                 if (_ConfigurationProperties.ContainsKey(SESSIONINTERCEPTOR_ATTRIBUTE))
                 {
                     Type interceptorType = Type.GetType(_ConfigurationProperties[SESSIONINTERCEPTOR_ATTRIBUTE]);
-                    nh.IInterceptor interceptor = Activator.CreateInstance(interceptorType) as nh.IInterceptor;
-                    configuration.SetInterceptor(interceptor);
+                    if (Activator.CreateInstance(interceptorType) is nh.IInterceptor interceptor)
+                        configuration.SetInterceptor(interceptor);
                 }
                 if (_ConfigurationProperties.ContainsKey(MAPPINGASSEMBLIES_ATTRIBUTE))
                 {
@@ -88,7 +88,11 @@ namespace ECO.Providers.NHibernate
             BuildSessionFactory();
         }
 
-        protected override IPersistenceContext OnCreateContext() => new NHPersistenceContext(_SessionFactory.OpenSession(), this, _LoggerFactory.CreateLogger<NHPersistenceContext>());
+        protected override IPersistenceContext OnCreateContext()
+        {
+            if (_SessionFactory == null) throw new ArgumentException();
+            return new NHPersistenceContext(_SessionFactory.OpenSession(), this, _LoggerFactory?.CreateLogger<NHPersistenceContext>());
+        }
 
         #endregion
 

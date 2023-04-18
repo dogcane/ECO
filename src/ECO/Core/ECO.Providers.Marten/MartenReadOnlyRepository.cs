@@ -26,20 +26,20 @@ namespace ECO.Providers.Marten
 
         public virtual T? Load(K identity) => typeof(K).Name switch
         {
-            nameof(String) => GetCurrentSession().Load<T>(Convert.ToString(identity)),
-            nameof(Int32) => GetCurrentSession().Load<T>(Convert.ToInt32(identity)),
-            nameof(Int64) => GetCurrentSession().Load<T>(Convert.ToInt64(identity)),
-            nameof(Guid) => GetCurrentSession().Load<T>(Guid.Parse(Convert.ToString(identity))),
+            nameof(String) => DocumentSession.Load<T>(Convert.ToString(identity)),
+            nameof(Int32) => DocumentSession.Load<T>(Convert.ToInt32(identity)),
+            nameof(Int64) => DocumentSession.Load<T>(Convert.ToInt64(identity)),
+            nameof(Guid) => DocumentSession.Load<T>(Guid.Parse(Convert.ToString(identity))),
             _ => throw new InvalidOperationException()
         };
 
 
         public virtual async Task<T?> LoadAsync(K identity) => typeof(K).Name switch
         {
-            nameof(String) => await GetCurrentSession().LoadAsync<T>(Convert.ToString(identity)),
-            nameof(Int32) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt32(identity)),
-            nameof(Int64) => await GetCurrentSession().LoadAsync<T>(Convert.ToInt64(identity)),
-            nameof(Guid) => await GetCurrentSession().LoadAsync<T>(Guid.Parse(Convert.ToString(identity))),
+            nameof(String) => await DocumentSession.LoadAsync<T>(Convert.ToString(identity)),
+            nameof(Int32) => await DocumentSession.LoadAsync<T>(Convert.ToInt32(identity)),
+            nameof(Int64) => await DocumentSession.LoadAsync<T>(Convert.ToInt64(identity)),
+            nameof(Guid) => await DocumentSession.LoadAsync<T>(Guid.Parse(Convert.ToString(identity))),
             _ => throw new InvalidOperationException()
         };
 
@@ -47,23 +47,23 @@ namespace ECO.Providers.Marten
 
         #region IEnumerable<T> Members
 
-        public virtual IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
+        public virtual IEnumerator<T> GetEnumerator() => DocumentSession.Query<T>().GetEnumerator();
 
         #endregion
 
         #region IEnumerable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => DocumentSession.Query<T>().GetEnumerator();
 
         #endregion
 
         #region IQueryable Members
 
-        public virtual Type ElementType => GetCurrentSession().Query<T>().ElementType;
+        public virtual Type ElementType => DocumentSession.Query<T>().ElementType;
 
-        public virtual System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
+        public virtual System.Linq.Expressions.Expression Expression => DocumentSession.Query<T>().Expression;
 
-        public virtual IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
+        public virtual IQueryProvider Provider => DocumentSession.Query<T>().Provider;
 
         #endregion
     }

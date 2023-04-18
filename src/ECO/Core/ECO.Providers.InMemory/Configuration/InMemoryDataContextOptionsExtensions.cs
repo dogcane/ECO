@@ -9,8 +9,10 @@ namespace ECO.Providers.InMemory.Configuration
 {
     public static class InMemoryDataContextOptionsExtensions
     {
-        public static DataContextOptions UseInMemory(this DataContextOptions dataContextOptions, Action<InMemoryOptions> optionsAction, IConfiguration configuration)
+        public static DataContextOptions UseInMemory(this DataContextOptions dataContextOptions, Action<InMemoryOptions> optionsAction)
         {            
+            if (dataContextOptions == null) throw new ArgumentNullException(nameof(dataContextOptions));
+            if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
             dataContextOptions.PersistenceUnitFactoryOptions += (persistenceUnitFactory, loggerFactory) =>
             {
                 InMemoryOptions options = new InMemoryOptions { };

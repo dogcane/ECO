@@ -19,14 +19,14 @@ namespace ECO
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        T Load(K identity);
+        T? Load(K identity);
 
         /// <summary>
         /// Method that loads asynchronously the entity from the repository
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        Task<T> LoadAsync(K identity);
+        Task<T?> LoadAsync(K identity);
 
         #endregion
     }

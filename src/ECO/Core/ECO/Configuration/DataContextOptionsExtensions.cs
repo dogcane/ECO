@@ -17,15 +17,15 @@ namespace ECO.Configuration
         {
             if (dataContextOptions == null) throw new ArgumentNullException(nameof(dataContextOptions));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-            ECOOptions options = configuration.GetSection(ECOOptions.ECOConfigurationName).Get<ECOOptions>();
+            ECOOptions options = configuration.GetSection(ECOOptions.ECOConfigurationName).Get<ECOOptions>() ?? throw new NullReferenceException(nameof(options));
             dataContextOptions.PersistenceUnitFactoryOptions += (persistenceUnitFactory, loggerFactory) =>
             {
-                foreach (PersistenceUnitOptions unit in options?.PersistenceUnits)
+                foreach (PersistenceUnitOptions unit in options.PersistenceUnits)
                 {
                     Type unitType = Type.GetType(unit.Type);
                     IPersistenceUnit persistenceUnit = (IPersistenceUnit)Activator.CreateInstance(unitType, unit.Name, loggerFactory);
-                    persistenceUnit.Initialize(unit.Attributes);                    
-                    foreach (string classType in unit?.Classes)
+                    persistenceUnit.Initialize(unit.Attributes);
+                    foreach (string classType in unit.Classes)
                     {
                         try
                         {
@@ -37,7 +37,7 @@ namespace ECO.Configuration
                             throw new ApplicationException($"Error when loading the type {classType}", ex);
                         }
                     }
-                    foreach (string listenerType in unit?.Listeners)
+                    foreach (string listenerType in unit.Listeners)
                     {
                         try
                         {

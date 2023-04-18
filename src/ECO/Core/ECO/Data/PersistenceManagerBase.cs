@@ -7,7 +7,7 @@ namespace ECO.Data
     {
         #region Private_Fields
 
-        private IPersistenceContext _PersistenceContext;
+        private readonly IPersistenceContext _PersistenceContext;
 
         #endregion
 

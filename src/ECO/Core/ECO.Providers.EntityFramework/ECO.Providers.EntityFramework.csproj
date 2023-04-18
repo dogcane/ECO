@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.Providers.EntityFramework</AssemblyTitle>
 		<AssemblyVersion>2.1.0.0</AssemblyVersion>
 		<FileVersion>2.1.0.0</FileVersion>
@@ -14,8 +15,7 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>		
 		<PackageIconUrl>icon.png</PackageIconUrl>
-		<PackageId>ECO.Providers.EntityFramework</PackageId>
-		<PackageVersion>2.1.0</PackageVersion>
+		<PackageId>ECO.Core.Providers.EntityFramework</PackageId>
 		<PackageTags>ddd aggregate entity repository persistence efcore</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>

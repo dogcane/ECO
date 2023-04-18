@@ -50,7 +50,7 @@ builder.Services.AddDataContext(options =>
             typeof(Event),
             typeof(Speaker)
         };
-    }, builder.Configuration);
+    });
 });
 #elif MARTEN
 builder.Services.AddDataContext(options =>
@@ -78,7 +78,7 @@ builder.Services.AddDataContext(options =>
         });
         serializer.NonPublicMembersStorage = NonPublicMembersStorage.NonPublicSetters;        
         opt.StoreOptions.Serializer(serializer);
-    }, builder.Configuration);
+    });
 });
 #else
 builder.Services.AddDataContext(options =>

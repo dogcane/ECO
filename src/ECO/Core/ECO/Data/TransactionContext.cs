@@ -37,8 +37,7 @@ namespace ECO.Data
 
         internal TransactionContext(IDataContext dataContext, bool autoCommit)
         {
-            if (dataContext == null) throw new ArgumentNullException(nameof(dataContext));
-            DataContext = dataContext;
+            DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             AutoCommit = autoCommit;
         }
 
@@ -123,7 +122,7 @@ namespace ECO.Data
                 }
                 _disposed = true;
             }
-        }        
+        }
 
         #endregion
     }

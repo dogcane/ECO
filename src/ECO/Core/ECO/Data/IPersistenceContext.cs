@@ -12,7 +12,7 @@ namespace ECO.Data
 
         IPersistenceUnit PersistenceUnit { get; }
 
-        IDataTransaction Transaction { get; }
+        IDataTransaction? Transaction { get; }
 
         #endregion
 

@@ -22,7 +22,7 @@ namespace ECO.Data
 
         void EnlistDataTransaction(IDataTransaction dataTransaction);
 
-        void Commit();        
+        void Commit();
 
         void Rollback();
 

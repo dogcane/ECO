@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ECO.Providers.MongoDB
@@ -7,7 +8,7 @@ namespace ECO.Providers.MongoDB
     {
         #region Fields
 
-        private ConcurrentDictionary<object, object> _Map = new ConcurrentDictionary<object, object>();
+        private readonly ConcurrentDictionary<object, object> _Map = new ConcurrentDictionary<object, object>();
 
         #endregion
 
@@ -18,14 +19,14 @@ namespace ECO.Providers.MongoDB
         public object this[object indexer]
         {
             get => _Map.ContainsKey(indexer) ? _Map[indexer] : null;
-            set => _Map.AddOrUpdate(indexer, value, (@old, @new) => @new);
+            set => _Map.AddOrUpdate(indexer, value ?? throw new ArgumentNullException(nameof(value)), (@old, @new) => @new);
         }
 
         #endregion
 
         #region Methods
 
-        public bool ContainsIdentity(object identity) => _Map.ContainsKey(identity);
+        public bool ContainsIdentity(object identity) => _Map.ContainsKey(identity ?? throw new ArgumentNullException(nameof(identity)));
 
         #endregion
     }

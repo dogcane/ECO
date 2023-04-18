@@ -19,9 +19,9 @@ namespace ECO.Providers.Marten
 
         #region Ctor
 
-        public MartenPersistenceContext(IDocumentSession session, IPersistenceUnit persistenceUnit, ILogger<MartenPersistenceContext> logger) : base(persistenceUnit, logger)
+        public MartenPersistenceContext(IDocumentSession session, IPersistenceUnit persistenceUnit, ILogger<MartenPersistenceContext>? logger) : base(persistenceUnit, logger)
         {
-            Session = session;
+            Session = session ?? throw new ArgumentNullException(nameof(session));
         }
 
         #endregion

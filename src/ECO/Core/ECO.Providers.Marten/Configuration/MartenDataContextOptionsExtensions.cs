@@ -11,8 +11,10 @@ namespace ECO.Providers.Marten.Configuration
 {
     public static class MartenDataContextOptionsExtensions
     {
-        public static DataContextOptions UseMarten(this DataContextOptions dataContextOptions, Action<MartenOptions> optionsAction, IConfiguration configuration)
+        public static DataContextOptions UseMarten(this DataContextOptions dataContextOptions, Action<MartenOptions> optionsAction)
         {
+            if (dataContextOptions == null) throw new ArgumentNullException(nameof(dataContextOptions));
+            if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
             dataContextOptions.PersistenceUnitFactoryOptions += (persistenceUnitFactory, loggerFactory) =>
             {
                 MartenOptions options = new MartenOptions();

@@ -17,17 +17,17 @@ namespace ECO.Providers.Marten
 
         #region IRepository<T> Membri di
 
-        public virtual void Add(T item) => GetCurrentSession().Store(item);
+        public virtual void Add(T item) => DocumentSession.Store(item ?? throw new ArgumentNullException(nameof(item)));
 
-        public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item));
+        public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item ?? throw new ArgumentNullException(nameof(item))));
 
-        public virtual void Update(T item) => GetCurrentSession().Update(item);
+        public virtual void Update(T item) => DocumentSession.Update(item ?? throw new ArgumentNullException(nameof(item)));
 
-        public virtual async Task UpdateAsync(T item) => await Task.Run(() => GetCurrentSession().Update(item));
+        public virtual async Task UpdateAsync(T item) => await Task.Run(() => DocumentSession.Update(item ?? throw new ArgumentNullException(nameof(item))));
 
-        public virtual void Remove(T item) => GetCurrentSession().Delete(item);
+        public virtual void Remove(T item) => DocumentSession.Delete(item ?? throw new ArgumentNullException(nameof(item)));
 
-        public virtual async Task RemoveAsync(T item) => await Task.Run(() => GetCurrentSession().Delete(item));
+        public virtual async Task RemoveAsync(T item) => await Task.Run(() => DocumentSession.Delete(item ?? throw new ArgumentNullException(nameof(item))));
 
         #endregion
     }

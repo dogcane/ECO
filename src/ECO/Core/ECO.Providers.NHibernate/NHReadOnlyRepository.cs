@@ -18,9 +18,9 @@ namespace ECO.Providers.NHibernate
 
         #region IReadOnlyEntityManager<T,K> Members
 
-        public virtual T Load(K identity) => GetCurrentSession().Get<T>(identity);
+        public virtual T? Load(K identity) => GetCurrentSession().Get<T>(identity);
 
-        public virtual async Task<T> LoadAsync(K identity) => await GetCurrentSession().GetAsync<T>(identity);
+        public virtual async Task<T?> LoadAsync(K identity) => await GetCurrentSession().GetAsync<T>(identity);
 
         #endregion
 

@@ -15,9 +15,9 @@ namespace ECO.Data
 
         protected ISet<IPersistenceUnitListener> _Listeners = new HashSet<IPersistenceUnitListener>();
 
-        protected readonly ILoggerFactory _LoggerFactory;
+        protected readonly ILoggerFactory? _LoggerFactory;
 
-        protected readonly ILogger<P> _Logger;
+        protected readonly ILogger<P>? _Logger;
 
         #endregion
 
@@ -33,9 +33,9 @@ namespace ECO.Data
 
         #region Ctor
 
-        protected PersistenceUnitBase(string name, ILoggerFactory loggerFactory = null)
+        protected PersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name)) throw new ArgumentOutOfRangeException(nameof(name));
             _Name = name;
             _LoggerFactory = loggerFactory;
             _Logger = loggerFactory?.CreateLogger<P>();

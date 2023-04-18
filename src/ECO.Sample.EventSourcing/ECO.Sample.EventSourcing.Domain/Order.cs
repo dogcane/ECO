@@ -7,7 +7,7 @@ public class Order : ESAggregateRoot<string>
 {
     #region Fields
 
-    private List<OrderDetail> items = new List<OrderDetail>();
+    private readonly List<OrderDetail> items = new();
 
     #endregion
 

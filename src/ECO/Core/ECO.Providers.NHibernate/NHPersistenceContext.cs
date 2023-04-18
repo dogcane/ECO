@@ -1,6 +1,6 @@
-
 using ECO.Data;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using nh = NHibernate;
@@ -17,7 +17,7 @@ namespace ECO.Providers.NHibernate
 
         #region ~Ctor
 
-        public NHPersistenceContext(nh.ISession session, IPersistenceUnit persistenceUnit, ILogger<NHPersistenceContext> logger) : base(persistenceUnit, logger)
+        public NHPersistenceContext(nh.ISession session, IPersistenceUnit persistenceUnit, ILogger<NHPersistenceContext>? logger) : base(persistenceUnit, logger)
         {
             Session = session;
         }
@@ -51,7 +51,7 @@ namespace ECO.Providers.NHibernate
             }
             catch (nh.NonUniqueObjectException)
             {   
-                entity = Session.Load(entity.GetType(), entity.Identity) as IAggregateRoot<T>;
+                entity = Session.Load(entity.GetType(), entity.Identity) as IAggregateRoot<T> ?? throw new ArgumentNullException(nameof(entity));
             }
         }
 
@@ -74,7 +74,7 @@ namespace ECO.Providers.NHibernate
         protected override void OnDispose()
         {
             Session.Dispose();
-            if (Transaction != null) Transaction.Dispose();
+            Transaction?.Dispose();
         }
 
         #endregion

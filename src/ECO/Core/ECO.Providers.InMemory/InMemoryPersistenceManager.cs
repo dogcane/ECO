@@ -1,6 +1,6 @@
 ﻿using ECO.Data;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace ECO.Providers.InMemory
 {
@@ -15,7 +15,7 @@ namespace ECO.Providers.InMemory
 
         #region Properties
 
-        public virtual InMemoryPersistenceContext InMemoryPersistenceContext => PersistenceContext as InMemoryPersistenceContext;
+        public virtual InMemoryPersistenceContext InMemoryPersistenceContext => PersistenceContext as InMemoryPersistenceContext ?? throw new InvalidCastException(nameof(InMemoryPersistenceContext));
 
         #endregion
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace ECO.EventSourcing
 {
@@ -10,7 +8,7 @@ namespace ECO.EventSourcing
     {
         #region Fields
 
-        private IList<object> _uncommittedEvents = new List<object>();
+        private readonly IList<object> _uncommittedEvents = new List<object>();
 
         #endregion
 
@@ -36,14 +34,12 @@ namespace ECO.EventSourcing
 
         protected void OnApply<E>(E @event, Action<E> applyHandler)
         {
-            if (@event != null) {
-                applyHandler(@event);
-                AddUncommittedEvent(@event);
-                Version++;
-            }
+            if (@event == null) throw new ArgumentNullException(nameof(@event));
+            if (applyHandler == null) throw new ArgumentNullException(nameof(applyHandler));
+            applyHandler(@event);
+            _uncommittedEvents.Add(@event);
+            Version++;
         }
-
-        protected void AddUncommittedEvent(object @event) => _uncommittedEvents.Add(@event);
 
         #endregion
 

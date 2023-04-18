@@ -1,23 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <OutputType>Library</OutputType>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Serializers\ECOBsonSerializationProvider .cs~RF282c8288.TMP" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ECO\ECO.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<AssemblyTitle>ECO.Providers.MongoDB</AssemblyTitle>
+		<AssemblyVersion>2.1.0.0</AssemblyVersion>
+		<FileVersion>2.1.0.0</FileVersion>
+		<Version>2.1.0</Version>
+		<Product>Enterprise CLR Objects - MongoDB provider</Product>
+		<Description>ECO.Providers.MongoDB is the package for MongoDB. It contains all the MongoDB stuff (repositories, contexts).</Description>
+		<Authors>Andrea Canegrati</Authors>
+		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Providers.MongoDB</PackageId>
+		<PackageTags>ddd aggregate entity repository persistence mongodb</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+	</ItemGroup>
 </Project>

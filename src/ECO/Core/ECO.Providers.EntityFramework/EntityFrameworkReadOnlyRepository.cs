@@ -19,9 +19,9 @@ namespace ECO.Providers.EntityFramework
 
         #region IReadOnlyRepository<T,K> Members
 
-        public virtual T Load(K identity) => DbContext.Set<T>().Find(identity);
+        public virtual T? Load(K identity) => DbContext.Set<T>().Find(identity);
 
-        public virtual async Task<T> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
+        public virtual async Task<T?> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
 
         #endregion
 

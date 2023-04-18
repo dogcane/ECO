@@ -1,5 +1,7 @@
 ﻿
 using ECO.Data;
+using NHibernate;
+using System;
 using nh = NHibernate;
 
 namespace ECO.Providers.NHibernate
@@ -17,9 +19,9 @@ namespace ECO.Providers.NHibernate
 
         #region Protected_Methods
 
-        protected nh.ISession GetCurrentSession() => (PersistenceContext as NHPersistenceContext).Session;
+        protected nh.ISession GetCurrentSession() => (PersistenceContext as NHPersistenceContext ?? throw new InvalidCastException(nameof(NHPersistenceContext))).Session;
 
-        protected nh.ITransaction GetCurrentTransaction() => (PersistenceContext.Transaction as NHDataTransaction).Transaction;
+        protected nh.ITransaction? GetCurrentTransaction() => GetCurrentSession().GetCurrentTransaction();
 
         #endregion
     }

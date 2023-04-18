@@ -10,7 +10,7 @@ namespace ECO.Data
 
         Guid DataContextId { get; }
 
-        ITransactionContext Transaction { get; }
+        ITransactionContext? Transaction { get; }
 
         #endregion
 

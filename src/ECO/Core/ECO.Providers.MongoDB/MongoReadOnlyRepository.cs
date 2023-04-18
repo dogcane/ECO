@@ -28,9 +28,9 @@ namespace ECO.Providers.MongoDB
 
         #region IReadOnlyRepository<T,K> Members
 
-        public virtual T Load(K identity)
+        public virtual T? Load(K identity)
         {
-            if (typeof(K).IsClass && identity == null) return default(T);
+            if (identity == null) throw new ArgumentNullException(nameof(identity));
             if (IdentityMap.ContainsIdentity(identity))
             {
                 return (T)IdentityMap[identity];
@@ -41,7 +41,7 @@ namespace ECO.Providers.MongoDB
             }
         }
 
-        public virtual async Task<T> LoadAsync(K identity) => await Task.Run(() => Load(identity));
+        public virtual async Task<T?> LoadAsync(K identity) => await Task.Run(() => Load(identity));
 
         #endregion
 

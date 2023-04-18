@@ -11,15 +11,15 @@ namespace ECO.Events
     {
         #region Private_Fields
 
-        private static IDictionary<Type, IDictionary<object, Delegate>> _Subscribers = new Dictionary<Type, IDictionary<object, Delegate>>();
+        private static readonly IDictionary<Type, IDictionary<object, Delegate>> _Subscribers = new Dictionary<Type, IDictionary<object, Delegate>>();
 
         #endregion
 
         #region Events
 
-        public static event EventHandler<DomainEventArgs<IDomainEvent>> EventRaised;
+        public static event EventHandler<DomainEventArgs<IDomainEvent>>? EventRaised;
 
-        public static event EventHandler<DomainEventArgs<IDomainEvent, Delegate>> EventManaged;
+        public static event EventHandler<DomainEventArgs<IDomainEvent, Delegate>>? EventManaged;
 
         #endregion
 
@@ -27,10 +27,7 @@ namespace ECO.Events
 
         public static void RaiseEvent<T>(T args) where T : IDomainEvent
         {
-            if (EventRaised != null)
-            {
-                EventRaised(null, new DomainEventArgs<IDomainEvent>(args));
-            }
+            EventRaised?.Invoke(null, new DomainEventArgs<IDomainEvent>(args));
             if (_Subscribers.ContainsKey(typeof(T)))
             {
                 _Subscribers[typeof(T)]
@@ -39,10 +36,7 @@ namespace ECO.Events
                     .ToList()
                     .ForEach(act =>
                     {
-                        if (EventManaged != null)
-                        {
-                            EventManaged(null, new DomainEventArgs<IDomainEvent, Delegate>(args, act));
-                        }
+                        EventManaged?.Invoke(null, new DomainEventArgs<IDomainEvent, Delegate>(args, act));
                         act.Invoke(args);
                     });
             }

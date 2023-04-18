@@ -12,15 +12,15 @@ namespace ECO.Data
 
         private readonly IDictionary<Type, IPersistenceUnit> _Classes = new Dictionary<Type, IPersistenceUnit>();
 
-        private readonly ILoggerFactory _LoggerFactory;
+        private readonly ILoggerFactory? _LoggerFactory;
 
-        private readonly ILogger<PersistenceUnitFactory> _Logger;
+        private readonly ILogger<PersistenceUnitFactory>? _Logger;
 
         #endregion
 
         #region ~Ctor
 
-        public PersistenceUnitFactory(ILoggerFactory loggerFactory = null)
+        public PersistenceUnitFactory(ILoggerFactory? loggerFactory = null)
         {
             _LoggerFactory = loggerFactory;
             _Logger = _LoggerFactory?.CreateLogger<PersistenceUnitFactory>();
@@ -32,6 +32,7 @@ namespace ECO.Data
 
         public IPersistenceUnitFactory AddPersistenceUnit(IPersistenceUnit persistenceUnit)
         {
+            _Logger?.LogDebug($"Adding persistence unit {persistenceUnit.Name} of type {persistenceUnit.GetType().Name}");
             if (persistenceUnit == null) throw new ArgumentNullException(nameof(persistenceUnit));
             _Units.Add(persistenceUnit.Name, persistenceUnit);
             foreach (var classType in persistenceUnit.Classes)
@@ -71,8 +72,9 @@ namespace ECO.Data
                 foreach (Type registeredType in _Classes.Keys)
                 {
                     if (entityType.IsSubclassOf(registeredType))
-                    {                        
+                    {
                         IPersistenceUnit persistenceUnit = GetPersistenceUnit(registeredType);
+                        _Logger?.LogDebug($"Mapping subclass {entityType.Name} of {registeredType.Name} in persistence unit {persistenceUnit.Name}");
                         _Classes.Add(entityType, persistenceUnit);
                         return persistenceUnit;
                     }

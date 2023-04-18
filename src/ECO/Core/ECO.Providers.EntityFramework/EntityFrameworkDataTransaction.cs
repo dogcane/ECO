@@ -28,10 +28,8 @@ namespace ECO.Providers.EntityFramework
 
         private EntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context, IDbContextTransaction transaction)
         {
-            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            Transaction = transaction;
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            Transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
         }
 
         ~EntityFrameworkDataTransaction()
@@ -45,13 +43,15 @@ namespace ECO.Providers.EntityFramework
 
         internal static EntityFrameworkDataTransaction CreateEntityFrameworkDataTransaction(EntityFrameworkPersistenceContext context)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
             var transaction = context.Context.Database.BeginTransaction();
             return new EntityFrameworkDataTransaction(context, transaction);
         }
 
         internal static async Task<EntityFrameworkDataTransaction> CreateEntityFrameworkDataTransactionAsync(EntityFrameworkPersistenceContext context, CancellationToken cancellationToken = default)
         {
-            var transaction = await context.Context.Database.BeginTransactionAsync();
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            var transaction = await context.Context.Database.BeginTransactionAsync(cancellationToken);
             return new EntityFrameworkDataTransaction(context, transaction);
         }
 
@@ -63,7 +63,7 @@ namespace ECO.Providers.EntityFramework
 
         public void Rollback() => Transaction.Rollback();
 
-        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Transaction.CommitAsync(cancellationToken);        
+        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Transaction.CommitAsync(cancellationToken);
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Transaction.RollbackAsync(cancellationToken);
 
@@ -76,15 +76,10 @@ namespace ECO.Providers.EntityFramework
 
             if (isDisposing)
             {
-                if (Transaction != null)
-                {
-                    Transaction.Dispose();
-                }
+                Transaction?.Dispose();
                 GC.SuppressFinalize(this);
             }
             _disposed = true;
-            Transaction = null;
-            Context = null;
         }
 
         #endregion

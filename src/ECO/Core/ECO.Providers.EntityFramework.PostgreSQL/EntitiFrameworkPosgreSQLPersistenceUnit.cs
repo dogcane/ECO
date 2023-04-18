@@ -15,7 +15,7 @@ namespace ECO.Providers.EntityFramework.PostgreSQL
 
         #region Ctor
 
-        public EntitiFrameworkPosgreSQLPersistenceUnit(string name, ILoggerFactory loggerFactory = null) : base(name, loggerFactory)
+        public EntitiFrameworkPosgreSQLPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : base(name, loggerFactory)
         {
 
         }

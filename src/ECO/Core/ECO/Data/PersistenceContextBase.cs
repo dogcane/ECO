@@ -12,17 +12,16 @@ namespace ECO.Data
 
         protected bool _disposed = false;
 
-        protected readonly ILogger<P> _Logger;
+        protected readonly ILogger<P>? _Logger;
 
         #endregion
 
         #region Ctor
 
-        protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P> logger = null)
+        protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P>? logger = null)
         {
-            if (persistenceUnit == null) throw new ArgumentNullException(nameof(persistenceUnit));
             PersistenceContextId = Guid.NewGuid();
-            PersistenceUnit = persistenceUnit;
+            PersistenceUnit = persistenceUnit ?? throw new ArgumentNullException(nameof(persistenceUnit));
             _Logger = logger;
         }
 
@@ -80,7 +79,7 @@ namespace ECO.Data
 
         public IPersistenceUnit PersistenceUnit { get; }
 
-        public IDataTransaction Transaction { get; private set; }
+        public IDataTransaction? Transaction { get; private set; } = null;
 
         public void Attach<T>(IAggregateRoot<T> entity)
         {
@@ -96,14 +95,14 @@ namespace ECO.Data
             OnDetach(entity);
         }
 
-        public void Refresh<T>(IAggregateRoot<T> entity)            
+        public void Refresh<T>(IAggregateRoot<T> entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Refreshing entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnRefresh(entity);
         }
 
-        public PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity)            
+        public PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             _Logger?.LogDebug($"Get Persistence State for entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
@@ -163,7 +162,7 @@ namespace ECO.Data
             }
 
             _disposed = true;
-        }        
+        }
 
         #endregion
     }

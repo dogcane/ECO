@@ -16,7 +16,7 @@ namespace ECO.Providers.EntityFramework.SqlServer
 
         #region Ctor
 
-        public EntityFrameworkSqlServerPersistenceUnit(string name, ILoggerFactory loggerFactory = null) : base(name, loggerFactory)
+        public EntityFrameworkSqlServerPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : base(name, loggerFactory)
         {
 
         }

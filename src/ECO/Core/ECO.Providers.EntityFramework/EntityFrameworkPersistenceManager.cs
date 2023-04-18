@@ -1,5 +1,6 @@
 ﻿using ECO.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ECO.Providers.EntityFramework
 {
@@ -8,7 +9,7 @@ namespace ECO.Providers.EntityFramework
     {
         #region Properties
 
-        public DbContext DbContext => (PersistenceContext as EntityFrameworkPersistenceContext).Context;
+        public DbContext DbContext => (PersistenceContext as EntityFrameworkPersistenceContext ?? throw new InvalidCastException(nameof(DbContext))).Context;
 
         #endregion
 
@@ -16,6 +17,7 @@ namespace ECO.Providers.EntityFramework
 
         public EntityFrameworkPersistenceManager(IDataContext dataContext) : base(dataContext)
         {
+            
         }
 
         #endregion

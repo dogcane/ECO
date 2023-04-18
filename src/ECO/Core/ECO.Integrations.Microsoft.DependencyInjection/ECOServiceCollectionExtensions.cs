@@ -12,6 +12,8 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
             this IServiceCollection serviceCollection,
             Action<DataContextOptions> optionsAction)
         {
+            if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));            
+            if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
             DataContextOptions options = new DataContextOptions();
             optionsAction(options);
             serviceCollection.AddSingleton<IPersistenceUnitFactory, PersistenceUnitFactory>(fact =>
@@ -34,6 +36,7 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
         public static IServiceCollection AddReadOnlyRepository<T,K>(this IServiceCollection serviceCollection)
             where T : class, IAggregateRoot<K>
         {
+            if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
             serviceCollection.AddSingleton<IReadOnlyRepository<T, K>>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
@@ -47,6 +50,7 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
         public static IServiceCollection AddRepository<T, K>(this IServiceCollection serviceCollection)
             where T : class, IAggregateRoot<K>
         {
+            if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
             serviceCollection.AddSingleton<IRepository<T, K>>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
