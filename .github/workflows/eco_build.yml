@@ -32,25 +32,15 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal  
-    #- name: Save build artifacts
-    #  uses: actions/upload-artifact@v2
-    #  with:
-    #    name: build-artifact
-    #    path: ./src/ECO/Core/
-    #    retention-days: 1
+      run: dotnet test --no-restore --verbosity normal
           
   deploy:
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    env:
-      # Official NuGet Feed settings
+    env:      
       NUGET_FEED: https://api.nuget.org/v3/index.json
-      NUGET_KEY: ${{ secrets.NUGET_KEY }}
-      # Github Packages Feed settings
-      #GITHUB_PACKAGES_FEED: https://nuget.pkg.github.com/dogcane/index.json
-      #GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}
+      NUGET_KEY: ${{ secrets.NUGET_KEY }}      
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
@@ -61,11 +51,7 @@ jobs:
         run: dotnet restore      
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      #- name: Download build artifacts
-      #  uses: actions/download-artifact@v2
-      #  with:
-      #    name: build-artifact
-      #    path: ./src/ECO/Core/
+
       - name: Pack        
         run: |
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
@@ -79,6 +65,7 @@ jobs:
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.Marten.csproj
             #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
+
       - name: Push NuGet Feed ECO
         run: |
             dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
@@ -92,6 +79,3 @@ jobs:
             dotnet nuget push ./src/ECO/Core/ECO.Providers.Marten/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             #dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.NHibernate/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY            
-      #- name: Push Github Packages Feed ECO
-      #  run: |      
-      #      dotnet nuget push XXX.nupkg --source $GITHUB_PACKAGES_FEED --skip-duplicate --api-key $GITHUB_PACKAGES_KEY  
