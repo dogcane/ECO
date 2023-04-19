@@ -107,6 +107,8 @@ namespace ECO.Data
         public virtual IPersistenceUnit AddClass(Type classType)
         {
             if (classType == null) throw new ArgumentNullException(nameof(classType));
+            if (_Classes.Contains(classType)) return this;
+
             _Classes.Add(classType);
             OnClassAdded(classType);
             return this;
@@ -120,6 +122,8 @@ namespace ECO.Data
         public virtual IPersistenceUnit RemoveClass(Type classType)
         {
             if (classType == null) throw new ArgumentNullException(nameof(classType));
+            if (!_Classes.Contains(classType)) return this;
+
             _Classes.Remove(classType);
             OnClassRemoved(classType);
             return this;
@@ -133,6 +137,8 @@ namespace ECO.Data
         public virtual IPersistenceUnit AddUnitListener(IPersistenceUnitListener listener)
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
+            if (_Listeners.Contains(listener)) return this;
+
             _Listeners.Add(listener);
             OnUnitListenerAdded(listener);
             return this;
@@ -141,6 +147,8 @@ namespace ECO.Data
         public virtual IPersistenceUnit RemoveUnitListener(IPersistenceUnitListener listener)
         {
             if (listener == null) throw new ArgumentNullException(nameof(listener));
+            if (!_Listeners.Contains(listener)) return this;
+
             _Listeners.Remove(listener);
             OnUnitListenerRemoved(listener);
             return this;

@@ -1,8 +1,11 @@
 ﻿using ECO.Configuration;
 using ECO.Data;
+using ECO.Utils;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ECO.Providers.InMemory.Configuration
@@ -18,6 +21,10 @@ namespace ECO.Providers.InMemory.Configuration
                 InMemoryOptions options = new InMemoryOptions { };
                 optionsAction(options);
                 InMemoryPersistenceUnit persistenceUnit = new InMemoryPersistenceUnit(options.Name, loggerFactory);
+                foreach (var @class in options.Assemblies.SelectMany(asm => asm.ExportedTypes).OfAggregateRootType())
+                {
+                    persistenceUnit.AddClass(@class);
+                }
                 foreach (var @class in options.Classes)
                 {
                     persistenceUnit.AddClass(@class);
@@ -35,6 +42,8 @@ namespace ECO.Providers.InMemory.Configuration
     public sealed class InMemoryOptions
     {
         public string Name { get; set; } = string.Empty;
+
+        public Assembly[] Assemblies { get; set; } = new Assembly[0];
 
         public Type[] Classes { get; set; } = new Type[0];
 

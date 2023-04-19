@@ -1,6 +1,5 @@
-﻿namespace ECO.Sample.Application
+﻿namespace ECO.Sample.Application;
+
+public class AssemblyMarker
 {
-    public class AssemblyMarker
-    {
-    }
 }

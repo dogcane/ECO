@@ -1,18 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using ECO.Configuration;
 using ECO.Integrations.Microsoft.DependencyInjection;
 using MediatR;
 using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.Repositories;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using ECO.Providers.Marten.Configuration;
 using ECO.Providers.InMemory.Configuration;
+using ECO.Providers.Marten.Configuration;
 using Weasel.Core;
 using Marten;
 using Newtonsoft.Json;
-using System;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureAppConfiguration(config =>
@@ -45,11 +44,7 @@ builder.Services.AddDataContext(options =>
     options.UseInMemory(opt =>
     {
         opt.Name = "ecosampleapp.efcore.memory";
-        opt.Classes = new[]
-        {
-            typeof(Event),
-            typeof(Speaker)
-        };
+        opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };        
     });
 });
 #elif MARTEN
@@ -58,15 +53,9 @@ builder.Services.AddDataContext(options =>
     options.UseMarten(opt =>
     {
         opt.Name = "ecosampleapp.marten";
-        opt.Classes = new[]
-        {
-            typeof(Event),
-            typeof(Speaker)
-        };
+        opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };
         opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));        
         opt.StoreOptions.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-        opt.StoreOptions.Schema.For<Event>().Identity(ent => ent.Identity);
-        opt.StoreOptions.Schema.For<Speaker>().Identity(ent => ent.Identity);
         var serializer = new Marten.Services.JsonNetSerializer();        
         serializer.EnumStorage = EnumStorage.AsString;
         serializer.Customize(_ =>
