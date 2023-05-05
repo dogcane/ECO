@@ -32,6 +32,12 @@ namespace ECO.Providers.Marten
 
         protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Session.SaveChangesAsync(cancellationToken);
 
+        protected override void OnDispose()
+        {
+            Session?.Dispose();
+            Transaction?.Dispose();
+        }
+
         #endregion
     }
 }
