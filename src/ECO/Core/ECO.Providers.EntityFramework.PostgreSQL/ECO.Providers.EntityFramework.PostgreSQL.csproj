@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<TargetFramework>netstandard2.1</TargetFramework>
 		<AssemblyTitle>ECO.Providers.EntityFramework.PostgreSQL</AssemblyTitle>
 		<AssemblyVersion>2.1.0.0</AssemblyVersion>
 		<FileVersion>2.1.0.0</FileVersion>
@@ -22,8 +21,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Npgsql" Version="6.0.9" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+		<PackageReference Include="Npgsql" Version="7.0.4" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

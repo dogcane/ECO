@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Library</OutputType>
 		<SccProjectName>SAK</SccProjectName>
 		<SccLocalPath>SAK</SccLocalPath>
@@ -16,6 +16,6 @@
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NHibernate" Version="5.4.0" />
+		<PackageReference Include="NHibernate" Version="5.4.2" />
 	</ItemGroup>
 </Project>

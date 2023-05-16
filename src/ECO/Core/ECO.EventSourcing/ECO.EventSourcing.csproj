@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.EventSourcing</AssemblyTitle>
 		<AssemblyVersion>2.1.0.0</AssemblyVersion>
@@ -19,10 +19,6 @@
 		<PackageId>ECO.Core.EventSourcing</PackageId>
 		<PackageTags>DDD aggregate entity repository persistence eventsourcing</PackageTags>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />

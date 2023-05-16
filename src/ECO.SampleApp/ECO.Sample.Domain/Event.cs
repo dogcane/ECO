@@ -27,7 +27,6 @@ namespace ECO.Sample.Domain
 
         #region Ctor
 
-        //x Proxy/ORM
         protected Event()
             : base(Guid.NewGuid())
         {

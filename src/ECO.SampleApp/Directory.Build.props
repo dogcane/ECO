@@ -1,5 +1,15 @@
 <Project> 
   <PropertyGroup>
+	  <!-- 
+	  ADMITTED VALUES :
+	  - INMEMORY
+	  - EFSQL
+	  - EFMEMORY
+	  - EFPOSTGRE
+	  - NHSQL
+	  - NHPOSTGRE
+	  - MARTEN
+	  -->
 	<DefineConstants>MARTEN</DefineConstants>
   </PropertyGroup>
 </Project>

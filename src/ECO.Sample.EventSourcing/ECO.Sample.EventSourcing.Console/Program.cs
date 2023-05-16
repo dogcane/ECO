@@ -4,6 +4,7 @@ using ECO.Sample.EventSourcing.Domain;
 using ECO.Sample.EventSourcing.Infrastructure.Marten;
 using Marten;
 using Marten.Events;
+using Marten.Events.Projections;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Weasel.Core;
@@ -17,7 +18,7 @@ var documentStore = DocumentStore.For(opt =>
 {
     opt.Connection("Server=127.0.0.1;Port=5432;Database=ECOSampleES_MT;User Id=ecosample;Password=ecosample;");
     opt.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-    opt.Projections.SelfAggregate<Order>();    
+    opt.Projections.Snapshot<Order>(SnapshotLifecycle.Inline);
     opt.Events.StreamIdentity = StreamIdentity.AsString;
     var serializer = new Marten.Services.JsonNetSerializer()
     {

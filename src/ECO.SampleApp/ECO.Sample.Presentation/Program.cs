@@ -12,28 +12,33 @@ using Weasel.Core;
 using Marten;
 using Newtonsoft.Json;
 using System.Reflection;
+using JasperFx.Core;
+using Marten.Services.Json;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Text.Json.Serialization;
+using ECO.Providers.Marten.Utils;
+using ECO.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.ConfigureAppConfiguration(config =>
-{
+
 #if INMEMORY
-    //config.AddJsonFile("ecosettings.inmemory.json"); => MOVED TO FLUENT "WAY"
+    //builder.Configuration.AddJsonFile("ecosettings.inmemory.json"); => MOVED TO FLUENT "WAY"    
 #elif EFSQL
-    config.AddJsonFile("ecosettings.efcore.sqlserver.json");
+    builder.Configuration.AddJsonFile("ecosettings.efcore.sqlserver.json");
 #elif EFMEMORY
-    config.AddJsonFile("ecosettings.efcore.memory.json");
+    builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json");
 #elif EFPOSTGRE
-    config.AddJsonFile("ecosettings.efcore.postgresql.json");
+    builder.Configuration.AddJsonFile("ecosettings.efcore.postgresql.json");
 #elif NHSQL
-    config.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
+    builder.Configuration.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
 #elif NHPOSTGRE
-    config.AddJsonFile("ecosettings.nhibernate.postgresql.json");
+    builder.Configuration.AddJsonFile("ecosettings.nhibernate.postgresql.json");
 #elif MONGODB
-    config.AddJsonFile("ecosettings.mongodb.json");
+    builder.Configuration.AddJsonFile("ecosettings.mongodb.json");
 #elif MARTEN
-    //config.AddJsonFile("ecosettings.marten.json");  => NOT YET SUPPORTED!
+//builder.Configuration.AddJsonFile("ecosettings.marten.json");  => NOT YET SUPPORTED!
 #endif
-});
+
 
 builder.Services.AddControllersWithViews();
 
@@ -56,8 +61,21 @@ builder.Services.AddDataContext(options =>
         opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };
         opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));        
         opt.StoreOptions.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-        var serializer = new Marten.Services.JsonNetSerializer();        
-        serializer.EnumStorage = EnumStorage.AsString;
+        var serializer = new Marten.Services.SystemTextJsonSerializer
+        {
+            EnumStorage = EnumStorage.AsString
+        };
+        serializer.Customize(_ =>
+        {
+            _.TypeInfoResolver = new NonPublicContractResolver();
+            _.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+        opt.StoreOptions.Serializer(serializer);
+        /*
+        var serializer = new Marten.Services.JsonNetSerializer
+        {
+            EnumStorage = EnumStorage.AsString
+        };
         serializer.Customize(_ =>
         {
             _.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
@@ -67,6 +85,7 @@ builder.Services.AddDataContext(options =>
         });
         serializer.NonPublicMembersStorage = NonPublicMembersStorage.NonPublicSetters;        
         opt.StoreOptions.Serializer(serializer);
+        */
     });
 });
 #else
@@ -76,7 +95,10 @@ builder.Services.AddDataContext(options =>
 });
 #endif
 //MediatR
-builder.Services.AddMediatR(typeof(ECO.Sample.Application.AssemblyMarker));
+builder.Services.AddMediatR(conf =>
+{
+    conf.RegisterServicesFromAssemblyContaining<ECO.Sample.Application.AssemblyMarker>();
+});
 //Automapper
 builder.Services.AddAutoMapper(
     typeof(ECO.Sample.Application.AssemblyMarker),

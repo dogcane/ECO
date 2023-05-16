@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Library</OutputType>
 		<SccProjectName>SAK</SccProjectName>
 		<SccLocalPath>SAK</SccLocalPath>
@@ -24,9 +24,9 @@
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="12.0.0" />
-		<PackageReference Include="MediatR" Version="11.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="MediatR" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Resulz" Version="1.2.0" />
 	</ItemGroup>
 </Project>
