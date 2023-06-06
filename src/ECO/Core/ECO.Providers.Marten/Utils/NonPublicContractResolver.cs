@@ -19,10 +19,14 @@ namespace ECO.Providers.Marten.Utils
             JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
             if (jsonTypeInfo.Kind == JsonTypeInfoKind.Object)
             {
-                if (UseParameterlessCtor)
+                if (jsonTypeInfo.CreateObject == null && UseParameterlessCtor)
                 {
                     //Default Parameterless Ctor
-                    jsonTypeInfo.CreateObject = () => Activator.CreateInstance(jsonTypeInfo.Type, true)!;
+                    var ctor = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        jsonTypeInfo.CreateObject = () => ctor.Invoke(null);
+                    }
                 }
 
                 //Try properties/field public/non public resolver
