@@ -40,7 +40,10 @@ var builder = WebApplication.CreateBuilder(args);
 #endif
 
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(jopt =>
+{
+    jopt.JsonSerializerOptions.TypeInfoResolver = new NonPublicContractResolver() { UseParameterlessCtor = false };
+});
 
 //ECO            
 #if INMEMORY
@@ -68,7 +71,7 @@ builder.Services.AddDataContext(options =>
         serializer.Customize(_ =>
         {
             _.TypeInfoResolver = new NonPublicContractResolver();
-            _.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            _.ReferenceHandler = ReferenceHandler.IgnoreCycles;            
         });
         opt.StoreOptions.Serializer(serializer);
         /*

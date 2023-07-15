@@ -108,6 +108,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Files", "_Files", "{91E1E8
 		src\ECO\Core\Directory.Build.props = src\ECO\Core\Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Moq", "src\ECO\Core\ECO.Integrations.Moq\ECO.Integrations.Moq.csproj", "{5907335F-0E36-4962-B7F2-DDF763C93263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -210,6 +212,10 @@ Global
 		{D148D682-0251-4950-B53E-058E4B54F381}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D148D682-0251-4950-B53E-058E4B54F381}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D148D682-0251-4950-B53E-058E4B54F381}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5907335F-0E36-4962-B7F2-DDF763C93263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5907335F-0E36-4962-B7F2-DDF763C93263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5907335F-0E36-4962-B7F2-DDF763C93263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5907335F-0E36-4962-B7F2-DDF763C93263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,6 +261,7 @@ Global
 		{25417C41-A70A-41DA-8349-4FC79976154C} = {74E8AC64-B775-441B-9921-CE5820D7C314}
 		{D148D682-0251-4950-B53E-058E4B54F381} = {47710F90-5375-4FEA-A0D0-3B5453CDE540}
 		{91E1E880-C5EF-43BA-A633-4EDC6118456E} = {CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}
+		{5907335F-0E36-4962-B7F2-DDF763C93263} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}
