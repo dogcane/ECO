@@ -57,6 +57,7 @@ jobs:
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.EventSourcing.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Moq.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.InMemory.csproj
             #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.PostgreSQL.csproj
@@ -71,6 +72,7 @@ jobs:
             dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.EventSourcing/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Moq/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             #dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.PostgreSQL/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
