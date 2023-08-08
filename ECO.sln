@@ -108,7 +108,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Files", "_Files", "{91E1E8
 		src\ECO\Core\Directory.Build.props = src\ECO\Core\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.Moq", "src\ECO\Core\ECO.Integrations.Moq\ECO.Integrations.Moq.csproj", "{5907335F-0E36-4962-B7F2-DDF763C93263}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Integrations.Moq", "src\ECO\Core\ECO.Integrations.Moq\ECO.Integrations.Moq.csproj", "{5907335F-0E36-4962-B7F2-DDF763C93263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.Integrations.HotChocolate", "src\ECO\Core\ECO.Integrations.HotChocolate\ECO.Integrations.HotChocolate.csproj", "{FDB20DB1-261F-4989-A7B4-45993CD6077B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -216,6 +218,10 @@ Global
 		{5907335F-0E36-4962-B7F2-DDF763C93263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5907335F-0E36-4962-B7F2-DDF763C93263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5907335F-0E36-4962-B7F2-DDF763C93263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB20DB1-261F-4989-A7B4-45993CD6077B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB20DB1-261F-4989-A7B4-45993CD6077B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB20DB1-261F-4989-A7B4-45993CD6077B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB20DB1-261F-4989-A7B4-45993CD6077B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +268,7 @@ Global
 		{D148D682-0251-4950-B53E-058E4B54F381} = {47710F90-5375-4FEA-A0D0-3B5453CDE540}
 		{91E1E880-C5EF-43BA-A633-4EDC6118456E} = {CC8FBE3F-A896-462E-8C0D-E3DA3F5B3D90}
 		{5907335F-0E36-4962-B7F2-DDF763C93263} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
+		{FDB20DB1-261F-4989-A7B4-45993CD6077B} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}
