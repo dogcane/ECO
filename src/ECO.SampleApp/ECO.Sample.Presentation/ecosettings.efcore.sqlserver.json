@@ -6,7 +6,7 @@
         "type": "ECO.Providers.EntityFramework.SqlServer.EntityFrameworkSqlServerPersistenceUnit, ECO.Providers.EntityFramework.SqlServer",
         "attributes": {
           "dbContextType": "ECO.Sample.Infrastructure.DAL.EntityFramework.ECOSampleContext, ECO.Sample.Infrastructure.DAL.EntityFramework",
-          "connectionString": "Server=(localdb)\\mssqllocaldb;Database=ECOSampleApp;Trusted_Connection=True;"
+          "connectionStringName": "sqlserver"
         }
       }
     ]

@@ -2,6 +2,7 @@
 using Marten;
 using Marten.Internal.Storage;
 using Marten.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -36,7 +37,7 @@ namespace ECO.Providers.Marten
 
         #region Private_Methods
 
-        private void BuildDocumentStore()
+        private void BuildDocumentStore(IConfiguration configuration)
         {
             if (_DocumentStore == null)
             {
@@ -48,10 +49,10 @@ namespace ECO.Providers.Marten
 
         #region Protected_Methods
 
-        protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
+        protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
-            base.OnInitialize(extendedAttributes);
-            BuildDocumentStore();
+            base.OnInitialize(extendedAttributes, configuration);
+            BuildDocumentStore(configuration);
         }
 
         protected override IPersistenceContext OnCreateContext() => new MartenPersistenceContext((_DocumentStore ?? throw new NullReferenceException(nameof(_DocumentStore))).OpenSession(), this, _LoggerFactory?.CreateLogger<MartenPersistenceContext>());

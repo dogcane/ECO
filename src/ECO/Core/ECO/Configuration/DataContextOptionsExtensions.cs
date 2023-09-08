@@ -22,9 +22,19 @@ namespace ECO.Configuration
             {
                 foreach (PersistenceUnitOptions unit in options.PersistenceUnits)
                 {
-                    Type unitType = Type.GetType(unit.Type);
-                    IPersistenceUnit persistenceUnit = (IPersistenceUnit)Activator.CreateInstance(unitType, unit.Name, loggerFactory);
-                    persistenceUnit.Initialize(unit.Attributes);
+                    Type unitType;
+                    IPersistenceUnit persistenceUnit;
+                    try
+                    {
+                        unitType = Type.GetType(unit.Type)!;
+                        persistenceUnit = (IPersistenceUnit)Activator.CreateInstance(unitType, unit.Name, loggerFactory)!;
+                        persistenceUnit.Initialize(unit.Attributes, configuration);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ApplicationException($"Error when loading the type {unit.Type}", ex);
+                    }
+                    
                     foreach (string classType in unit.Classes)
                     {
                         try

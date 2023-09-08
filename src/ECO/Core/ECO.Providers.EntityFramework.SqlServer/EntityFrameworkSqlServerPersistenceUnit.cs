@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace ECO.Providers.EntityFramework.SqlServer
         #region Consts
 
         private static readonly string CONNECTIONSTRING_ATTRIBUTE = "connectionString";
+
+        private static readonly string CONNECTIONSTRINGNAME_ATTRIBUTE = "connectionStringName";
 
         #endregion
 
@@ -25,16 +28,20 @@ namespace ECO.Providers.EntityFramework.SqlServer
 
         #region Protected_Methods 
 
-        protected override DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes)
+        protected override DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
-            string connectionString;
-            if (extendedAttributes.ContainsKey(CONNECTIONSTRING_ATTRIBUTE))
+            string connectionString = string.Empty;
+            if (string.IsNullOrEmpty(connectionString) && extendedAttributes.ContainsKey(CONNECTIONSTRING_ATTRIBUTE))
             {
                 connectionString = extendedAttributes[CONNECTIONSTRING_ATTRIBUTE];
             }
-            else
+            if (string.IsNullOrEmpty(connectionString) && extendedAttributes.ContainsKey(CONNECTIONSTRINGNAME_ATTRIBUTE))
             {
-                throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", CONNECTIONSTRING_ATTRIBUTE));
+                connectionString = configuration.GetConnectionString(extendedAttributes[CONNECTIONSTRINGNAME_ATTRIBUTE]) ?? "";
+            }
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ApplicationException(string.Format("The attribute '{0}' or '{1}' were not found in the persistent unit configuration", CONNECTIONSTRING_ATTRIBUTE, CONNECTIONSTRINGNAME_ATTRIBUTE));
             }
             return new DbContextOptionsBuilder()
                 .UseSqlServer(connectionString)

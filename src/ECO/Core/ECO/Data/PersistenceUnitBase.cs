@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace ECO.Data
 
         protected abstract IPersistenceContext OnCreateContext();
 
-        protected virtual void OnInitialize(IDictionary<string, string> extendedAttributes)
+        protected virtual void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
 
         }
@@ -91,9 +92,9 @@ namespace ECO.Data
         #endregion
 
         #region Public_Methods
-        public virtual void Initialize(IDictionary<string, string> extededAttributes)
+        public virtual void Initialize(IDictionary<string, string> extededAttributes, IConfiguration configuration)
         {
-            if (extededAttributes != null) OnInitialize(extededAttributes);
+            OnInitialize(extededAttributes, configuration);
         }
 
         public virtual IPersistenceContext CreateContext()

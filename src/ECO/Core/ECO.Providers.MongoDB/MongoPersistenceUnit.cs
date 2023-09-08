@@ -1,6 +1,7 @@
 ﻿using ECO.Data;
 using ECO.Providers.MongoDB.Conventions;
 using ECO.Providers.MongoDB.Mappers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
@@ -41,9 +42,9 @@ namespace ECO.Providers.MongoDB
 
         #region Protected_Methods   
 
-        protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
+        protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
-            base.OnInitialize(extendedAttributes);
+            base.OnInitialize(extendedAttributes, configuration);
             if (!extendedAttributes.ContainsKey(CONNECTIONSTRING_ATTRIBUTE))
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", CONNECTIONSTRING_ATTRIBUTE));

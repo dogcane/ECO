@@ -1,4 +1,5 @@
 using ECO.Data;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -37,17 +38,23 @@ namespace ECO.Providers.NHibernate
         #endregion
 
         #region Private_Methods
-        private void BuildSessionFactory()
+        private void BuildSessionFactory(IConfiguration appConfiguration)
         {
             if (_SessionFactory == null)
             {
-                var configuration = new nhcfg.Configuration();
-                configuration.AddProperties(_ConfigurationProperties);
+                var nhConfiguration = new nhcfg.Configuration();
+                if (_ConfigurationProperties.TryGetValue(nhcfg.Environment.ConnectionStringName, out var connectionStringName))
+                {
+                    var connectionString = appConfiguration.GetConnectionString(connectionStringName);
+                    if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException($"The connection string {connectionStringName} is not defined in the configuration file");
+                    nhConfiguration.SetProperty(nhcfg.Environment.ConnectionString, connectionString);
+                }
+                nhConfiguration.AddProperties(_ConfigurationProperties);
                 if (_ConfigurationProperties.ContainsKey(SESSIONINTERCEPTOR_ATTRIBUTE))
                 {
                     Type interceptorType = Type.GetType(_ConfigurationProperties[SESSIONINTERCEPTOR_ATTRIBUTE]);
                     if (Activator.CreateInstance(interceptorType) is nh.IInterceptor interceptor)
-                        configuration.SetInterceptor(interceptor);
+                        nhConfiguration.SetInterceptor(interceptor);
                 }
                 if (_ConfigurationProperties.ContainsKey(MAPPINGASSEMBLIES_ATTRIBUTE))
                 {
@@ -55,7 +62,7 @@ namespace ECO.Providers.NHibernate
                     //Hbm.xml
                     foreach (var mappingAssembly in mappingAssemblies)
                     {
-                        configuration.AddAssembly(mappingAssembly);
+                        nhConfiguration.AddAssembly(mappingAssembly);
                     }
                     //ClassMapping
                     var mapper = new nh.Mapping.ByCode.ModelMapper();
@@ -64,9 +71,9 @@ namespace ECO.Providers.NHibernate
                         mapper.AddMappings(Assembly.Load(mappingAssembly).ExportedTypes);
                     }
                     nhcfg.MappingSchema.HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-                    configuration.AddMapping(domainMapping);
+                    nhConfiguration.AddMapping(domainMapping);
                 }
-                _SessionFactory = configuration.BuildSessionFactory();
+                _SessionFactory = nhConfiguration.BuildSessionFactory();
                 //Register class types
                 foreach (var classMetadata in _SessionFactory.GetAllClassMetadata())
                 {
@@ -81,11 +88,11 @@ namespace ECO.Providers.NHibernate
 
         #region Protected_Methods
 
-        protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
+        protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
-            base.OnInitialize(extendedAttributes);
+            base.OnInitialize(extendedAttributes, configuration);
             _ConfigurationProperties = extendedAttributes;
-            BuildSessionFactory();
+            BuildSessionFactory(configuration);
         }
 
         protected override IPersistenceContext OnCreateContext()

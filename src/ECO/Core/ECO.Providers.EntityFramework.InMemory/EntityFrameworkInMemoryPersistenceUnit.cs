@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace ECO.Providers.EntityFramework.InMemory
 
         #region Protected_Methods
 
-        protected override DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes)
+        protected override DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
             string databaseName;
             if (extendedAttributes.ContainsKey(DATABASENAME_ATTRIBUTE))

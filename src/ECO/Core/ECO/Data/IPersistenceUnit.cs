@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 
@@ -26,7 +27,7 @@ namespace ECO.Data
         /// Method that initialize the persistence unit
         /// </summary>
         /// <param name="extendedAttributes"></param>
-        void Initialize(IDictionary<string, string> extendedAttributes);
+        void Initialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration);
 
         /// <summary>
         /// Method that return the current persistence context for the opened data context (if there is one).

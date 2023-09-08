@@ -1,5 +1,6 @@
 ﻿using ECO.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -35,15 +36,15 @@ namespace ECO.Providers.EntityFramework
 
         #region Protected_Methods
 
-        protected abstract DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes);
+        protected abstract DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration);
 
         #endregion
 
         #region PersistenceUnitBase
 
-        protected override void OnInitialize(IDictionary<string, string> extendedAttributes)
+        protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
         {
-            base.OnInitialize(extendedAttributes);
+            base.OnInitialize(extendedAttributes, configuration);
             if (extendedAttributes.ContainsKey(DBCONTEXTTYPE_ATTRIBUTE))
             {
                 _DbContextType = Type.GetType(extendedAttributes[DBCONTEXTTYPE_ATTRIBUTE]);
@@ -52,7 +53,7 @@ namespace ECO.Providers.EntityFramework
             {
                 throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DBCONTEXTTYPE_ATTRIBUTE));
             }
-            _DbContextOptions = CreateDbContextOptions(extendedAttributes);
+            _DbContextOptions = CreateDbContextOptions(extendedAttributes, configuration);
             //Register class types
             using DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
             foreach (var entity in context.Model.GetEntityTypes())

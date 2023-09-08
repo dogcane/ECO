@@ -6,7 +6,7 @@
         "type": "ECO.Providers.EntityFramework.PostgreSQL.EntitiFrameworkPosgreSQLPersistenceUnit, ECO.Providers.EntityFramework.PostgreSQL",
         "attributes": {
           "dbContextType": "ECO.Sample.Infrastructure.DAL.EntityFramework.ECOSampleContext, ECO.Sample.Infrastructure.DAL.EntityFramework",
-          "connectionString": "Server=127.0.0.1;Port=5432;Database=ECOSampleApp;User Id=ecosample;Password=ecosample;"
+          "connectionStringName": "postgres"
         }
       }
     ]
