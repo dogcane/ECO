@@ -1,11 +1,10 @@
-﻿using ECO.Providers.EntityFramework;
-using ECO.Sample.Domain;
+﻿using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.DAL.EntityFramework.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECO.Sample.Infrastructure.DAL.EntityFramework
 {
-    public class ECOSampleContext : ECODbContext
+    public class ECOSampleContext : DbContext
     {
         public DbSet<Event> Events { get; set; }
 

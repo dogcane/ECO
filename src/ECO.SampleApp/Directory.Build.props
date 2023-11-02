@@ -10,6 +10,6 @@
 	  - NHPOSTGRE
 	  - MARTEN
 	  -->
-	<DefineConstants>MARTEN</DefineConstants>
+	<DefineConstants>EFMEMORY</DefineConstants>
   </PropertyGroup>
 </Project>

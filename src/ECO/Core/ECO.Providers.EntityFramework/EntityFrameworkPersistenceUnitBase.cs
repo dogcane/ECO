@@ -55,7 +55,7 @@ namespace ECO.Providers.EntityFramework
             }
             _DbContextOptions = CreateDbContextOptions(extendedAttributes, configuration);
             //Register class types
-            using DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
+            using DbContext context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
             foreach (var entity in context.Model.GetEntityTypes())
             {
                 var entityType = entity.ClrType;
@@ -67,7 +67,7 @@ namespace ECO.Providers.EntityFramework
 
         protected override IPersistenceContext OnCreateContext()
         {
-            DbContext context = Activator.CreateInstance(_DbContextType, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
+            DbContext context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
             return new EntityFrameworkPersistenceContext(context, this, _LoggerFactory?.CreateLogger<EntityFrameworkPersistenceContext>());
         }
 

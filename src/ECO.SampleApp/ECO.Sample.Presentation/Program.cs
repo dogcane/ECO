@@ -18,6 +18,11 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Text.Json.Serialization;
 using ECO.Providers.Marten.Utils;
 using ECO.Configuration;
+using ECO.Providers.EntityFramework.Configuration;
+using Weasel.Core.Migrations;
+using ECO.Sample.Infrastructure.DAL.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 #elif EFSQL
     builder.Configuration.AddJsonFile("ecosettings.efcore.sqlserver.json");
 #elif EFMEMORY
-    builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json");
+    //builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json"); => MOVED TO FLUENT "WAY"    
 #elif EFPOSTGRE
     builder.Configuration.AddJsonFile("ecosettings.efcore.postgresql.json");
 #elif NHSQL
@@ -55,6 +60,18 @@ builder.Services.AddDataContext(options =>
         opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };        
     });
 });
+#elif EFMEMORY
+builder.Services.AddDataContext(option =>
+{
+    option.UseEntityFramework<ECOSampleContext>(opt =>
+    {
+        opt.Name = "ecosampleapp.efcore.memory";
+        opt.DbContextOptions
+            .UseInMemoryDatabase("ecosampleapp.efcore.memory")
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+    });
+});
+
 #elif MARTEN
 builder.Services.AddDataContext(options =>
 {
