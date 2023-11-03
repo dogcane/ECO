@@ -12,15 +12,16 @@ namespace ECO.Providers.InMemory.Configuration
 {
     public static class InMemoryDataContextOptionsExtensions
     {
-        public static DataContextOptions UseInMemory(this DataContextOptions dataContextOptions, Action<InMemoryOptions> optionsAction)
+        public static DataContextOptions UseInMemory(this DataContextOptions dataContextOptions, string persistenceUnitName, Action<InMemoryOptions> optionsAction)
         {            
             if (dataContextOptions == null) throw new ArgumentNullException(nameof(dataContextOptions));
+            if (string.IsNullOrWhiteSpace(persistenceUnitName)) throw new ArgumentNullException(nameof(persistenceUnitName));
             if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
             dataContextOptions.PersistenceUnitFactoryOptions += (persistenceUnitFactory, loggerFactory) =>
             {
                 InMemoryOptions options = new InMemoryOptions { };
                 optionsAction(options);
-                InMemoryPersistenceUnit persistenceUnit = new InMemoryPersistenceUnit(options.Name, loggerFactory);
+                InMemoryPersistenceUnit persistenceUnit = new InMemoryPersistenceUnit(persistenceUnitName, loggerFactory);
                 foreach (var @class in options.Assemblies.SelectMany(asm => asm.ExportedTypes).OfAggregateRootType())
                 {
                     persistenceUnit.AddClass(@class);
@@ -41,12 +42,53 @@ namespace ECO.Providers.InMemory.Configuration
 
     public sealed class InMemoryOptions
     {
-        public string Name { get; set; } = string.Empty;
+        #region Fields
+        private readonly List<Assembly> assemblies = new();
+        private readonly List<Type> classes = new();
+        private readonly List<IPersistenceUnitListener> listeners = new();
+        #endregion
 
-        public Assembly[] Assemblies { get; set; } = new Assembly[0];
+        #region Properties
+        public IEnumerable<Assembly> Assemblies => assemblies;
+        public IEnumerable<Type> Classes => classes;
+        public IEnumerable<IPersistenceUnitListener> Listeners => listeners;
+        #endregion
 
-        public Type[] Classes { get; set; } = new Type[0];
+        #region Methods
+        public InMemoryOptions AddAssembly(Assembly assembly)
+        {
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+            assemblies.Add(assembly);
+            return this;
+        }
+        public InMemoryOptions AddAssemblyFromType<T>()
+        {
+            return AddAssembly(typeof(T).Assembly);
+        }
+        public InMemoryOptions AddClass<T, K>()
+            where T : class, IAggregateRoot<K>
+        {
+            return AddClass(typeof(T));
+        }
+        public InMemoryOptions AddClass(Type @class)
+        {
+            if (@class == null) throw new ArgumentNullException(nameof(@class));
+            classes.Add(@class);
+            return this;
+        }
+        public InMemoryOptions AddListener<T>()
+            where T : IPersistenceUnitListener, new()
+        {
+            listeners.Add(new T());
+            return this;
+        }
+        public InMemoryOptions AddListener(IPersistenceUnitListener listener)
+        {
+            if (listener == null) throw new ArgumentNullException(nameof(listener));
+            listeners.Add(listener);
+            return this;
+        }
 
-        public IPersistenceUnitListener[] Listeners { get; set; } = new IPersistenceUnitListener[0];
+        #endregion
     }
 }

@@ -54,21 +54,15 @@ builder.Services.AddControllersWithViews().AddJsonOptions(jopt =>
 #if INMEMORY
 builder.Services.AddDataContext(options =>
 {
-    options.UseInMemory(opt =>
+    options.UseInMemory("ecosampleapp.efcore.memory", opt =>
     {
-        opt.Name = "ecosampleapp.efcore.memory";
-        opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };        
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();        
     });
 });
 #elif EFSQL
 builder.Services.AddDataContext(options =>
 {
-    options.UseEntityFramework<ECOSampleContext>(opt =>
-    {
-        opt.Name = "ecosampleapp.efcore.sqlserver";
-        opt.DbContextOptions
-            .UseSqlServer(builder.Configuration.GetConnectionString("sqlserver"));
-    });
+    options.UseEntityFramework<ECOSampleContext>("ecosampleapp.efcore.sqlserver", opt => opt.DbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("sqlserver")));
 });
 #elif EFMEMORY
 builder.Services.AddDataContext(option =>

@@ -37,7 +37,7 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
             where T : class, IAggregateRoot<K>
         {
             if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
-            serviceCollection.AddSingleton<IReadOnlyRepository<T, K>>(fact =>
+            serviceCollection.AddScoped<IReadOnlyRepository<T, K>>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
                 var persistenceUnit = persistenceUnitFactory.GetPersistenceUnit<T>();
@@ -51,7 +51,7 @@ namespace ECO.Integrations.Microsoft.DependencyInjection
             where T : class, IAggregateRoot<K>
         {
             if (serviceCollection == null) throw new ArgumentNullException(nameof(serviceCollection));
-            serviceCollection.AddSingleton<IRepository<T, K>>(fact =>
+            serviceCollection.AddScoped<IRepository<T, K>>(fact =>
             {
                 var persistenceUnitFactory = fact.GetRequiredService<IPersistenceUnitFactory>();
                 var persistenceUnit = persistenceUnitFactory.GetPersistenceUnit<T>();
