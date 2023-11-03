@@ -1,5 +1,6 @@
 ﻿using ECO.Configuration;
 using ECO.Data;
+using ECO.Providers.EntityFramework.Utils;
 using ECO.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -23,13 +24,10 @@ namespace ECO.Providers.EntityFramework.Configuration
             {
                 EntityFrameworkOptions options = new();
                 optionsAction(options);
-                EntityFrameworkPersistenceUnit<T> persistenceUnit = new(options.Name, options.DbContextOptions.Options, loggerFactory);                
-                using DbContext context = Activator.CreateInstance(typeof(T), options.DbContextOptions.Options) as DbContext ?? throw new InvalidCastException(nameof(context));
-                foreach (var entity in context.Model.GetEntityTypes())
+                EntityFrameworkPersistenceUnit<T> persistenceUnit = new(options.Name, options.DbContextOptions.Options, loggerFactory);
+                foreach (var entityType in DbContextFacade<T>.GetAggregateTypesFromDBContext(options.DbContextOptions.Options))
                 {
-                    var entityType = entity.ClrType;
-                    if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
-                        persistenceUnit.AddClass(entityType);
+                    persistenceUnit.AddClass(entityType);
                 }
                 foreach (var listener in options.Listeners)
                 {

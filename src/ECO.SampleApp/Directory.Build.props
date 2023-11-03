@@ -10,6 +10,6 @@
 	  - NHPOSTGRE
 	  - MARTEN
 	  -->
-	<DefineConstants>EFMEMORY</DefineConstants>
+	<DefineConstants>EFSQL</DefineConstants>
   </PropertyGroup>
 </Project>

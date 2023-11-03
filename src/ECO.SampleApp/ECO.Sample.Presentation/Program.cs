@@ -29,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 #if INMEMORY
     //builder.Configuration.AddJsonFile("ecosettings.inmemory.json"); => MOVED TO FLUENT "WAY"    
 #elif EFSQL
-    builder.Configuration.AddJsonFile("ecosettings.efcore.sqlserver.json");
+    //builder.Configuration.AddJsonFile("ecosettings.efcore.sqlserver.json"); => MOVED TO FLUENT "WAY"    
 #elif EFMEMORY
     //builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json"); => MOVED TO FLUENT "WAY"    
 #elif EFPOSTGRE
@@ -58,6 +58,16 @@ builder.Services.AddDataContext(options =>
     {
         opt.Name = "ecosampleapp.efcore.memory";
         opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };        
+    });
+});
+#elif EFSQL
+builder.Services.AddDataContext(options =>
+{
+    options.UseEntityFramework<ECOSampleContext>(opt =>
+    {
+        opt.Name = "ecosampleapp.efcore.sqlserver";
+        opt.DbContextOptions
+            .UseSqlServer(builder.Configuration.GetConnectionString("sqlserver"));
     });
 });
 #elif EFMEMORY
