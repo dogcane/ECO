@@ -6,6 +6,7 @@ using Resulz;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ECO.Sample.Application.Utils
 {
@@ -33,10 +34,11 @@ namespace ECO.Sample.Application.Utils
             }
 
             public async Task<OperationResult> Handle(Command request, CancellationToken cancellationToken)
-            {
-                using var transactionContext = await _DataContext.BeginTransactionAsync();
+            {                
                 try
                 {
+                    using var transactionContext = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
                     //Speakers
                     var speaker01 = Speaker.Create("John", "Snow", ".Net & .Net Core Expert", 35).Value;
                     var speaker02 = Speaker.Create("Arya", "Stark", "FrontEnd superhero", 20).Value;
@@ -49,7 +51,7 @@ namespace ECO.Sample.Application.Utils
                     event01.AddSession("Bootstrap", "Bootstrap full immersion", 100, speaker02);
                     await _EventRepository.AddAsync(event01);
                     await _DataContext.SaveChangesAsync();
-                    await transactionContext.CommitAsync();
+                    transactionContext.Complete();
                     return await Task.FromResult(OperationResult.MakeSuccess());
                 }
                 catch (Exception ex)

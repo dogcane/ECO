@@ -7,12 +7,13 @@ namespace ECO.Data
     {
         #region Private_Fields
 
-        private readonly IPersistenceContext _PersistenceContext;
+        private readonly IDataContext _DataContext;
+        private IPersistenceContext? _PersistenceContext;
 
         #endregion
 
         #region Properties
-        public IPersistenceContext PersistenceContext => _PersistenceContext;
+        public IPersistenceContext PersistenceContext => (_PersistenceContext ??= _DataContext.GetCurrentContext(typeof(T)));
 
         #endregion
 
@@ -20,8 +21,7 @@ namespace ECO.Data
 
         protected PersistenceManagerBase(IDataContext dataContext)
         {
-            if (dataContext == null) throw new ArgumentNullException(nameof(dataContext));
-            _PersistenceContext = dataContext.GetCurrentContext(typeof(T));
+            _DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
         }
 
         #endregion
