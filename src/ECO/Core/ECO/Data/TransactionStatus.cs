@@ -1,9 +1,8 @@
-namespace ECO.Data
+namespace ECO.Data;
+
+public enum TransactionStatus
 {
-    public enum TransactionStatus
-    {
-        Alive,
-        Committed,
-        RolledBack
-    }
+    Alive = 0,
+    Committed = 1,
+    RolledBack = 2
 }

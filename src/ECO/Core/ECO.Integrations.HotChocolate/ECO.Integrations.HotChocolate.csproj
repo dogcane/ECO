@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.Integrations.HotChocolate</AssemblyTitle>
-		<AssemblyVersion>2.2.2.0</AssemblyVersion>
-		<FileVersion>2.2.2.0</FileVersion>
-		<Version>2.2.2</Version>
 		<Product>Enterprise CLR Objects - HotChocolate Integrations</Product>
 		<Description>ECO.Integrations.HotChocolate is the base package for HotChocolate integrations. It contains data loaders and other stuff.</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -21,11 +18,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HotChocolate.Data" Version="13.7.0" />
+		<PackageReference Include="HotChocolate.Data" Version="13.9.0" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>	
+	<ItemGroup>
+		<None Include="_images\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

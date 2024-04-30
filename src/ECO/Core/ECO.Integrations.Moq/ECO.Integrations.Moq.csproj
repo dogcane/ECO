@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.Integrations.Moq</AssemblyTitle>
-		<AssemblyVersion>2.2.2.0</AssemblyVersion>
-		<FileVersion>2.2.2.0</FileVersion>
-		<Version>2.2.2</Version>
 		<Product>Enterprise CLR Objects - Moq Integrations</Product>
 		<Description>ECO.Integrations.Moq is the base package for Moq integrations. It contains all the extension methods required to setup ECO with Mow testing framework.</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -23,9 +20,11 @@
 	<ItemGroup>
 		<PackageReference Include="Moq" Version="4.20.69" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="_images\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

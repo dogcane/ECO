@@ -1,20 +1,8 @@
-﻿using System;
+﻿namespace ECO.Data;
 
-namespace ECO.Data
+public class PersistentClassNotRegisteredException(Type persistenClassType) : ApplicationException($"Persistent class '{persistenClassType?.Name}' not registered")
 {
-    public class PersistentClassNotRegisteredException : ApplicationException
-    {
-        #region Public_Properties
-
-        public Type PersistentClassType { get; protected set; }
-
-        #endregion
-
-        #region Ctor
-
-        public PersistentClassNotRegisteredException(Type persistenClassType)
-            : base($"Persistent class '{persistenClassType?.Name}' not registered") => PersistentClassType = persistenClassType!;
-
-        #endregion
-    }
+    #region Public_Properties
+    public Type PersistentClassType { get; protected set; } = persistenClassType!;
+    #endregion
 }

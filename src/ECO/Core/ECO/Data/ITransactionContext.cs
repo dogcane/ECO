@@ -1,35 +1,30 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace ECO.Data;
 
-namespace ECO.Data
+public interface ITransactionContext : IDisposable
 {
-    public interface ITransactionContext : IDisposable
-    {
-        #region Properties
+    #region Properties
 
-        Guid TransactionContextId { get; }
+    Guid TransactionContextId { get; }
 
-        bool AutoCommit { get; }
+    bool AutoCommit { get; }
 
-        TransactionStatus Status { get; }
+    TransactionStatus Status { get; }
 
-        IDataContext DataContext { get; }
+    IDataContext DataContext { get; }
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        void EnlistDataTransaction(IDataTransaction dataTransaction);
+    void EnlistDataTransaction(IDataTransaction dataTransaction);
 
-        void Commit();
+    void Commit();
 
-        void Rollback();
+    void Rollback();
 
-        Task CommitAsync(CancellationToken cancellationToken = default);
+    Task CommitAsync(CancellationToken cancellationToken = default);
 
-        Task RollbackAsync(CancellationToken cancellationToken = default);
+    Task RollbackAsync(CancellationToken cancellationToken = default);
 
-        #endregion
-    }
+    #endregion
 }

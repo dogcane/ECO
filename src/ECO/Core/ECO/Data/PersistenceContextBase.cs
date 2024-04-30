@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ECO.Data
 {
@@ -52,7 +49,7 @@ namespace ECO.Data
         {
 
         }
-        protected virtual async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Task.Run(() => OnSaveChanges());
+        protected virtual async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Task.Run(OnSaveChanges, cancellationToken);
 
         protected virtual void OnAttach<T>(IAggregateRoot<T> entity)
         {
@@ -83,28 +80,28 @@ namespace ECO.Data
 
         public void Attach<T>(IAggregateRoot<T> entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            ArgumentNullException.ThrowIfNull(entity);
             _Logger?.LogDebug($"Attaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnAttach(entity);
         }
 
         public void Detach<T>(IAggregateRoot<T> entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            ArgumentNullException.ThrowIfNull(entity);
             _Logger?.LogDebug($"Detaching entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnDetach(entity);
         }
 
         public void Refresh<T>(IAggregateRoot<T> entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            ArgumentNullException.ThrowIfNull(entity);
             _Logger?.LogDebug($"Refreshing entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             OnRefresh(entity);
         }
 
         public PersistenceState GetPersistenceState<T>(IAggregateRoot<T> entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            ArgumentNullException.ThrowIfNull(entity);
             _Logger?.LogDebug($"Get Persistence State for entity {entity.GetType().Name}:{entity.Identity} in {PersistenceUnit.Name}:{PersistenceContextId}");
             return OnGetPersistenceState(entity);
         }
@@ -145,10 +142,7 @@ namespace ECO.Data
 
         #region IDisposable Membri di
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         private void Dispose(bool isDisposing)
         {

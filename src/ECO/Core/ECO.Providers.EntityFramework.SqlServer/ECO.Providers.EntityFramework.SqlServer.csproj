@@ -24,5 +24,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<None Include="_images\icon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>

@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.EventSourcing</AssemblyTitle>
-		<AssemblyVersion>2.1.0.0</AssemblyVersion>
-		<FileVersion>2.1.0.0</FileVersion>
-		<Version>2.1.0</Version>
 		<Product>Enterprise CLR Objects</Product>
 		<Description>ECO is a package that contains some base classes for DDD and Event Sourcing development. It helps to avoid the creation of standard classes like "event sourcing AggregateRoot" and all the "events stuff".</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -19,9 +16,10 @@
 		<PackageId>ECO.Core.EventSourcing</PackageId>
 		<PackageTags>DDD aggregate entity repository persistence eventsourcing</PackageTags>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Include="_images\icon.png" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 </Project>

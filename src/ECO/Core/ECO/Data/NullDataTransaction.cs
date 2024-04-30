@@ -1,47 +1,24 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace ECO.Data;
 
-namespace ECO.Data
+public sealed class NullDataTransaction(IPersistenceContext context) : IDataTransaction
 {
-    public sealed class NullDataTransaction : IDataTransaction
-    {
-        #region Ctor
+    #region IDataTransaction Membri di
 
-        public NullDataTransaction(IPersistenceContext context)
-        {
-            Context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+    public IPersistenceContext Context { get; private set; } = context ?? throw new ArgumentNullException(nameof(context));
 
-        #endregion
+    public void Commit() { }
 
-        #region IDataTransaction Membri di
+    public void Rollback() { }
 
-        public IPersistenceContext Context { get; private set; }
+    #endregion
 
-        public void Commit()
-        {
+    #region IDisposable Membri di
 
-        }
+    public void Dispose() { }
 
-        public void Rollback()
-        {
+    public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(Commit, cancellationToken);
 
-        }
+    public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(Rollback, cancellationToken);
 
-        #endregion
-
-        #region IDisposable Membri di
-
-        public void Dispose()
-        {
-
-        }
-
-        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());
-
-        public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Rollback());
-
-        #endregion
-    }
+    #endregion
 }
