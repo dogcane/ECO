@@ -10,7 +10,7 @@
 	  - NHPOSTGRE
 	  - MARTEN
 	  -->
-		<DefineConstants>NHSQL</DefineConstants>
+		<DefineConstants>INMEMORY</DefineConstants>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 </Project>

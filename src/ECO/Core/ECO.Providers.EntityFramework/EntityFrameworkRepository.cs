@@ -2,33 +2,24 @@
 using System;
 using System.Threading.Tasks;
 
-namespace ECO.Providers.EntityFramework
+namespace ECO.Providers.EntityFramework;
+
+public class EntityFrameworkRepository<T, K>(IDataContext dataContext) : EntityFrameworkReadOnlyRepository<T, K>(dataContext), IRepository<T, K>
+    where T : class, IAggregateRoot<K>
 {
-    public class EntityFrameworkRepository<T, K> : EntityFrameworkReadOnlyRepository<T, K>, IRepository<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region Ctor
+    #region IRepository<T,K> Members
 
-        public EntityFrameworkRepository(IDataContext dataContext) : base(dataContext)
-        {
-        }
+    public virtual void Add(T item) => DbContext.Set<T>().Add(item ?? throw new ArgumentNullException(nameof(item)));
 
-        #endregion
+    public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item ?? throw new ArgumentNullException(nameof(item))));
 
-        #region IRepository<T,K> Members
+    public virtual void Update(T item) => DbContext.Set<T>().Update(item ?? throw new ArgumentNullException(nameof(item)));
 
-        public virtual void Add(T item) => DbContext.Set<T>().Add(item ?? throw new ArgumentNullException(nameof(item)));
+    public virtual async Task UpdateAsync(T item) => await Task.Run(() => Update(item ?? throw new ArgumentNullException(nameof(item))));
 
-        public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item ?? throw new ArgumentNullException(nameof(item))));
+    public virtual void Remove(T item) => DbContext.Set<T>().Remove(item ?? throw new ArgumentNullException(nameof(item)));
 
-        public virtual void Update(T item) => DbContext.Set<T>().Update(item ?? throw new ArgumentNullException(nameof(item)));
+    public virtual async Task RemoveAsync(T item) => await Task.Run(() => Remove(item ?? throw new ArgumentNullException(nameof(item))));
 
-        public virtual async Task UpdateAsync(T item) => await Task.Run(() => Update(item ?? throw new ArgumentNullException(nameof(item))));
-
-        public virtual void Remove(T item) => DbContext.Set<T>().Remove(item ?? throw new ArgumentNullException(nameof(item)));
-
-        public virtual async Task RemoveAsync(T item) => await Task.Run(() => Remove(item ?? throw new ArgumentNullException(nameof(item))));
-
-        #endregion
-    }
+    #endregion
 }

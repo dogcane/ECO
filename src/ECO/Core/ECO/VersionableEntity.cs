@@ -1,6 +1,5 @@
 namespace ECO;
 
-[Serializable]
 public abstract class VersionableEntity<T> : Entity<T>, IVersionableEntity<T>
 {
     #region Public_Properties

@@ -4,7 +4,6 @@ namespace ECO;
 /// Class that defines a base for all the entities
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[Serializable]
 public abstract class Entity<T> : IEntity<T>
 {
     #region Public_Properties

@@ -1,4 +1,3 @@
-using ECO.UnitTests.Utils;
 using ECO.UnitTests.Utils.Foos;
 using System;
 using Xunit;

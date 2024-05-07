@@ -1,4 +1,3 @@
-using ECO.UnitTests.Utils;
 using ECO.UnitTests.Utils.Foos;
 using Xunit;
 
@@ -10,7 +9,7 @@ namespace ECO.UnitTests
         public void Should_identity_default_with_empty_constructor()
         {
             var aggregate = new AggregateRootFoo();
-            Assert.Equal(default(int), aggregate.Identity);            
+            Assert.Equal(default, aggregate.Identity);
         }
 
         [Fact]

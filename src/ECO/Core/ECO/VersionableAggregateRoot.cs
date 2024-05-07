@@ -4,7 +4,6 @@
 /// Class that defines a base for all versionable aggregate's roots
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[Serializable]
 public abstract class VersionableAggregateRoot<T> : AggregateRoot<T>, IVersionableAggregateRoot<T>
 {
     #region Public_Properties

@@ -4,47 +4,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ECO.Providers.EntityFramework
+namespace ECO.Providers.EntityFramework;
+
+public class EntityFrameworkReadOnlyRepository<T, K>(IDataContext dataContext) : EntityFrameworkPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
+    where T : class, IAggregateRoot<K>
 {
-    public class EntityFrameworkReadOnlyRepository<T, K> : EntityFrameworkPersistenceManager<T, K>, IReadOnlyRepository<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region Ctor
+    #region IReadOnlyRepository<T,K> Members
 
-        public EntityFrameworkReadOnlyRepository(IDataContext dataContext) : base(dataContext)
-        {
-        }
+    public virtual T? Load(K identity) => DbContext.Set<T>().Find(identity);
 
-        #endregion
+    public virtual async Task<T?> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
 
-        #region IReadOnlyRepository<T,K> Members
+    #endregion
 
-        public virtual T? Load(K identity) => DbContext.Set<T>().Find(identity);
+    #region IEnumerable<T> Members
 
-        public virtual async Task<T?> LoadAsync(K identity) => await DbContext.Set<T>().FindAsync(identity);
+    public virtual IEnumerator<T> GetEnumerator() => DbContext.Set<T>().AsEnumerable().GetEnumerator();
 
-        #endregion
+    #endregion
 
-        #region IEnumerable<T> Members
+    #region IEnumerable Members
 
-        public virtual IEnumerator<T> GetEnumerator() => DbContext.Set<T>().AsEnumerable().GetEnumerator();
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.GetEnumerator();
 
-        #endregion
+    #endregion
 
-        #region IEnumerable Members
+    #region IQueryable Members
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.GetEnumerator();
+    public virtual Type ElementType => DbContext.Set<T>().AsQueryable().ElementType;
 
-        #endregion
+    public virtual System.Linq.Expressions.Expression Expression => DbContext.Set<T>().AsQueryable().Expression;
 
-        #region IQueryable Members
+    public virtual IQueryProvider Provider => DbContext.Set<T>().AsQueryable().Provider;
 
-        public virtual Type ElementType => DbContext.Set<T>().AsQueryable().ElementType;
-
-        public virtual System.Linq.Expressions.Expression Expression => DbContext.Set<T>().AsQueryable().Expression;
-
-        public virtual IQueryProvider Provider => DbContext.Set<T>().AsQueryable().Provider;
-
-        #endregion
-    }
+    #endregion
 }
