@@ -15,6 +15,7 @@ namespace ECO.UnitTests.Utils.Mocks
         public PersistenceUnitFactoryMock()
         {
             Setup(m => m.GetPersistenceUnit(It.IsAny<Type>())).Returns(PersistenceUnitMock.Object);
+            Setup(m => m.GetPersistenceUnit<It.IsAnyType>()).Returns(PersistenceUnitMock.Object);
         }
     }
 }

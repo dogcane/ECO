@@ -8,14 +8,14 @@ namespace ECO.UnitTests
         [Fact]
         public void Should_identity_default_with_empty_constructor()
         {
-            var aggregate = new AggregateRootFoo();
+            var aggregate = new AggregateRootFooOfInt();
             Assert.Equal(default, aggregate.Identity);
         }
 
         [Fact]
         public void Should_identity_value_equal_when_constructor_with_identity()
         {
-            var aggregate = new AggregateRootFoo(1);
+            var aggregate = new AggregateRootFooOfInt(1);
             Assert.Equal(1, aggregate.Identity);
         }
 
