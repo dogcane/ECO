@@ -13,20 +13,20 @@ public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPe
 
     public virtual T? Load(K identity) => typeof(K).Name switch
     {
-        nameof(String) => DocumentSession.Load<T>(Convert.ToString(identity)),
+        nameof(String) => DocumentSession.Load<T>(Convert.ToString(identity)!),
         nameof(Int32) => DocumentSession.Load<T>(Convert.ToInt32(identity)),
         nameof(Int64) => DocumentSession.Load<T>(Convert.ToInt64(identity)),
-        nameof(Guid) => DocumentSession.Load<T>(Guid.Parse(Convert.ToString(identity))),
+        nameof(Guid) => DocumentSession.Load<T>(Guid.Parse(Convert.ToString(identity)!)),
         _ => throw new InvalidOperationException()
     };
 
 
     public virtual async Task<T?> LoadAsync(K identity) => typeof(K).Name switch
     {
-        nameof(String) => await DocumentSession.LoadAsync<T>(Convert.ToString(identity)),
+        nameof(String) => await DocumentSession.LoadAsync<T>(Convert.ToString(identity)!),
         nameof(Int32) => await DocumentSession.LoadAsync<T>(Convert.ToInt32(identity)),
         nameof(Int64) => await DocumentSession.LoadAsync<T>(Convert.ToInt64(identity)),
-        nameof(Guid) => await DocumentSession.LoadAsync<T>(Guid.Parse(Convert.ToString(identity))),
+        nameof(Guid) => await DocumentSession.LoadAsync<T>(Guid.Parse(Convert.ToString(identity)!)),
         _ => throw new InvalidOperationException()
     };
 

@@ -13,7 +13,7 @@ public class Order : ESAggregateRoot<string>
 
     #region Properties
 
-    public string Id
+    public string? Id
     {
         get => Identity;
         set => Identity = value;

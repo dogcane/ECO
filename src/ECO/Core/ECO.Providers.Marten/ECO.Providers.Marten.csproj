@@ -17,7 +17,7 @@
 		<PackageTags>ddd aggregate entity repository persistence marten</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Marten" Version="7.10.1" />
+		<PackageReference Include="Marten" Version="7.19.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ECO.EventSourcing\ECO.EventSourcing.csproj" />

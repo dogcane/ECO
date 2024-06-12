@@ -33,7 +33,7 @@ namespace ECO.Sample.Application.Speakers.Commands
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Speaker speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
+                    var speakerEntity = _SpeakerRepository.Load(request.SpeakerCode);
                     if (speakerEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND"));

@@ -38,7 +38,7 @@ namespace ECO.Sample.Application.Speakers.Queries
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Speaker speaker = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
+                    var speaker = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
                     if (speaker == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND"));

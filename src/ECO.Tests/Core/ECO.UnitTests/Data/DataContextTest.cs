@@ -85,10 +85,10 @@ public class DataContextTest
         var persistenceUnitFactory = new PersistenceUnitFactoryMock();
         var firstDataContext = new DataContext(persistenceUnitFactory.Object);
         firstDataContext.BeginTransaction(true);
-        Assert.True(firstDataContext.Transaction.AutoCommit);
+        Assert.True(firstDataContext.Transaction!.AutoCommit);
         var secondDataContext = new DataContext(persistenceUnitFactory.Object);
         secondDataContext.BeginTransaction(false);
-        Assert.False(secondDataContext.Transaction.AutoCommit);
+        Assert.False(secondDataContext.Transaction!.AutoCommit);
     }
 
     [Fact]

@@ -38,10 +38,10 @@ namespace ECO.Sample.Application.Events.Commands
                     {
                         return OperationResult<Guid>.MakeFailure(eventResult.TranslateContext("Period.StartDate", "StartDate").TranslateContext("Period.EndDate", "EndDate").Errors);
                     }
-                    await _EventRepository.AddAsync(eventResult.Value);
+                    await _EventRepository.AddAsync(eventResult.Value!);
                     await _DataContext.SaveChangesAsync();
                     await transactionContext.CommitAsync();
-                    return OperationResult<Guid>.MakeSuccess(eventResult.Value.Identity);                    
+                    return OperationResult<Guid>.MakeSuccess(eventResult.Value!.Identity);                    
                 }
                 catch (Exception ex)
                 {

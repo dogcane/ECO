@@ -51,7 +51,7 @@ public sealed class MartenPersistenceUnit : PersistenceUnitBase<MartenPersistenc
         BuildDocumentStore(configuration);
     }
 
-    protected override IPersistenceContext OnCreateContext() => new MartenPersistenceContext((_DocumentStore ?? throw new NullReferenceException(nameof(_DocumentStore))).OpenSession(), this, _LoggerFactory?.CreateLogger<MartenPersistenceContext>());
+    protected override IPersistenceContext OnCreateContext() => new MartenPersistenceContext((_DocumentStore ?? throw new NullReferenceException(nameof(_DocumentStore))).IdentitySession(), this, _LoggerFactory?.CreateLogger<MartenPersistenceContext>());
 
     #endregion
 

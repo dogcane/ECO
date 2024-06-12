@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HotChocolate.Data" Version="13.9.1" />
+		<PackageReference Include="HotChocolate.Data" Version="13.9.6" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ECO\ECO.csproj" />

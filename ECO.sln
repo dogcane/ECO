@@ -112,7 +112,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Integrations.Moq", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.Integrations.HotChocolate", "src\ECO\Core\ECO.Integrations.HotChocolate\ECO.Integrations.HotChocolate.csproj", "{FDB20DB1-261F-4989-A7B4-45993CD6077B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECO.DomainEvents", "src\ECO\Core\ECO.DomainEvents\ECO.DomainEvents.csproj", "{2AF44CC7-DEAD-4DAA-9C40-B643D4FBF8F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECO.DomainEvents", "src\ECO\Core\ECO.DomainEvents\ECO.DomainEvents.csproj", "{2AF44CC7-DEAD-4DAA-9C40-B643D4FBF8F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Marten", "Marten", "{2524F070-2FAB-4E65-B516-3C532BC144B7}"
+	ProjectSection(SolutionItems) = preProject
+		src\ECO.SampleApp\_Files\Marten\01_Create_Database.sql = src\ECO.SampleApp\_Files\Marten\01_Create_Database.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -276,6 +281,7 @@ Global
 		{5907335F-0E36-4962-B7F2-DDF763C93263} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{FDB20DB1-261F-4989-A7B4-45993CD6077B} = {056FE36F-6278-415F-B188-718CBEFEFFA1}
 		{2AF44CC7-DEAD-4DAA-9C40-B643D4FBF8F8} = {94C9423D-4BD2-495A-8FDC-72974CC574A3}
+		{2524F070-2FAB-4E65-B516-3C532BC144B7} = {8D966FE3-92CF-4C50-A7C1-2B1AD2E98D0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53398E46-E446-4097-9B17-D64ED618FA55}

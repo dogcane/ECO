@@ -38,10 +38,10 @@ namespace ECO.Sample.Application.Speakers.Commands
                     {
                         return OperationResult<Guid>.MakeFailure(speakerResult.Errors);
                     }
-                    await _SpeakerRepository.AddAsync(speakerResult.Value);
+                    await _SpeakerRepository.AddAsync(speakerResult.Value!);
                     await _DataContext.SaveChangesAsync();                    
                     await transactionContext.CommitAsync();
-                    return OperationResult<Guid>.MakeSuccess(speakerResult.Value.Identity);
+                    return OperationResult<Guid>.MakeSuccess(speakerResult.Value!.Identity);
                 }
                 catch (Exception ex)
                 {
