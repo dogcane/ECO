@@ -72,9 +72,8 @@ builder.Services.AddDataContext(options =>
 #elif EFMEMORY
 builder.Services.AddDataContext(option =>
 {
-    option.UseEntityFramework<ECOSampleContext>(opt =>
+    option.UseEntityFramework<ECOSampleContext>("ecosampleapp.efcore.memory", opt =>
     {
-        opt.Name = "ecosampleapp.efcore.memory";
         opt.DbContextOptions
             .UseInMemoryDatabase("ecosampleapp.efcore.memory")
             .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
