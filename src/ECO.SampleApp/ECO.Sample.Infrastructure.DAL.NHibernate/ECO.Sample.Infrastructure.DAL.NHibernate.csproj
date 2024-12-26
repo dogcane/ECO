@@ -8,6 +8,6 @@
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NHibernate" Version="5.5.1" />
+		<PackageReference Include="NHibernate" Version="5.5.2" />
 	</ItemGroup>
 </Project>
