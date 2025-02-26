@@ -3,8 +3,8 @@ namespace ECO;
 /// <summary>
 /// Interface that defines a repository
 /// </summary>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="K"></typeparam>
+/// <typeparam name="T">The type of the aggregate root</typeparam>
+/// <typeparam name="K">The type of the identifier</typeparam>
 public interface IRepository<T, K> : IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
 {

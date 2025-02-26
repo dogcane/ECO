@@ -25,8 +25,8 @@ public static class DataContextOptionsExtensions
                 IPersistenceUnit persistenceUnit;
                 try
                 {
-                    unitType = Type.GetType(unit.Type)!;
-                    persistenceUnit = (IPersistenceUnit)Activator.CreateInstance(unitType, unit.Name, loggerFactory)!;
+                    unitType = Type.GetType(unit.Type) ?? throw new TypeLoadException($"Unable to load type {unit.Type}");
+                    persistenceUnit = Activator.CreateInstance(unitType, unit.Name, loggerFactory) as IPersistenceUnit ?? throw new InvalidOperationException($"Unable to create instance of {unitType}");
                     persistenceUnit.Initialize(unit.Attributes, configuration);
                 }
                 catch (Exception ex)
@@ -38,7 +38,7 @@ public static class DataContextOptionsExtensions
                 {
                     try
                     {
-                        Type type = Type.GetType(classType)!;
+                        Type type = Type.GetType(classType) ?? throw new TypeLoadException($"Unable to load type {classType}");
                         persistenceUnit.AddClass(type);
                     }
                     catch (Exception ex)
@@ -50,8 +50,8 @@ public static class DataContextOptionsExtensions
                 {
                     try
                     {
-                        Type type = Type.GetType(listenerType)!;
-                        IPersistenceUnitListener listener = (IPersistenceUnitListener)Activator.CreateInstance(type)!;
+                        Type type = Type.GetType(listenerType) ?? throw new TypeLoadException($"Unable to load type {listenerType}");
+                        IPersistenceUnitListener listener = Activator.CreateInstance(type) as IPersistenceUnitListener ?? throw new InvalidOperationException($"Unable to create instance of {type}");
                         persistenceUnit.AddUnitListener(listener);
                     }
                     catch (Exception ex)

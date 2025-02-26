@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.NHibernate\ECO.Providers.NHibernate.csproj" />
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="NHibernate" Version="5.5.2" />
 	</ItemGroup>
 </Project>

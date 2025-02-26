@@ -44,7 +44,7 @@ public abstract class Entity<T> : IEntity<T>
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public virtual bool Equals(IEntity<T>? obj) => (obj != null) && GetType() == obj!.GetType() && object.Equals(Identity, obj!.Identity);
+    public virtual bool Equals(IEntity<T>? obj) => obj is not null && GetType() == obj.GetType() && EqualityComparer<T?>.Default.Equals(Identity, obj.Identity);
 
     /// <summary>
     /// Method that returns the hash code for the current entity

@@ -5,8 +5,8 @@ namespace ECO;
 /// <summary>
 /// Interface that defines a read only repository
 /// </summary>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="K"></typeparam>
+/// <typeparam name="T">The type of the aggregate root</typeparam>
+/// <typeparam name="K">The type of the identifier</typeparam>
 public interface IReadOnlyRepository<T, K> : IQueryable<T>, IPersistenceManager<T, K>
     where T : class, IAggregateRoot<K>
 {

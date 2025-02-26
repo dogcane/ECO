@@ -76,7 +76,9 @@ public interface IPersistenceUnit
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="K"></typeparam>
     /// <returns></returns>
-    IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) where T : class, IAggregateRoot<K>;
+    IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) 
+        where T : class, IAggregateRoot<K> 
+        where K : notnull;
 
     /// <summary>
     /// 
@@ -84,7 +86,9 @@ public interface IPersistenceUnit
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="K"></typeparam>
     /// <returns></returns>
-    IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) where T : class, IAggregateRoot<K>;
+    IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
+        where T : class, IAggregateRoot<K>
+        where K : notnull;
 
     #endregion
 }

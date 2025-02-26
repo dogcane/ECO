@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ECO.Providers.EntityFramework;
 
-public abstract class EntityFrameworkPersistenceUnitBase : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>
+public abstract class EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null) : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>(name, loggerFactory)
 {
     #region Consts
 
@@ -21,16 +21,6 @@ public abstract class EntityFrameworkPersistenceUnitBase : PersistenceUnitBase<E
     protected Type? _DbContextType;
 
     protected DbContextOptions? _DbContextOptions;
-
-    #endregion
-
-    #region Ctor
-
-    protected EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
-        : base(name, loggerFactory)
-    {
-
-    }
 
     #endregion
 
@@ -63,7 +53,6 @@ public abstract class EntityFrameworkPersistenceUnitBase : PersistenceUnitBase<E
                 _Classes.Add(entity.ClrType);
         }
     }
-
 
     protected override IPersistenceContext OnCreateContext()
     {

@@ -1,5 +1,9 @@
 namespace ECO;
 
+/// <summary>
+/// Class that defines a base for all versionable entities
+/// </summary>
+/// <typeparam name="T">The type of the identifier</typeparam>
 public abstract class VersionableEntity<T> : Entity<T>, IVersionableEntity<T>
 {
     #region Public_Properties

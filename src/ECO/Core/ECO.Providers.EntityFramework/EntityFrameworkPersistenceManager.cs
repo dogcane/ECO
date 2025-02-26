@@ -10,6 +10,4 @@ public class EntityFrameworkPersistenceManager<T, K>(IDataContext dataContext) :
     #region Properties
     public DbContext DbContext => (PersistenceContext as EntityFrameworkPersistenceContext ?? throw new InvalidCastException(nameof(DbContext))).Context;
     #endregion
-
-
 }

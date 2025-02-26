@@ -1,22 +1,19 @@
 ﻿using ECO.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace ECO.EventSourcing
+namespace ECO.EventSourcing;
+
+public interface IESRepository<T, K> : IPersistenceManager<T, K>
+    where T : class, IESAggregateRoot<K>
 {
-    public interface IESRepository<T, K> : IPersistenceManager<T, K>
-        where T : class, IESAggregateRoot<K>
-    {
-        T? Load(K identity);
+    T? Load(K identity);
 
-        Task<T?> LoadAsync(K identity);
+    Task<T?> LoadAsync(K identity);
 
-        void Save(T item);
+    void Save(T item);
 
-        Task SaveAsync(T item);
+    Task SaveAsync(T item);
 
-        IEnumerable<dynamic> LoadEvents(K identity);
+    IEnumerable<dynamic> LoadEvents(K identity);
 
-        Task<IEnumerable<dynamic>> LoadEventsAsync(K identity);
-    }
+    Task<IEnumerable<dynamic>> LoadEventsAsync(K identity);
 }

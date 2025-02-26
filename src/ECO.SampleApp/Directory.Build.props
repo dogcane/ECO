@@ -10,7 +10,7 @@
 	  - NHPOSTGRE
 	  - MARTEN
 	  -->
-		<DefineConstants>EFMEMORY</DefineConstants>
+		<DefineConstants>INMEMORY</DefineConstants>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 </Project>

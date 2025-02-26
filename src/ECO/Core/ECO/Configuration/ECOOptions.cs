@@ -11,9 +11,9 @@ public class ECOOptions
 
 public class PersistenceUnitOptions
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; } = string.Empty;
 
-    public string Type { get; set; } = string.Empty;
+    public required string Type { get; set; } = string.Empty;
 
     public string[] Listeners { get; set; } = [];
 

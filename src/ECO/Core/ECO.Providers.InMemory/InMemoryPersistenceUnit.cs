@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace ECO.Providers.InMemory;
 
-public sealed class InMemoryPersistenceUnit(string name, ILoggerFactory loggerFactory) 
-    : PersistenceUnitBase<InMemoryPersistenceUnit>(name, loggerFactory)    
+public sealed class InMemoryPersistenceUnit(string name, ILoggerFactory loggerFactory)
+    : PersistenceUnitBase<InMemoryPersistenceUnit>(name, loggerFactory)
 {
     #region Methods
 

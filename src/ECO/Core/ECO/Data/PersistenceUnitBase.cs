@@ -3,20 +3,20 @@ using Microsoft.Extensions.Logging;
 
 namespace ECO.Data;
 
-public abstract class PersistenceUnitBase<P> : IPersistenceUnit
+public abstract class PersistenceUnitBase<P>(string name, ILoggerFactory? loggerFactory = null) : IPersistenceUnit
     where P : PersistenceUnitBase<P>
 {
     #region Protected_Fields
 
-    protected string _Name;
+    protected string _Name = name ?? throw new ArgumentNullException(nameof(name));
 
     protected ISet<Type> _Classes = new HashSet<Type>();
 
     protected ISet<IPersistenceUnitListener> _Listeners = new HashSet<IPersistenceUnitListener>();
 
-    protected readonly ILoggerFactory? _LoggerFactory;
+    protected readonly ILoggerFactory? _LoggerFactory = loggerFactory;
 
-    protected readonly ILogger<P>? _Logger;
+    protected readonly ILogger<P>? _Logger = loggerFactory?.CreateLogger<P>();
 
     #endregion
 
@@ -27,17 +27,6 @@ public abstract class PersistenceUnitBase<P> : IPersistenceUnit
     public virtual IEnumerable<Type> Classes => _Classes;
 
     public virtual IEnumerable<IPersistenceUnitListener> Listeners => _Listeners;
-
-    #endregion
-
-    #region Ctor
-
-    protected PersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
-    {
-        _Name = name ?? throw new ArgumentNullException(nameof(name));
-        _LoggerFactory = loggerFactory;
-        _Logger = loggerFactory?.CreateLogger<P>();
-    }
 
     #endregion
 
@@ -152,9 +141,13 @@ public abstract class PersistenceUnitBase<P> : IPersistenceUnit
         return this;
     }
 
-    public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) where T : class, IAggregateRoot<K>;
+    public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) 
+        where T : class, IAggregateRoot<K> 
+        where K : notnull;
 
-    public abstract IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) where T : class, IAggregateRoot<K>;
+    public abstract IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) 
+        where T : class, IAggregateRoot<K> 
+        where K : notnull;
 
     #endregion
 }

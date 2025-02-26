@@ -30,8 +30,8 @@ public abstract class ESAggregateRoot<T> : AggregateRoot<T>, IESAggregateRoot<T>
 
     protected void OnApply<E>(E @event, Action<E> applyHandler)
     {
-        if (@event == null) throw new ArgumentNullException(nameof(@event));
-        if (applyHandler == null) throw new ArgumentNullException(nameof(applyHandler));
+        ArgumentNullException.ThrowIfNull(@event);
+        ArgumentNullException.ThrowIfNull(applyHandler);
         applyHandler(@event);
         _uncommittedEvents.Add(@event);
         Version++;

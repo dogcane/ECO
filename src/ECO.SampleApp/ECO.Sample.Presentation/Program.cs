@@ -54,10 +54,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(jopt =>
 #if INMEMORY
 builder.Services.AddDataContext(options =>
 {
-    options.UseInMemory("ecosampleapp.efcore.memory", opt =>
-    {
-        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();        
-    });
+    options.UseInMemory("ecosampleapp.efcore.memory", opt => opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>());            
 });
 #elif EFSQL
 builder.Services.AddDataContext(options =>

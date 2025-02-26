@@ -2,70 +2,69 @@ using ECO.UnitTests.Utils.Foos;
 using System;
 using Xunit;
 
-namespace ECO.UnitTests
+namespace ECO.UnitTests;
+
+public class EntityTest
 {
-    public class EntityTest
+    [Fact]
+    public void Should_identity_default_with_empty_constructor()
     {
-        [Fact]
-        public void Should_identity_default_with_empty_constructor()
-        {
-            var entity = new EntityFooOfInt();
-            Assert.Equal(default, entity.Identity);            
-        }
+        var entity = new EntityFooOfInt();
+        Assert.Equal(default, entity.Identity);            
+    }
 
-        [Fact]
-        public void Should_identity_value_equal_when_constructor_with_identity()
-        {
-            var entity = new EntityFooOfInt(1);
-            Assert.Equal(1, entity.Identity);
-        }
+    [Fact]
+    public void Should_identity_value_equal_when_constructor_with_identity()
+    {
+        var entity = new EntityFooOfInt(1);
+        Assert.Equal(1, entity.Identity);
+    }
 
-        [Fact]
-        public void Should_entities_equals_with_same_identity()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            var entity2 = new EntityFooOfInt(1);
-            Assert.Equal(entity1, entity2);
-        }
+    [Fact]
+    public void Should_entities_equals_with_same_identity()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        var entity2 = new EntityFooOfInt(1);
+        Assert.Equal(entity1, entity2);
+    }
 
-        [Fact]
-        public void Should_entities_not_equals_with_different_identity()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            var entity2 = new EntityFooOfInt(2);
-            Assert.NotEqual(entity1, entity2);
-        }
+    [Fact]
+    public void Should_entities_not_equals_with_different_identity()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        var entity2 = new EntityFooOfInt(2);
+        Assert.NotEqual(entity1, entity2);
+    }
 
-        [Fact]
-        public void Should_different_kind_entities_not_equals()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            var entity2 = new AnotherEntityFooOfInt(1);
-            Assert.False(object.Equals(entity1, entity2));
-        }
+    [Fact]
+    public void Should_different_kind_entities_not_equals()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        var entity2 = new AnotherEntityFooOfInt(1);
+        Assert.False(object.Equals(entity1, entity2));
+    }
 
-        [Fact]
-        public void Should_entity_not_equal_to_null_value()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            Assert.False(object.Equals(entity1, null));
-            Assert.False(object.Equals(null, entity1));
-            Assert.False(entity1.Equals(null));
-        }
+    [Fact]
+    public void Should_entity_not_equal_to_null_value()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        Assert.False(object.Equals(entity1, null));
+        Assert.False(object.Equals(null, entity1));
+        Assert.False(entity1.Equals(null));
+    }
 
-        [Fact]
-        public void Should_hashcode_equals_with_same_identity()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            var entity2 = new EntityFooOfInt(1);
-            Assert.Equal(entity1.GetHashCode(), entity2.GetHashCode());
-        }
+    [Fact]
+    public void Should_hashcode_equals_with_same_identity()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        var entity2 = new EntityFooOfInt(1);
+        Assert.Equal(entity1.GetHashCode(), entity2.GetHashCode());
+    }
 
-        [Fact]
-        public void Should_hashcode_equals_to_static_combine_method()
-        {
-            var entity1 = new EntityFooOfInt(1);
-            Assert.Equal(entity1.GetHashCode(), HashCode.Combine(1, typeof(EntityFooOfInt)));
-        }
+    [Fact]
+    public void Should_hashcode_equals_to_static_combine_method()
+    {
+        var entity1 = new EntityFooOfInt(1);
+        Assert.Equal(entity1.GetHashCode(), HashCode.Combine(1, typeof(EntityFooOfInt)));
     }
 }

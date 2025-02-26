@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace ECO.Providers.InMemory;
 
-public abstract class InMemoryPersistenceManager<T, K> : PersistenceManagerBase<T, K>
+public abstract class InMemoryPersistenceManager<T, K>(IDataContext dataContext) : PersistenceManagerBase<T, K>(dataContext)
     where T : class, IAggregateRoot<K>
     where K : notnull
 {
@@ -16,16 +16,6 @@ public abstract class InMemoryPersistenceManager<T, K> : PersistenceManagerBase<
     #region Properties
 
     public virtual InMemoryPersistenceContext InMemoryPersistenceContext => PersistenceContext as InMemoryPersistenceContext ?? throw new InvalidCastException(nameof(InMemoryPersistenceContext));
-
-    #endregion
-
-    #region Ctor
-
-    protected InMemoryPersistenceManager(IDataContext dataContext)
-        : base(dataContext)
-    {
-
-    }
 
     #endregion
 }

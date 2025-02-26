@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
+﻿namespace ECO.EventSourcing;
 
-namespace ECO.EventSourcing
+public interface IESAggregateRoot<T> : IAggregateRoot<T>
 {
-    public interface IESAggregateRoot<T> : IAggregateRoot<T>
-    {
-        long Version { get; }
+    long Version { get; }
 
-        IEnumerable<object> GetUncommittedEvents();
+    IEnumerable<object> GetUncommittedEvents();
 
-        void ClearUncommittedEvents();
-    }
+    void ClearUncommittedEvents();
 }

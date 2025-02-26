@@ -2,25 +2,17 @@
 
 namespace ECO.Data;
 
-public abstract class PersistenceContextBase<P> : IPersistenceContext
+public abstract class PersistenceContextBase<P>(IPersistenceUnit persistenceUnit, ILogger<P>? logger = null) : IPersistenceContext
     where P : PersistenceContextBase<P>
 {
     #region Protected_Fields
 
     protected bool _disposed = false;
 
-    protected readonly ILogger<P>? _Logger;
+    protected readonly ILogger<P>? _Logger = logger;
 
     #endregion
-
     #region Ctor
-
-    protected PersistenceContextBase(IPersistenceUnit persistenceUnit, ILogger<P>? logger = null)
-    {
-        PersistenceContextId = Guid.NewGuid();
-        PersistenceUnit = persistenceUnit ?? throw new ArgumentNullException(nameof(persistenceUnit));
-        _Logger = logger;
-    }
 
     ~PersistenceContextBase()
     {
@@ -72,9 +64,9 @@ public abstract class PersistenceContextBase<P> : IPersistenceContext
 
     #region IPersistenceContext Membri di
 
-    public Guid PersistenceContextId { get; }
+    public Guid PersistenceContextId { get; } = Guid.NewGuid();
 
-    public IPersistenceUnit PersistenceUnit { get; }
+    public IPersistenceUnit PersistenceUnit { get; } = persistenceUnit ?? throw new ArgumentNullException(nameof(persistenceUnit));
 
     public IDataTransaction? Transaction { get; private set; } = null;
 

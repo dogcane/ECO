@@ -3,7 +3,7 @@
 /// <summary>
 /// Class that defines a base for all versionable aggregate's roots
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The type of the identifier</typeparam>
 public abstract class VersionableAggregateRoot<T> : AggregateRoot<T>, IVersionableAggregateRoot<T>
 {
     #region Public_Properties
