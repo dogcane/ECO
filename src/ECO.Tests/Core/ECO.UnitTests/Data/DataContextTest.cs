@@ -3,8 +3,6 @@ using ECO.UnitTests.Utils.Foos;
 using ECO.UnitTests.Utils.Mocks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ECO.UnitTests.Data;
