@@ -1,15 +1,15 @@
 namespace ECO;
 
 /// <summary>
-/// Interface that defines a versionble Entity
+/// Interface that defines a versionable entity.
 /// </summary>
-/// <typeparam name="T">The type of the identifier</typeparam>
+/// <typeparam name="T">The type of the identifier.</typeparam>
 public interface IVersionableEntity<T> : IEntity<T>
 {
     #region Properties
 
     /// <summary>
-    /// Version of the entity
+    /// Gets the version of the entity.
     /// </summary>
     int Version { get; }
 

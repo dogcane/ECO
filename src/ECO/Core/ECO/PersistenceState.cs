@@ -1,24 +1,27 @@
 namespace ECO;
 
 /// <summary>
-/// Enum that defines the state of an entity
+/// Enum that defines the state of an entity.
 /// </summary>
 public enum PersistenceState
 {
     /// <summary>
-    /// Unknown state
+    /// Unknown state.
     /// </summary>
     Unknown = 0,
+
     /// <summary>
-    /// New entity
+    /// New entity.
     /// </summary>
     Transient = 1,
+
     /// <summary>
-    /// Saved entity
+    /// Saved entity.
     /// </summary>
     Persistent = 2,
+
     /// <summary>
-    /// Saved entity with no persistence context
+    /// Saved entity with no persistence context.
     /// </summary>
     Detached = 3
 }

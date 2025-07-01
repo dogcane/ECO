@@ -1,15 +1,15 @@
 ﻿namespace ECO;
 
 /// <summary>
-/// Class that defines a base for all versionable aggregate's roots
+/// Abstract base class for all versionable aggregate roots.
 /// </summary>
-/// <typeparam name="T">The type of the identifier</typeparam>
+/// <typeparam name="T">The type of the identifier.</typeparam>
 public abstract class VersionableAggregateRoot<T> : AggregateRoot<T>, IVersionableAggregateRoot<T>
 {
     #region Public_Properties
 
     /// <summary>
-    /// Version of the aggregate root
+    /// Gets the version of the aggregate root.
     /// </summary>
     public virtual int Version { get; protected set; }
 
@@ -18,15 +18,15 @@ public abstract class VersionableAggregateRoot<T> : AggregateRoot<T>, IVersionab
     #region Ctor
 
     /// <summary>
-    /// Ctor
+    /// Initializes a new instance of the <see cref="VersionableAggregateRoot{T}"/> class with default version 1.
     /// </summary>
     protected VersionableAggregateRoot() : base() => Version = 1;
 
     /// <summary>
-    /// Ctor
+    /// Initializes a new instance of the <see cref="VersionableAggregateRoot{T}"/> class with a specific identifier and version.
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="version"></param>
+    /// <param name="id">The identifier of the aggregate root.</param>
+    /// <param name="version">The version of the aggregate root.</param>
     protected VersionableAggregateRoot(T id, int version) : base(id) => Version = version;
 
     #endregion

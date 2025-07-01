@@ -1,18 +1,17 @@
 namespace ECO.Data;
 
 /// <summary>
-/// Interface that representa a generic persistence manager for an aggregate root and contains the link to the
-/// related persistence unit
+/// Represents a generic persistence manager for an aggregate root, providing access to the related persistence context.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="K"></typeparam>
+/// <typeparam name="T">The type of the aggregate root.</typeparam>
+/// <typeparam name="K">The type of the aggregate root's identifier.</typeparam>
 public interface IPersistenceManager<T, K>
     where T : class, IAggregateRoot<K>
 {
     #region Properties
 
     /// <summary>
-    /// Related persistence context
+    /// Gets the related persistence context for the aggregate root.
     /// </summary>
     IPersistenceContext PersistenceContext { get; }
 

@@ -3,8 +3,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace ECO.Configuration;
 
+/// <summary>
+/// Extension methods for configuring <see cref="DataContextOptions"/>.
+/// </summary>
 public static class DataContextOptionsExtensions
 {
+    /// <summary>
+    /// Enables transaction requirement for the data context options.
+    /// </summary>
+    /// <param name="dataContextOptions">The data context options to configure.</param>
+    /// <returns>The configured <see cref="DataContextOptions"/> instance.</returns>
     public static DataContextOptions RequireTransaction(this DataContextOptions dataContextOptions)
     {
         ArgumentNullException.ThrowIfNull(dataContextOptions);
@@ -12,6 +20,12 @@ public static class DataContextOptionsExtensions
         return dataContextOptions;
     }
 
+    /// <summary>
+    /// Configures the data context options using the specified configuration section.
+    /// </summary>
+    /// <param name="dataContextOptions">The data context options to configure.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <returns>The configured <see cref="DataContextOptions"/> instance.</returns>
     public static DataContextOptions UseConfiguration(this DataContextOptions dataContextOptions, IConfiguration configuration)
     {
         ArgumentNullException.ThrowIfNull(dataContextOptions);

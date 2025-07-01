@@ -1,49 +1,49 @@
 namespace ECO;
 
 /// <summary>
-/// Interface that defines a repository
+/// Interface that defines a repository for aggregate roots, supporting CRUD operations.
 /// </summary>
-/// <typeparam name="T">The type of the aggregate root</typeparam>
-/// <typeparam name="K">The type of the identifier</typeparam>
+/// <typeparam name="T">The type of the aggregate root.</typeparam>
+/// <typeparam name="K">The type of the identifier.</typeparam>
 public interface IRepository<T, K> : IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
 {
     #region Methods
 
     /// <summary>
-    /// Method that adds asynchronously the entity to the repository
+    /// Adds the entity to the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to add.</param>
     void Add(T item);
 
     /// <summary>
-    /// Method that adds the entity to the repository
+    /// Asynchronously adds the entity to the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to add.</param>
     Task AddAsync(T item);
 
     /// <summary>
-    /// Method that update the entity in the repository
+    /// Updates the entity in the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to update.</param>
     void Update(T item);
 
     /// <summary>
-    /// Method that update asynchronously the entity in the repository
+    /// Asynchronously updates the entity in the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to update.</param>
     Task UpdateAsync(T item);
 
     /// <summary>
-    /// Method that removes the entity from the repository
+    /// Removes the entity from the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to remove.</param>
     void Remove(T item);
 
     /// <summary>
-    /// Method that removes asynchronously the entity from the repository
+    /// Asynchronously removes the entity from the repository.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The entity to remove.</param>
     Task RemoveAsync(T item);
 
     #endregion

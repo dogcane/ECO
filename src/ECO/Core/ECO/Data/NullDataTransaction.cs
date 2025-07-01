@@ -1,24 +1,26 @@
 ﻿namespace ECO.Data;
 
+/// <summary>
+/// Represents a no-op (null object) implementation of <see cref="IDataTransaction"/>.
+/// Used when a transaction is required by the API but no actual transaction is needed.
+/// </summary>
 public sealed class NullDataTransaction(IPersistenceContext context) : IDataTransaction
 {
-    #region IDataTransaction Membri di
+    /// <inheritdoc />
+    public IPersistenceContext Context { get; } = context ?? throw new ArgumentNullException(nameof(context));
 
-    public IPersistenceContext Context { get; private set; } = context ?? throw new ArgumentNullException(nameof(context));
+    /// <inheritdoc />
+    public void Commit() { /* No operation */ }
 
-    public void Commit() { }
+    /// <inheritdoc />
+    public void Rollback() { /* No operation */ }
 
-    public void Rollback() { }
+    /// <inheritdoc />
+    public void Dispose() { /* No resources to dispose */ }
 
-    #endregion
+    /// <inheritdoc />
+    public Task CommitAsync(CancellationToken cancellationToken = default) => Task.Run(Commit, cancellationToken);
 
-    #region IDisposable Membri di
-
-    public void Dispose() { }
-
-    public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(Commit, cancellationToken);
-
-    public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(Rollback, cancellationToken);
-
-    #endregion
+    /// <inheritdoc />
+    public Task RollbackAsync(CancellationToken cancellationToken = default) => Task.Run(Rollback, cancellationToken);
 }

@@ -1,15 +1,15 @@
 namespace ECO;
 
 /// <summary>
-/// Class that defines a base for all the entities
+/// Abstract base class for all entities, providing identity and equality logic.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">Type of the entity's identifier.</typeparam>
 public abstract class Entity<T> : IEntity<T>
 {
     #region Public_Properties
 
     /// <summary>
-    /// Identifier of the entity
+    /// Gets the identifier of the entity.
     /// </summary>
     public virtual T? Identity { get; protected set; }
 
@@ -18,14 +18,14 @@ public abstract class Entity<T> : IEntity<T>
     #region Ctor
 
     /// <summary>
-    /// Ctor
+    /// Initializes a new instance of the <see cref="Entity{T}"/> class with the default identity.
     /// </summary>
     protected Entity() => Identity = default;
 
     /// <summary>
-    /// Ctor
+    /// Initializes a new instance of the <see cref="Entity{T}"/> class with a specific identity.
     /// </summary>
-    /// <param name="identity"></param>
+    /// <param name="identity">The entity identifier.</param>
     protected Entity(T identity) => Identity = identity;
 
     #endregion
@@ -33,23 +33,26 @@ public abstract class Entity<T> : IEntity<T>
     #region Public_Methods
 
     /// <summary>
-    /// Method that verify if another object is the same as the current entity
+    /// Determines whether the specified object is equal to the current entity.
     /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
+    /// <param name="obj">The object to compare with the current entity.</param>
+    /// <returns><c>true</c> if the specified object is equal to the current entity; otherwise, <c>false</c>.</returns>
     public override bool Equals(object? obj) => Equals(obj as IEntity<T>);
 
     /// <summary>
-    /// Method that verify if another entitye is the same as the current entity
+    /// Determines whether the specified entity is equal to the current entity.
     /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    public virtual bool Equals(IEntity<T>? obj) => obj is not null && GetType() == obj.GetType() && EqualityComparer<T?>.Default.Equals(Identity, obj.Identity);
+    /// <param name="obj">The entity to compare with the current entity.</param>
+    /// <returns><c>true</c> if the specified entity is equal to the current entity; otherwise, <c>false</c>.</returns>
+    public virtual bool Equals(IEntity<T>? obj) =>
+        obj is not null &&
+        GetType() == obj.GetType() &&
+        EqualityComparer<T?>.Default.Equals(Identity, obj.Identity);
 
     /// <summary>
-    /// Method that returns the hash code for the current entity
+    /// Returns a hash code for the current entity.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A hash code for the current entity.</returns>
     public override int GetHashCode() => HashCode.Combine(Identity, GetType());
 
     #endregion
