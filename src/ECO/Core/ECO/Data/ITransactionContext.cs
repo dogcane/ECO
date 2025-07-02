@@ -4,7 +4,7 @@
 /// Represents a transaction context for managing multiple data transactions within a data context.
 /// Provides methods for enlisting transactions, committing, and rolling back, both synchronously and asynchronously.
 /// </summary>
-public interface ITransactionContext : IDisposable
+public interface ITransactionContext : IDisposable, IAsyncDisposable
 {
     #region Properties
     /// <summary>

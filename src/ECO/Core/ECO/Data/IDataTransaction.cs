@@ -4,7 +4,7 @@ namespace ECO.Data;
 /// Represents a data transaction for a persistence context.
 /// Provides synchronous and asynchronous methods for commit and rollback operations.
 /// </summary>
-public interface IDataTransaction : IDisposable
+public interface IDataTransaction : IDisposable, IAsyncDisposable
 {
     #region Properties
     /// <summary>

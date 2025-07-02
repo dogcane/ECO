@@ -1,8 +1,17 @@
 ﻿namespace ECO.Data;
 
-public class PersistentClassNotRegisteredException(Type persistenClassType) : ApplicationException($"Persistent class '{persistenClassType?.Name}' not registered")
+/// <summary>
+/// Exception thrown when a persistent class type is not registered in any persistence unit.
+/// </summary>
+public class PersistentClassNotRegisteredException(Type persistentClassType)
+    : ApplicationException($"Persistent class '{persistentClassType?.Name}' not registered")
 {
     #region Public_Properties
-    public Type PersistentClassType { get; protected set; } = persistenClassType!;
+
+    /// <summary>
+    /// Gets the persistent class type that was not registered.
+    /// </summary>
+    public Type PersistentClassType { get; } = persistentClassType ?? throw new ArgumentNullException(nameof(persistentClassType));
+
     #endregion
 }

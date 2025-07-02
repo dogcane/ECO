@@ -23,4 +23,6 @@ public sealed class NullDataTransaction(IPersistenceContext context) : IDataTran
 
     /// <inheritdoc />
     public Task RollbackAsync(CancellationToken cancellationToken = default) => Task.Run(Rollback, cancellationToken);
+
+    public ValueTask DisposeAsync() { return ValueTask.CompletedTask;} 
 }

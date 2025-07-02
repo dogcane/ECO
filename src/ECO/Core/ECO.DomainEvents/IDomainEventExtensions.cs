@@ -1,9 +1,15 @@
 ﻿namespace ECO.Events;
 
 /// <summary>
-/// Represents the extension for a fluent interface in domain events management
+/// Provides extension methods for domain event management, enabling a fluent interface for raising events.
 /// </summary>
 public static class IDomainEventExtensions
 {
-    public static void Raise<T>(this T domainEvent) where T : IDomainEvent => DomainEvents.RaiseEvent(domainEvent);
+    /// <summary>
+    /// Raises the specified domain event using the <see cref="DomainEvents"/> infrastructure.
+    /// </summary>
+    /// <typeparam name="T">The type of the domain event, which must implement <see cref="IDomainEvent"/>.</typeparam>
+    /// <param name="domainEvent">The domain event instance to raise.</param>
+    public static void Raise<T>(this T domainEvent) where T : IDomainEvent
+        => DomainEvents.RaiseEvent(domainEvent);
 }
