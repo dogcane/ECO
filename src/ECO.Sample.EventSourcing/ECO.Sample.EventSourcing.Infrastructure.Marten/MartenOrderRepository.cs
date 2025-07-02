@@ -4,9 +4,6 @@ using ECO.Sample.EventSourcing.Domain;
 
 namespace ECO.Sample.EventSourcing.Infrastructure.Marten;
 
-public class MartenOrderRepository : MartenESRepository<Order, string>
+public class MartenOrderRepository(IDataContext dataContext) : MartenESRepository<Order, string>(dataContext)
 {
-    public MartenOrderRepository(IDataContext dataContext) : base(dataContext)
-    {
-    }
 }

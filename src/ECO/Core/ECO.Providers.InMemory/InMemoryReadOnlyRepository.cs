@@ -1,52 +1,39 @@
 ﻿using ECO.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ECO.Providers.InMemory
+namespace ECO.Providers.InMemory;
+
+public class InMemoryReadOnlyRepository<T, K>(IDataContext dataContext) : InMemoryPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
+    where T : class, IAggregateRoot<K>
+    where K : notnull
 {
-    public class InMemoryReadOnlyRepository<T, K> : InMemoryPersistenceManager<T, K>, IReadOnlyRepository<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region Ctor
 
-        public InMemoryReadOnlyRepository(IDataContext dataContext)
-            : base(dataContext)
-        {
+    #region IReadOnlyRepository<T,K> Membri di
 
-        }
+    public virtual T? Load(K identity) => _EntitySet.TryGetValue(identity, out T? entity) ? entity : null;
 
-        #endregion
+    public virtual async Task<T?> LoadAsync(K identity) => await Task.FromResult(Load(identity));
 
-        #region IReadOnlyRepository<T,K> Membri di
+    #endregion
 
-        public virtual T? Load(K identity) => _EntitySet.TryGetValue(identity, out T entity) ? entity : null;
+    #region IEnumerable<T> Membri di
 
-        public virtual async Task<T?> LoadAsync(K identity) => await Task.FromResult(Load(identity));
+    public virtual IEnumerator<T> GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
 
-        #endregion
+    #endregion
 
-        #region IEnumerable<T> Membri di
+    #region IEnumerable Membri di
 
-        public virtual IEnumerator<T> GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
 
-        #endregion
+    #endregion
 
-        #region IEnumerable Membri di
+    #region IQueryable Membri di
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _EntitySet.Values.ToList().GetEnumerator();
+    public virtual Type ElementType => _EntitySet.AsQueryable().ElementType;
 
-        #endregion
+    public virtual System.Linq.Expressions.Expression Expression => _EntitySet.AsQueryable().Expression;
 
-        #region IQueryable Membri di
+    public virtual IQueryProvider Provider => _EntitySet.AsQueryable().Provider;
 
-        public virtual Type ElementType => _EntitySet.AsQueryable().ElementType;
-
-        public virtual System.Linq.Expressions.Expression Expression => _EntitySet.AsQueryable().Expression;
-
-        public virtual IQueryProvider Provider => _EntitySet.AsQueryable().Provider;
-
-        #endregion
-    }
+    #endregion
 }

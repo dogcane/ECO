@@ -1,20 +1,17 @@
-﻿using System;
+﻿namespace ECO.Data;
 
-namespace ECO.Data
+/// <summary>
+/// Exception thrown when a requested persistence unit cannot be found.
+/// </summary>
+public class PersistenceUnitNotFoundException(string persistenceUnitName)
+    : ApplicationException($"Persistence Unit '{persistenceUnitName}' not found")
 {
-    public class PersistenceUnitNotFoundException : ApplicationException
-    {
-        #region Public_Properties
+    #region Public_Properties
 
-        public string PersistenceUnitName { get; protected set; }
+    /// <summary>
+    /// Gets the name of the persistence unit that was not found.
+    /// </summary>
+    public string PersistenceUnitName { get; } = persistenceUnitName ?? throw new ArgumentNullException(nameof(persistenceUnitName));
 
-        #endregion
-
-        #region Ctor
-
-        public PersistenceUnitNotFoundException(string persistenceUnitName)
-            : base($"Persistence Unit '{persistenceUnitName}' not found") => PersistenceUnitName = persistenceUnitName;
-
-        #endregion
-    }
+    #endregion
 }

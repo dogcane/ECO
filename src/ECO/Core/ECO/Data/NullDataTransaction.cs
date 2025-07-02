@@ -1,57 +1,33 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace ECO.Data;
 
-namespace ECO.Data
+/// <summary>
+/// Represents a no-op (null object) implementation of <see cref="IDataTransaction"/>.
+/// Used when a transaction is required by the API but no actual transaction is needed.
+/// </summary>
+public sealed class NullDataTransaction(IPersistenceContext context) : IDataTransaction
 {
-    public sealed class NullDataTransaction : IDataTransaction
-    {
-        #region Ctor
+    /// <inheritdoc />
+    public IPersistenceContext Context { get; } = context ?? throw new ArgumentNullException(nameof(context));
 
-        public NullDataTransaction(IPersistenceContext context)
-        {
-            Context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+    /// <inheritdoc />
+    public void Commit() { /* No operation */ }
 
-        #endregion
+    /// <inheritdoc />
+    public void Rollback() { /* No operation */ }
 
-        #region IDataTransaction Membri di
+    /// <inheritdoc />
+    public void Dispose() { /* No resources to dispose */ }
 
-        public IPersistenceContext Context { get; private set; }
+    /// <inheritdoc />
+    public Task CommitAsync(CancellationToken cancellationToken = default) => Task.Run(Commit, cancellationToken);
 
-        public void Commit()
-        {
+    /// <inheritdoc />
+    public Task RollbackAsync(CancellationToken cancellationToken = default) => Task.Run(Rollback, cancellationToken);
 
-        }
-
-        public void Rollback()
-        {
-
-        }
-
-        #endregion
-
-        #region IDisposable Membri di
-
-        public void Dispose()
-        {
-
-        }
-
-        /// <summary>
-        /// Asynchronously releases all resources used by the NullDataTransaction.
-        /// Since this is a no-op transaction, no actual cleanup is performed.
-        /// </summary>
-        /// <returns>A completed ValueTask</returns>
-        public ValueTask DisposeAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());
-
-        public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Rollback());
-
-        #endregion
-    }
+    /// <summary>
+    /// Asynchronously releases all resources used by the NullDataTransaction.
+    /// Since this is a no-op transaction, no actual cleanup is performed.
+    /// </summary>
+    /// <returns>A completed ValueTask</returns>
+    public ValueTask DisposeAsync() { return ValueTask.CompletedTask;} 
 }

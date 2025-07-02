@@ -33,7 +33,7 @@ var builder = WebApplication.CreateBuilder(args);
 #elif EFMEMORY
     //builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json"); => MOVED TO FLUENT "WAY"    
 #elif EFPOSTGRE
-    builder.Configuration.AddJsonFile("ecosettings.efcore.postgresql.json");
+    //builder.Configuration.AddJsonFile("ecosettings.efcore.postgresql.json"); => MOVED TO FLUENT "WAY" 
 #elif NHSQL
     builder.Configuration.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
 #elif NHPOSTGRE
@@ -54,22 +54,23 @@ builder.Services.AddControllersWithViews().AddJsonOptions(jopt =>
 #if INMEMORY
 builder.Services.AddDataContext(options =>
 {
-    options.UseInMemory("ecosampleapp.efcore.memory", opt =>
-    {
-        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();        
-    });
+    options.UseInMemory("ecosampleapp.efcore.memory", opt => opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>());            
 });
 #elif EFSQL
 builder.Services.AddDataContext(options =>
 {
     options.UseEntityFramework<ECOSampleContext>("ecosampleapp.efcore.sqlserver", opt => opt.DbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("sqlserver")));
 });
+#elif EFPOSTGRE
+builder.Services.AddDataContext(options =>
+{
+    options.UseEntityFramework<ECOSampleContext>("ecosampleapp.efcore.postgresql", opt => opt.DbContextOptions.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+});
 #elif EFMEMORY
 builder.Services.AddDataContext(option =>
 {
-    option.UseEntityFramework<ECOSampleContext>(opt =>
+    option.UseEntityFramework<ECOSampleContext>("ecosampleapp.efcore.memory", opt =>
     {
-        opt.Name = "ecosampleapp.efcore.memory";
         opt.DbContextOptions
             .UseInMemoryDatabase("ecosampleapp.efcore.memory")
             .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
@@ -79,17 +80,16 @@ builder.Services.AddDataContext(option =>
 #elif MARTEN
 builder.Services.AddDataContext(options =>
 {
-    options.UseMarten(opt =>
+    options.UseMarten("ecosampleapp.marten", opt =>
     {
-        opt.Name = "ecosampleapp.marten";
-        opt.Assemblies = new[] { typeof(ECO.Sample.Domain.AssemblyMarker).Assembly };
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
         opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));        
         opt.StoreOptions.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
         var serializer = new Marten.Services.SystemTextJsonSerializer
         {
             EnumStorage = EnumStorage.AsString
         };
-        serializer.Customize(_ =>
+        serializer.Configure(_ =>
         {
             _.TypeInfoResolver = new NonPublicContractResolver();
             _.ReferenceHandler = ReferenceHandler.IgnoreCycles;            

@@ -1,18 +1,10 @@
-﻿namespace ECO
+﻿namespace ECO;
+
+/// <summary>
+/// Interface that defines a versionable aggregate root.
+/// </summary>
+/// <typeparam name="T">The type of the identifier.</typeparam>
+public interface IVersionableAggregateRoot<T> : IAggregateRoot<T>, IVersionableEntity<T>
 {
-    /// <summary>
-    /// Interface that defines a versionble Aggregate root
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IVersionableAggregateRoot<T> : IAggregateRoot<T>
-    {
-        #region Properties
-
-        /// <summary>
-        /// Version of the aggregate root
-        /// </summary>
-        int Version { get; }
-
-        #endregion
-    }
+    // Marker interface for versionable aggregate roots.
 }

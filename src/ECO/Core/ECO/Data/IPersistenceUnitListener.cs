@@ -1,24 +1,24 @@
-﻿namespace ECO.Data
+﻿namespace ECO.Data;
+
+/// <summary>
+/// Represents a listener that subscribes to events in the lifecycle of a persistence context.
+/// </summary>
+public interface IPersistenceUnitListener
 {
+    #region Methods
+
     /// <summary>
-    /// Interface that represent a listener that subscribes the different events of a persistence context lifecycle
+    /// Called before the creation of the persistence context.
     /// </summary>
-    public interface IPersistenceUnitListener
-    {
-        #region Methods
+    /// <param name="unit">The persistence unit for which the context is being created.</param>
+    void ContextPreCreate(IPersistenceUnit unit);
 
-        /// <summary>
-        /// Method that occurs before the creation of the persistence context
-        /// </summary>
-        /// <param name="unit"></param>
-        void ContextPreCreate(IPersistenceUnit unit);
+    /// <summary>
+    /// Called after the creation of the persistence context.
+    /// </summary>
+    /// <param name="unit">The persistence unit for which the context was created.</param>
+    /// <param name="context">The created persistence context.</param>
+    void ContextPostCreate(IPersistenceUnit unit, IPersistenceContext context);
 
-        /// <summary>
-        /// Method that occurs after the creation of the persistence context
-        /// </summary>
-        /// <param name="unit"></param>
-        void ContextPostCreate(IPersistenceUnit unit, IPersistenceContext context);
-
-        #endregion
-    }
+    #endregion
 }

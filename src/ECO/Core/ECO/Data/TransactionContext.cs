@@ -1,155 +1,172 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+namespace ECO.Data;
 
-namespace ECO.Data
+/// <summary>
+/// Represents a transaction context that manages the lifecycle and coordination of multiple data transactions.
+/// </summary>
+public sealed class TransactionContext : ITransactionContext
 {
-    public sealed class TransactionContext : ITransactionContext
+    #region Private_Fields
+
+    private bool _disposed = false;
+    private readonly List<IDataTransaction> _Transactions = [];
+
+    #endregion
+
+    #region Public_Properties
+
+    /// <inheritdoc/>
+    public Guid TransactionContextId { get; } = Guid.NewGuid();
+
+    /// <inheritdoc/>
+    public TransactionStatus Status { get; private set; } = TransactionStatus.Alive;
+
+    /// <inheritdoc/>
+    public bool AutoCommit { get; }
+
+    /// <inheritdoc/>
+    public IDataContext DataContext { get; private set; }
+
+    #endregion
+
+    #region ~Ctor
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TransactionContext"/> class.
+    /// </summary>
+    /// <param name="dataContext">The data context associated with this transaction context.</param>
+    internal TransactionContext(IDataContext dataContext)
+        : this(dataContext, false)
     {
-        #region Private_Fields
+    }
 
-        private bool _disposed = false;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TransactionContext"/> class with optional auto-commit.
+    /// </summary>
+    /// <param name="dataContext">The data context associated with this transaction context.</param>
+    /// <param name="autoCommit">Whether to automatically commit on dispose.</param>
+    internal TransactionContext(IDataContext dataContext, bool autoCommit)
+    {
+        DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+        AutoCommit = autoCommit;
+    }
 
-        private readonly IList<IDataTransaction> _Transactions = new List<IDataTransaction>();
+    /// <summary>
+    /// Finalizer to ensure resources are released.
+    /// </summary>
+    ~TransactionContext() => Dispose(false);
 
-        #endregion
+    #endregion
 
-        #region Public_Properties
+    #region Public_Methods
 
-        public Guid TransactionContextId { get; } = Guid.NewGuid();
+    /// <inheritdoc/>
+    public void EnlistDataTransaction(IDataTransaction transaction)
+    {
+        ArgumentNullException.ThrowIfNull(transaction);
+        _Transactions.Add(transaction);
+    }
 
-        public TransactionStatus Status { get; private set; } = TransactionStatus.Alive;
-
-        public bool AutoCommit { get; }
-
-        public IDataContext DataContext { get; private set; }
-
-        #endregion
-
-        #region ~Ctor
-
-        internal TransactionContext(IDataContext dataContext)
-            : this(dataContext, false)
+    /// <inheritdoc/>
+    public void Commit()
+    {
+        foreach (var tx in _Transactions)
         {
-
+            tx.Commit();
         }
+        Status = TransactionStatus.Committed;
+    }
 
-        internal TransactionContext(IDataContext dataContext, bool autoCommit)
+    /// <inheritdoc/>
+    public void Rollback()
+    {
+        foreach (var tx in _Transactions)
         {
-            DataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
-            AutoCommit = autoCommit;
+            tx.Rollback();
         }
+        Status = TransactionStatus.RolledBack;
+    }
 
-        ~TransactionContext()
+    /// <inheritdoc/>
+    public async Task CommitAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var tx in _Transactions)
         {
-            Dispose(false);
+            await tx.CommitAsync(cancellationToken).ConfigureAwait(false);
         }
+        Status = TransactionStatus.Committed;
+    }
 
-        #endregion
-
-        #region Public_Methods
-
-        public void EnlistDataTransaction(IDataTransaction transaction)
+    /// <inheritdoc/>
+    public async Task RollbackAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var tx in _Transactions)
         {
-            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-            _Transactions.Add(transaction);
+            await tx.RollbackAsync(cancellationToken).ConfigureAwait(false);
         }
+        Status = TransactionStatus.RolledBack;
+    }
 
-        public void Commit()
+    #endregion
+
+    #region IDisposable Members
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool isDisposing)
+    {
+        if (_disposed)
+            return;
+
+        if (isDisposing)
         {
-            foreach (IDataTransaction tx in _Transactions)
+            if (Status is TransactionStatus.Alive && AutoCommit)
             {
-                tx.Commit();
-            }
-            Status = TransactionStatus.Committed;
-        }
-
-        public void Rollback()
-        {
-            foreach (IDataTransaction tx in _Transactions)
-            {
-                tx.Rollback();
-            }
-            Status = TransactionStatus.RolledBack;
-        }
-
-        public async Task CommitAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (IDataTransaction tx in _Transactions)
-            {
-                await tx.CommitAsync(cancellationToken);
-            }
-            Status = TransactionStatus.Committed;
-        }
-
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (IDataTransaction tx in _Transactions)
-            {
-                await tx.RollbackAsync(cancellationToken);
-            }
-            Status = TransactionStatus.RolledBack;
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-
-        /// <summary>
-        /// Asynchronously releases all resources used by the TransactionContext.
-        /// </summary>
-        /// <returns>A ValueTask representing the asynchronous dispose operation</returns>
-        public async ValueTask DisposeAsync()
-        {
-            if (_disposed)
-                return;
-
-            if (Status == TransactionStatus.Alive)
-            {
-                if (AutoCommit)
-                {
-                    await CommitAsync();
-                }
+                Commit();
                 Status = TransactionStatus.Committed;
             }
-            
-            foreach (IDataTransaction tx in _Transactions)
+            foreach (var tx in _Transactions)
             {
-                await tx.DisposeAsync();
-            }
-            _disposed = true;
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool isDisposing)
-        {
-            if (_disposed)
-                return;
-
-            if (isDisposing)
-            {
-                if (Status == TransactionStatus.Alive)
-                {
-                    if (AutoCommit)
-                    {
-                        Commit();
-                    }
-                    Status = TransactionStatus.Committed;
-                }
-                foreach (IDataTransaction tx in _Transactions)
-                {
-                    tx.Dispose();
-                }
-                _disposed = true;
+                tx.Dispose();
             }
         }
-
-        #endregion
+        _disposed = true;
     }
+
+    #endregion
+
+    #region IAsyncDisposable Members
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore(true).ConfigureAwait(false);
+        GC.SuppressFinalize(this);
+    }
+
+    private async ValueTask DisposeAsync(bool isDisposing)
+    {
+        if (_disposed)
+            return;
+
+        if (isDisposing)
+        {
+            if (Status is TransactionStatus.Alive && AutoCommit)
+            {
+                await CommitAsync().ConfigureAwait(false);
+                Status = TransactionStatus.Committed;
+            }
+            foreach (var tx in _Transactions)
+            {
+                await tx.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+        _disposed = true;
+    }
+
+    #endregion
 }

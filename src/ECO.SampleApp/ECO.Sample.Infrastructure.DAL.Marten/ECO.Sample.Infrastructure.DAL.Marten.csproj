@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>	  
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
-    <ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
+		<ProjectReference Include="..\ECO.Sample.Infrastructure\ECO.Sample.Infrastructure.csproj" />
+	</ItemGroup>
 
 </Project>

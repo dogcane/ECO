@@ -4,39 +4,29 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ECO.Providers.EntityFramework
+namespace ECO.Providers.EntityFramework;
+
+public class EntityFrameworkPersistenceContext(DbContext context, IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext>? logger = null) : PersistenceContextBase<EntityFrameworkPersistenceContext>(persistenceUnit, logger)
 {
-    public class EntityFrameworkPersistenceContext : PersistenceContextBase<EntityFrameworkPersistenceContext>
-    {
-        #region Public_Properties
+    #region Public_Properties
+    public DbContext Context { get; protected set; } = context;
+    #endregion
 
-        public DbContext Context { get; protected set; }
+    #region Protected_Methods
 
-        #endregion
+    protected override void OnAttach<T>(IAggregateRoot<T> entity) => Context.Attach(entity);
 
-        #region ~Ctor
+    protected override void OnRefresh<T>(IAggregateRoot<T> entity) => Context.Entry(entity).Reload();
 
-        public EntityFrameworkPersistenceContext(DbContext context, IPersistenceUnit persistenceUnit, ILogger<EntityFrameworkPersistenceContext>? logger = null)
-            : base(persistenceUnit, logger) => Context = context;
+    protected override void OnDetach<T>(IAggregateRoot<T> entity) => Context.Entry(entity).State = EntityState.Detached;
 
-        #endregion
+    protected override IDataTransaction OnBeginTransaction() => EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransaction(this);
 
-        #region Protected_Methods
+    protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransactionAsync(this, cancellationToken);
 
-        protected override void OnAttach<T>(IAggregateRoot<T> entity) => Context.Attach(entity);
+    protected override void OnSaveChanges() => Context.SaveChanges();
 
-        protected override void OnRefresh<T>(IAggregateRoot<T> entity) => Context.Entry(entity).Reload();
+    protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Context.SaveChangesAsync(cancellationToken);
 
-        protected override void OnDetach<T>(IAggregateRoot<T> entity) => Context.Entry(entity).State = EntityState.Detached;
-
-        protected override IDataTransaction OnBeginTransaction() => EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransaction(this);
-
-        protected override async Task<IDataTransaction> OnBeginTransactionAsync(CancellationToken cancellationToken = default) => await EntityFrameworkDataTransaction.CreateEntityFrameworkDataTransactionAsync(this, cancellationToken);
-
-        protected override void OnSaveChanges() => Context.SaveChanges();
-
-        protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Context.SaveChangesAsync(cancellationToken);
-
-        #endregion
-    }
+    #endregion
 }

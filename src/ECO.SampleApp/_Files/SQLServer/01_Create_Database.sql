@@ -1,4 +1,16 @@
-﻿CREATE TABLE [Speakers] (
+﻿--DB CREATION
+CREATE DATABASE [ECOSampleApp];
+CREATE LOGIN ecosample WITH PASSWORD = '3c0S4mpl3#01!';
+
+USE [ECOSampleApp];
+
+--USERS AND PERMISSIONS
+CREATE USER ecosample FOR LOGIN ecosample;
+EXEC sp_addrolemember 'db_datareader', 'ecosample';
+EXEC sp_addrolemember 'db_datawriter', 'ecosample';
+
+--TABLE CREATION
+CREATE TABLE [Speakers] (
 	[Id] UniqueIdentifier PRIMARY KEY,
 	[Name] NVarChar(50) NOT NULL,
 	[Surname] NVarChar(50) NOT NULL,

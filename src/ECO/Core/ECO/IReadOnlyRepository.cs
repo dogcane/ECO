@@ -1,33 +1,30 @@
 using ECO.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ECO
+namespace ECO;
+
+/// <summary>
+/// Interface that defines a read-only repository for aggregate roots.
+/// </summary>
+/// <typeparam name="T">The type of the aggregate root.</typeparam>
+/// <typeparam name="K">The type of the identifier.</typeparam>
+public interface IReadOnlyRepository<T, K> : IQueryable<T>, IPersistenceManager<T, K>
+    where T : class, IAggregateRoot<K>
 {
+    #region Methods
+
     /// <summary>
-    /// Interface that defines a read only repository
+    /// Loads the entity from the repository by its identifier.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="K"></typeparam>
-    public interface IReadOnlyRepository<T, K> : IQueryable<T>, IPersistenceManager<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region
+    /// <param name="identity">The identifier of the entity.</param>
+    /// <returns>The entity if found; otherwise, <c>null</c>.</returns>
+    T? Load(K identity);
 
-        /// <summary>
-        /// Method that loads the entity from the repository
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <returns></returns>
-        T? Load(K identity);
+    /// <summary>
+    /// Asynchronously loads the entity from the repository by its identifier.
+    /// </summary>
+    /// <param name="identity">The identifier of the entity.</param>
+    /// <returns>A task representing the asynchronous operation, with the entity if found; otherwise, <c>null</c>.</returns>
+    Task<T?> LoadAsync(K identity);
 
-        /// <summary>
-        /// Method that loads asynchronously the entity from the repository
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <returns></returns>
-        Task<T?> LoadAsync(K identity);
-
-        #endregion
-    }
+    #endregion
 }

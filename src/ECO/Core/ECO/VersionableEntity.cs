@@ -1,33 +1,33 @@
-using System;
+namespace ECO;
 
-namespace ECO
+/// <summary>
+/// Abstract base class for all versionable entities.
+/// </summary>
+/// <typeparam name="T">The type of the identifier.</typeparam>
+public abstract class VersionableEntity<T> : Entity<T>, IVersionableEntity<T>
 {
-    [Serializable]
-    public abstract class VersionableEntity<T> : Entity<T>, IVersionableEntity<T>
-    {
-        #region Public_Properties
+    #region Public_Properties
 
-        /// <summary>
-        /// Version of the entity
-        /// </summary>
-        public virtual int Version { get; protected set; }
+    /// <summary>
+    /// Gets the version of the entity.
+    /// </summary>
+    public virtual int Version { get; protected set; }
 
-        #endregion
+    #endregion
 
-        #region Ctor
+    #region Ctor
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        protected VersionableEntity() : base() => Version = 1;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="VersionableEntity{T}"/> class with default version 1.
+    /// </summary>
+    protected VersionableEntity() : base() => Version = 1;
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="version"></param>
-        protected VersionableEntity(T id, int version) : base(id) => Version = version;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="VersionableEntity{T}"/> class with a specific identifier and version.
+    /// </summary>
+    /// <param name="id">The identifier of the entity.</param>
+    /// <param name="version">The version of the entity.</param>
+    protected VersionableEntity(T id, int version) : base(id) => Version = version;
 
-        #endregion
-    }
+    #endregion
 }

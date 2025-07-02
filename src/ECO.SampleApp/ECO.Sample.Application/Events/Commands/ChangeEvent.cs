@@ -33,7 +33,7 @@ namespace ECO.Sample.Application.Events.Commands
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event eventEventity = _EventRepository.Load(request.EventCode);
+                    var eventEventity = _EventRepository.Load(request.EventCode);
                     if (eventEventity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));

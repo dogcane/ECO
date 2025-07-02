@@ -38,7 +38,7 @@ namespace ECO.Sample.Application.Events.Queries
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event eventEntity = await _EventRepository.LoadAsync(request.EventCode);
+                    var eventEntity = await _EventRepository.LoadAsync(request.EventCode);
                     if (eventEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));

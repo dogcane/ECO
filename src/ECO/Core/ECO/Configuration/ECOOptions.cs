@@ -1,26 +1,48 @@
-﻿using System.Collections.Generic;
+﻿namespace ECO.Configuration;
 
-namespace ECO.Configuration
+/// <summary>
+/// ECO options configuration for persistence units.
+/// </summary>
+public class ECOOptions
 {
     /// <summary>
-    /// ECO Options configuration.
+    /// The configuration section name for ECO options.
     /// </summary>
-    public class ECOOptions
-    {
-        public const string ECOConfigurationName = "eco";
-        public PersistenceUnitOptions[] PersistenceUnits { get; set; } = new PersistenceUnitOptions[] { };
-    }
+    public const string ECOConfigurationName = "eco";
 
-    public class PersistenceUnitOptions
-    {
-        public string Name { get; set; } = string.Empty;
+    /// <summary>
+    /// The collection of persistence unit options.
+    /// </summary>
+    public PersistenceUnitOptions[] PersistenceUnits { get; set; } = [];
+}
 
-        public string Type { get; set; } = string.Empty;
+/// <summary>
+/// Options for configuring a persistence unit.
+/// </summary>
+public class PersistenceUnitOptions
+{
+    /// <summary>
+    /// The name of the persistence unit.
+    /// </summary>
+    public required string Name { get; set; } = string.Empty;
 
-        public string[] Listeners { get; set; } = new string[] { };
+    /// <summary>
+    /// The type name of the persistence unit implementation.
+    /// </summary>
+    public required string Type { get; set; } = string.Empty;
 
-        public string[] Classes { get; set; } = new string[] { };
+    /// <summary>
+    /// The list of listener type names to attach to the persistence unit.
+    /// </summary>
+    public string[] Listeners { get; set; } = [];
 
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-    }
+    /// <summary>
+    /// The list of class type names managed by the persistence unit.
+    /// </summary>
+    public string[] Classes { get; set; } = [];
+
+    /// <summary>
+    /// Additional attributes for the persistence unit.
+    /// </summary>
+    public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 }

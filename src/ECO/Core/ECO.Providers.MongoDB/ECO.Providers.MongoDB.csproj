@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<AssemblyTitle>ECO.Providers.MongoDB</AssemblyTitle>
-		<AssemblyVersion>2.1.0.0</AssemblyVersion>
-		<FileVersion>2.1.0.0</FileVersion>
-		<Version>2.1.0</Version>
 		<Product>Enterprise CLR Objects - MongoDB provider</Product>
 		<Description>ECO.Providers.MongoDB is the package for MongoDB. It contains all the MongoDB stuff (repositories, contexts).</Description>
 		<Authors>Andrea Canegrati</Authors>
@@ -23,6 +20,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+		<PackageReference Include="MongoDB.Driver" Version="3.2.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="_images\icon.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="_images\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 </Project>

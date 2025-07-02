@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ECO\Core\ECO.EventSourcing\ECO.EventSourcing.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />
-    <ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
-    <ProjectReference Include="..\ECO.Sample.EventSourcing.Domain\ECO.Sample.EventSourcing.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\ECO\Core\ECO.EventSourcing\ECO.EventSourcing.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />
+		<ProjectReference Include="..\..\ECO\Core\ECO\ECO.csproj" />
+		<ProjectReference Include="..\ECO.Sample.EventSourcing.Domain\ECO.Sample.EventSourcing.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

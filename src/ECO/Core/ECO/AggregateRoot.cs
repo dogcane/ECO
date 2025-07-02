@@ -1,24 +1,23 @@
-﻿namespace ECO
+﻿namespace ECO;
+
+/// <summary>
+/// Abstract base class for all aggregate roots, inheriting from Entity and implementing IAggregateRoot.
+/// </summary>
+/// <typeparam name="T">Type of the aggregate root's identifier.</typeparam>
+public abstract class AggregateRoot<T> : Entity<T>, IAggregateRoot<T>
 {
+    #region Ctor
+
     /// <summary>
-    /// Class that defines a base for all aggregates roots
+    /// Initializes a new instance of the <see cref="AggregateRoot{T}"/> class with the default identity.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class AggregateRoot<T> : Entity<T>, IAggregateRoot<T>
-    {
-        #region Ctor
+    protected AggregateRoot() : base() { }
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        protected AggregateRoot() : base() { }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AggregateRoot{T}"/> class with a specific identity.
+    /// </summary>
+    /// <param name="identity">The aggregate root identifier.</param>
+    protected AggregateRoot(T identity) : base(identity) { }
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="identity"></param>
-        protected AggregateRoot(T identity) : base(identity) { }
-
-        #endregion
-    }
+    #endregion
 }

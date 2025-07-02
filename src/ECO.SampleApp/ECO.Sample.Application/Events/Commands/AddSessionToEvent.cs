@@ -36,12 +36,12 @@ namespace ECO.Sample.Application.Events.Commands
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event eventEntity = await _EventRepository.LoadAsync(request.EventCode);
+                    var eventEntity = await _EventRepository.LoadAsync(request.EventCode);
                     if (eventEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
-                    Speaker speakerEntity = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
+                    var speakerEntity = await _SpeakerRepository.LoadAsync(request.SpeakerCode);
                     if (speakerEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Speaker", "SPEAKER_NOT_FOUND"));

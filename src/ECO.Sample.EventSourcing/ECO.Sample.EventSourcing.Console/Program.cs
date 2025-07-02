@@ -24,7 +24,7 @@ var documentStore = DocumentStore.For(opt =>
     {
         EnumStorage = EnumStorage.AsString
     };
-    serializer.Customize(_ =>
+    serializer.Configure(_ =>
     {
         _.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
         _.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
@@ -40,7 +40,7 @@ var persistenceUnitFactory = new PersistenceUnitFactory();
 persistenceUnitFactory.AddPersistenceUnit(martenPersistenceUnit);
 
 
-documentStore.Advanced.Clean.CompletelyRemoveAll();
+await documentStore.Advanced.Clean.CompletelyRemoveAllAsync();
 var orderId = "ORD-1234";
 
 
@@ -48,9 +48,9 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = Order.CreateNew(orderId, "Test", "Akronimo", "Via Sesia 5");
-    order?.AddDetail(1234, "My fabolous phone", 1, 300f);
-    order?.AddDetail(5678, "My fabolous phone's cover", 2, 10f);
+    var order = Order.CreateNew(orderId, "Test", "Akronimo", "Via Sesia 5")!;
+    order.AddDetail(1234, "My fabolous phone", 1, 300f);
+    order.AddDetail(5678, "My fabolous phone's cover", 2, 10f);
     repository.Save(order);
     ctx.SaveChanges();
     tx.Commit();
@@ -60,7 +60,7 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
     PrintOrder("Orders Created", order);
     ctx.SaveChanges();
     tx.Commit();
@@ -70,8 +70,8 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
-    order?.RemoveDetail(5678, 1);
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
+    order.RemoveDetail(5678, 1);
     repository.Save(order);
 }
 
@@ -79,7 +79,7 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
     PrintOrder("Order item removed", order);
 }
 
@@ -87,8 +87,8 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
-    order?.Prepare();
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
+    order.Prepare();
     repository.Save(order);
 }
 
@@ -96,7 +96,7 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
     PrintOrder("Order prepared", order);
 }
 
@@ -104,8 +104,8 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
-    order?.Ship();
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
+    order.Ship();
     repository.Save(order);
 }
 
@@ -113,7 +113,7 @@ using (var ctx = persistenceUnitFactory.OpenDataContext())
 using (var tx = ctx.BeginTransaction())
 {
     var repository = new MartenOrderRepository(ctx);
-    var order = repository.Load(orderId);
+    var order = repository.Load(orderId) ?? throw new ArgumentNullException(nameof(orderId));
     PrintOrder("Order shipped", order);
 }
 

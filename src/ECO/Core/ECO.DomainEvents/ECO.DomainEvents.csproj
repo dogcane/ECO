@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>true</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyTitle>ECO.DomainEvents</AssemblyTitle>
+		<Product>Enterprise CLR Objects</Product>
+		<Description>ECO is a package that contains some base classes for DDD-development. It helps to avoid the creation of standard classes like Entity, AggregateRoot or ValueObject and it is based on the concept of "persistent unit".</Description>
+		<Authors>Andrea Canegrati</Authors>
+		<Copyright>Andrea Canegrati © 2007</Copyright>
+		<PackageProjectUrl>https://github.com/dogcane/ECO</PackageProjectUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIconUrl>icon.png</PackageIconUrl>
+		<PackageId>ECO.Core.DomainEvents</PackageId>
+		<PackageTags>DDD aggregate entity repository persistence domain events</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="_images\icon.png" />
+	</ItemGroup>
+</Project>

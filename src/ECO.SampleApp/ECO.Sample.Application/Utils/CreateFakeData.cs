@@ -18,9 +18,9 @@ namespace ECO.Sample.Application.Utils
         {
             private readonly IDataContext _DataContext;
 
-            private IEventRepository _EventRepository;
+            private readonly IEventRepository _EventRepository;
 
-            private ISpeakerRepository _SpeakerRepository;
+            private readonly ISpeakerRepository _SpeakerRepository;
 
             private readonly ILogger<CreateFakeData.Handler> _Logger;
 
@@ -40,12 +40,12 @@ namespace ECO.Sample.Application.Utils
                     using var transactionContext = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
                     //Speakers
-                    var speaker01 = Speaker.Create("John", "Snow", ".Net & .Net Core Expert", 35).Value;
-                    var speaker02 = Speaker.Create("Arya", "Stark", "FrontEnd superhero", 20).Value;
+                    var speaker01 = Speaker.Create("John", "Snow", ".Net & .Net Core Expert", 35).Value!;
+                    var speaker02 = Speaker.Create("Arya", "Stark", "FrontEnd superhero", 20).Value!;
                     await _SpeakerRepository.AddAsync(speaker01);
                     await _SpeakerRepository.AddAsync(speaker02);
                     //Events
-                    var event01 = Event.Create(".Net Core Days", "Full immersion in .Net Core and on...", new Period(DateTime.Today, DateTime.Today.AddDays(2))).Value;
+                    var event01 = Event.Create(".Net Core Days", "Full immersion in .Net Core and on...", new Period(DateTimeOffset.Now.UtcDateTime.Date, DateTimeOffset.Now.UtcDateTime.Date.AddDays(2))).Value!;
                     event01.AddSession("AspNet Core", "AspNet Core full immersion", 200, speaker01);
                     event01.AddSession("Blazor", "Blazor full immersion", 300, speaker01);
                     event01.AddSession("Bootstrap", "Bootstrap full immersion", 100, speaker02);

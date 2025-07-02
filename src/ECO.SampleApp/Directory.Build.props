@@ -1,6 +1,6 @@
-<Project> 
-  <PropertyGroup>
-	  <!-- 
+<Project>
+	<PropertyGroup>
+		<!-- 
 	  ADMITTED VALUES :
 	  - INMEMORY
 	  - EFSQL
@@ -10,6 +10,7 @@
 	  - NHPOSTGRE
 	  - MARTEN
 	  -->
-	<DefineConstants>NHSQL</DefineConstants>
-  </PropertyGroup>
+		<DefineConstants>INMEMORY</DefineConstants>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 </Project>

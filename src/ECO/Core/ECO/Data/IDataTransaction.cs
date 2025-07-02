@@ -1,45 +1,41 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+namespace ECO.Data;
 
-namespace ECO.Data
+/// <summary>
+/// Represents a data transaction for a persistence context.
+/// Provides synchronous and asynchronous methods for commit and rollback operations.
+/// </summary>
+public interface IDataTransaction : IDisposable, IAsyncDisposable
 {
+    #region Properties
     /// <summary>
-    /// Interface that defines a data transaction.
+    /// Gets the persistence context that owns this data transaction.
     /// </summary>
-    public interface IDataTransaction : IDisposable, IAsyncDisposable
-    {
-        #region Properties
+    IPersistenceContext Context { get; }
+    #endregion
 
-        /// <summary>
-        /// Corrent context, owner of the data transaction
-        /// </summary>
-        IPersistenceContext Context { get; }
+    #region Methods
+    /// <summary>
+    /// Commits the transaction.
+    /// </summary>
+    void Commit();
 
-        #endregion
+    /// <summary>
+    /// Rolls back the transaction.
+    /// </summary>
+    void Rollback();
 
-        #region Methods
+    /// <summary>
+    /// Asynchronously commits the transaction.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A task representing the asynchronous commit operation.</returns>
+    Task CommitAsync(CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Method that commits the transaction
-        /// </summary>
-        void Commit();
-
-        /// <summary>
-        /// Method that rollbacks the transaction
-        /// </summary>
-        void Rollback();
-
-        /// <summary>
-        /// Method that commits the transaction asynchronously
-        /// </summary>
-        Task CommitAsync(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Method that rollbacks the transaction asynchronously
-        /// </summary>
-        Task RollbackAsync(CancellationToken cancellationToken = default);
-
-        #endregion
-    }
+    /// <summary>
+    /// Asynchronously rolls back the transaction.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A task representing the asynchronous rollback operation.</returns>
+    Task RollbackAsync(CancellationToken cancellationToken = default);
+    #endregion
 }

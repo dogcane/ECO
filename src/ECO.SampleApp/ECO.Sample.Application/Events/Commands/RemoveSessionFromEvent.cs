@@ -34,12 +34,12 @@ namespace ECO.Sample.Application.Events.Commands
                 using var transactionContext = await _DataContext.BeginTransactionAsync();
                 try
                 {
-                    Event eventEntity = _EventRepository.Load(request.EventCode);
+                    var eventEntity = _EventRepository.Load(request.EventCode);
                     if (eventEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Event", "EVENT_NOT_FOUND"));
                     }
-                    Session sessionEntity = eventEntity.Sessions.FirstOrDefault(s => s.Identity == request.SessionCode);
+                    var sessionEntity = eventEntity.Sessions.FirstOrDefault(s => s.Identity == request.SessionCode);
                     if (sessionEntity == null)
                     {
                         return OperationResult.MakeFailure(ErrorMessage.Create("Session", "SESSION_NOT_FOUND"));
