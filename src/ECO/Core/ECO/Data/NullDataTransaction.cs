@@ -24,5 +24,10 @@ public sealed class NullDataTransaction(IPersistenceContext context) : IDataTran
     /// <inheritdoc />
     public Task RollbackAsync(CancellationToken cancellationToken = default) => Task.Run(Rollback, cancellationToken);
 
+    /// <summary>
+    /// Asynchronously releases all resources used by the NullDataTransaction.
+    /// Since this is a no-op transaction, no actual cleanup is performed.
+    /// </summary>
+    /// <returns>A completed ValueTask</returns>
     public ValueTask DisposeAsync() { return ValueTask.CompletedTask;} 
 }

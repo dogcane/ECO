@@ -148,14 +148,14 @@ public sealed class TransactionContext : ITransactionContext
         GC.SuppressFinalize(this);
     }
 
-    private async ValueTask DisposeAsyncCore(bool isDisposing)
+    private async ValueTask DisposeAsync(bool isDisposing)
     {
         if (_disposed)
             return;
 
         if (isDisposing)
         {
-            if (Status == TransactionStatus.Alive && AutoCommit)
+            if (Status is TransactionStatus.Alive && AutoCommit)
             {
                 await CommitAsync().ConfigureAwait(false);
                 Status = TransactionStatus.Committed;

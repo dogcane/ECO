@@ -77,10 +77,30 @@ public class EntityFrameworkDataTransaction : IDataTransaction
     {
         if (_disposed)
             return;
-
         if (isDisposing)
         {
             Transaction?.Dispose();            
+        }
+        _disposed = true;
+    }
+    
+    public async ValueTask DisposeAsync()
+    {
+        DisposeAsync(true);
+        GC.SuppressFinalize(this);
+    }
+    
+    /// <summary>
+    /// Asynchronously releases all resources used by the EntityFrameworkDataTransaction.
+    /// </summary>
+    /// <returns>A ValueTask representing the asynchronous dispose operation</returns>
+    private async ValueTask DisposeAsync(bool isDisposing)
+    {
+        if (_disposed)
+            return;
+        if (isDisposing)
+        {
+            await Transaction?.DisposeAsync();
         }
         _disposed = true;
     }
