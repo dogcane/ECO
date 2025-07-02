@@ -101,6 +101,32 @@ namespace ECO.Data
             Dispose(true);
         }
 
+        /// <summary>
+        /// Asynchronously releases all resources used by the TransactionContext.
+        /// </summary>
+        /// <returns>A ValueTask representing the asynchronous dispose operation</returns>
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return;
+
+            if (Status == TransactionStatus.Alive)
+            {
+                if (AutoCommit)
+                {
+                    await CommitAsync();
+                }
+                Status = TransactionStatus.Committed;
+            }
+            
+            foreach (IDataTransaction tx in _Transactions)
+            {
+                await tx.DisposeAsync();
+            }
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
+
         private void Dispose(bool isDisposing)
         {
             if (_disposed)

@@ -7,7 +7,7 @@ namespace ECO.Data
     /// <summary>
     /// Interface that defines a data transaction.
     /// </summary>
-    public interface IDataTransaction : IDisposable
+    public interface IDataTransaction : IDisposable, IAsyncDisposable
     {
         #region Properties
 

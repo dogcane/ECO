@@ -69,6 +69,23 @@ namespace ECO.Providers.EntityFramework
 
         public void Dispose() => Dispose(true);
 
+        /// <summary>
+        /// Asynchronously releases all resources used by the EntityFrameworkDataTransaction.
+        /// </summary>
+        /// <returns>A ValueTask representing the asynchronous dispose operation</returns>
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return;
+
+            if (Transaction != null)
+            {
+                await Transaction.DisposeAsync();
+            }
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
+
         private void Dispose(bool isDisposing)
         {
             if (_disposed)

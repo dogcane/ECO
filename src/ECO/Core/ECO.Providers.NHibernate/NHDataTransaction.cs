@@ -42,6 +42,26 @@ namespace ECO.Providers.NHibernate
 
         public void Dispose() => Dispose(true);
 
+        /// <summary>
+        /// Asynchronously releases all resources used by the NHDataTransaction.
+        /// </summary>
+        /// <returns>A ValueTask representing the asynchronous dispose operation</returns>
+        public ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return ValueTask.CompletedTask;
+
+            if (Transaction != null)
+            {
+                // NHibernate ITransaction does not support async disposal,
+                // so we fall back to synchronous disposal
+                Transaction.Dispose();
+            }
+            _disposed = true;
+            GC.SuppressFinalize(this);
+            return ValueTask.CompletedTask;
+        }
+
         private void Dispose(bool isDisposing)
         {
             if (_disposed)

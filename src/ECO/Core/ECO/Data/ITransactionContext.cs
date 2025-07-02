@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ECO.Data
 {
-    public interface ITransactionContext : IDisposable
+    public interface ITransactionContext : IDisposable, IAsyncDisposable
     {
         #region Properties
 

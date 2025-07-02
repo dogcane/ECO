@@ -38,6 +38,16 @@ namespace ECO.Data
 
         }
 
+        /// <summary>
+        /// Asynchronously releases all resources used by the NullDataTransaction.
+        /// Since this is a no-op transaction, no actual cleanup is performed.
+        /// </summary>
+        /// <returns>A completed ValueTask</returns>
+        public ValueTask DisposeAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
         public async Task CommitAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Commit());
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default) => await Task.Run(() => Rollback());
