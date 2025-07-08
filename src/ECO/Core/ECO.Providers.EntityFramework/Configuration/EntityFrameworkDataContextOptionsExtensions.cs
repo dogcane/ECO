@@ -1,14 +1,15 @@
-﻿using ECO.Configuration;
+﻿namespace ECO.Providers.EntityFramework.Configuration;
+
+using ECO.Configuration;
 using ECO.Data;
 using ECO.Providers.EntityFramework.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
-namespace ECO.Providers.EntityFramework.Configuration;
-
 public static class EntityFrameworkDataContextOptionsExtensions
 {
+    #region Extensions
     public static DataContextOptions UseEntityFramework<T>(this DataContextOptions dataContextOptions, string persistenceUnitName, Action<EntityFrameworkOptions> optionsAction)
         where T : DbContext
     {
@@ -21,17 +22,14 @@ public static class EntityFrameworkDataContextOptionsExtensions
             optionsAction(options);
             EntityFrameworkPersistenceUnit<T> persistenceUnit = new(persistenceUnitName, options.DbContextOptions.Options, loggerFactory);
             foreach (var entityType in DbContextFacade<T>.GetAggregateTypesFromDBContext())
-            {
                 persistenceUnit.AddClass(entityType);
-            }
             foreach (var listener in options.Listeners)
-            {
                 persistenceUnit.AddUnitListener(listener);
-            }
             persistenceUnitFactory.AddPersistenceUnit(persistenceUnit);
         };
         return dataContextOptions;
     }
+    #endregion
 }
 
 public sealed class EntityFrameworkOptions
@@ -42,12 +40,11 @@ public sealed class EntityFrameworkOptions
 
     #region Properties
     public IEnumerable<IPersistenceUnitListener> Listeners => listeners;
-    public DbContextOptionsBuilder DbContextOptions { get; private set; } = new DbContextOptionsBuilder();
+    public DbContextOptionsBuilder DbContextOptions { get; } = new();
     #endregion
 
     #region Methods
-    public EntityFrameworkOptions AddListener<T>()
-        where T : IPersistenceUnitListener, new()
+    public EntityFrameworkOptions AddListener<T>() where T : IPersistenceUnitListener, new()
     {
         listeners.Add(new T());
         return this;

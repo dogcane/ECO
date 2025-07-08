@@ -1,6 +1,6 @@
-﻿using ECO.Data;
+﻿namespace ECO.EventSourcing;
 
-namespace ECO.EventSourcing;
+using ECO.Data;
 
 /// <summary>
 /// Defines a contract for a repository that supports event sourcing operations for aggregates.
@@ -23,7 +23,7 @@ public interface IESRepository<T, K> : IPersistenceManager<T, K>
     /// </summary>
     /// <param name="identity">The identity of the aggregate.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the loaded aggregate, or <c>null</c> if not found.</returns>
-    Task<T?> LoadAsync(K identity);
+    ValueTask<T?> LoadAsync(K identity);
 
     /// <summary>
     /// Saves the specified aggregate.

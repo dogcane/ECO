@@ -144,7 +144,7 @@ public sealed class TransactionContext : ITransactionContext
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
-        await DisposeAsyncCore(true).ConfigureAwait(false);
+        await DisposeAsync(true).ConfigureAwait(false);
         GC.SuppressFinalize(this);
     }
 

@@ -9,4 +9,4 @@
 /// <param name="sourceEvent">
 /// The event instance that triggered the callback.
 /// </param>
-public delegate void EventAction<T>(T sourceEvent);
+public delegate void EventAction<T>(T sourceEvent) where T : IDomainEvent;

@@ -5,6 +5,4 @@
 /// Domain events are used to represent significant occurrences or changes within the domain,
 /// allowing different parts of the system to react to these events in a decoupled manner.
 /// </summary>
-public interface IDomainEvent
-{
-}
+public interface IDomainEvent { }

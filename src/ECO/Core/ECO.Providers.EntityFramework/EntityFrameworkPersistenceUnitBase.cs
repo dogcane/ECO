@@ -1,4 +1,6 @@
-﻿using ECO.Data;
+﻿namespace ECO.Providers.EntityFramework;
+
+using ECO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -6,32 +8,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ECO.Providers.EntityFramework;
-
-public abstract class EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null) : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>(name, loggerFactory)
+public abstract class EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
+    : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>(name, loggerFactory)
 {
     #region Consts
-
     protected static readonly string DBCONTEXTTYPE_ATTRIBUTE = "dbContextType";
-
     #endregion
 
     #region Private_Fields
-
     protected Type? _DbContextType;
-
     protected DbContextOptions? _DbContextOptions;
-
     #endregion
 
     #region Protected_Methods
-
     protected abstract DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration);
-
     #endregion
 
     #region PersistenceUnitBase
-
     protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
     {
         base.OnInitialize(extendedAttributes, configuration);
@@ -41,28 +34,32 @@ public abstract class EntityFrameworkPersistenceUnitBase(string name, ILoggerFac
         }
         else
         {
-            throw new ApplicationException(string.Format("The attribute '{0}' was not found in the persistent unit configuration", DBCONTEXTTYPE_ATTRIBUTE));
+            throw new ApplicationException($"The attribute '{DBCONTEXTTYPE_ATTRIBUTE}' was not found in the persistent unit configuration");
         }
         _DbContextOptions = CreateDbContextOptions(extendedAttributes, configuration);
-        //Register class types
-        using DbContext context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
-        foreach (var entity in context.Model.GetEntityTypes())
+        var context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext;
+        if (context is null)
+            throw new InvalidCastException("Could not create DbContext instance");
+        using (context)
         {
-            var entityType = entity.ClrType;
-            if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
-                _Classes.Add(entity.ClrType);
+            foreach (var entity in context.Model.GetEntityTypes())
+            {
+                var entityType = entity.ClrType;
+                if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
+                    _Classes.Add(entity.ClrType);
+            }
         }
     }
 
-    protected override IPersistenceContext OnCreateContext()
-    {
-        DbContext context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext ?? throw new InvalidCastException(nameof(context));
-        return new EntityFrameworkPersistenceContext(context, this, _LoggerFactory?.CreateLogger<EntityFrameworkPersistenceContext>());
-    }
+    protected override IPersistenceContext OnCreateContext() =>
+        Activator.CreateInstance(_DbContextType!, _DbContextOptions) is DbContext context
+            ? new EntityFrameworkPersistenceContext(context, this, _LoggerFactory?.CreateLogger<EntityFrameworkPersistenceContext>())
+            : throw new InvalidCastException(nameof(context));
 
-    public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext) => new EntityFrameworkReadOnlyRepository<T, K>(dataContext);
+    public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
+        => new EntityFrameworkReadOnlyRepository<T, K>(dataContext);
 
-    public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext) => new EntityFrameworkRepository<T, K>(dataContext);
-
+    public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
+        => new EntityFrameworkRepository<T, K>(dataContext);
     #endregion
 }

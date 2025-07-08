@@ -5,7 +5,7 @@
 /// Provides mechanisms for applying and tracking domain events, maintaining versioning, and managing uncommitted events.
 /// </summary>
 /// <typeparam name="T">The type of the aggregate root's identity.</typeparam>
-public abstract class ESAggregateRoot<T> : AggregateRoot<T>, IESAggregateRoot<T>
+public abstract class ESAggregateRoot<T>(T? identity = default) : AggregateRoot<T>(identity!), IESAggregateRoot<T>
 {
     #region Fields
 
@@ -27,16 +27,8 @@ public abstract class ESAggregateRoot<T> : AggregateRoot<T>, IESAggregateRoot<T>
 
     #region Ctor
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ESAggregateRoot{T}"/> class.
-    /// </summary>
-    protected ESAggregateRoot() : base() { }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ESAggregateRoot{T}"/> class with the specified identity.
-    /// </summary>
-    /// <param name="identity">The identity of the aggregate root.</param>
-    protected ESAggregateRoot(T identity) : base(identity) { }
+    // Primary constructor is used for both parameterless and identity-based construction.
+    // If you need to create with identity, pass it; otherwise, default will be used.
 
     #endregion
 
@@ -65,7 +57,7 @@ public abstract class ESAggregateRoot<T> : AggregateRoot<T>, IESAggregateRoot<T>
     void IESAggregateRoot<T>.ClearUncommittedEvents() => _uncommittedEvents.Clear();
 
     /// <inheritdoc/>
-    IEnumerable<object> IESAggregateRoot<T>.GetUncommittedEvents() => _uncommittedEvents.ToArray();
+    IEnumerable<object> IESAggregateRoot<T>.GetUncommittedEvents() => [.._uncommittedEvents];
 
     #endregion
 }

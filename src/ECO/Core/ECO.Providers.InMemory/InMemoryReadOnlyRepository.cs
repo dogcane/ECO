@@ -1,17 +1,17 @@
-﻿using ECO.Data;
+﻿namespace ECO.Providers.InMemory;
 
-namespace ECO.Providers.InMemory;
+using ECO.Data;
 
-public class InMemoryReadOnlyRepository<T, K>(IDataContext dataContext) : InMemoryPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
+public class InMemoryReadOnlyRepository<T, K>(IDataContext dataContext)
+    : InMemoryPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
     where K : notnull
 {
-
     #region IReadOnlyRepository<T,K> Membri di
 
-    public virtual T? Load(K identity) => _EntitySet.TryGetValue(identity, out T? entity) ? entity : null;
+    public virtual T? Load(K identity) => _EntitySet.TryGetValue(identity, out var entity) ? entity : null;
 
-    public virtual async Task<T?> LoadAsync(K identity) => await Task.FromResult(Load(identity));
+    public virtual ValueTask<T?> LoadAsync(K identity) => ValueTask.FromResult(Load(identity));
 
     #endregion
 

@@ -1,7 +1,7 @@
-﻿using ECO.Data;
-using Microsoft.Extensions.Logging;
+﻿namespace ECO.Configuration;
 
-namespace ECO.Configuration;
+using ECO.Data;
+using Microsoft.Extensions.Logging;
 
 /// <summary>
 /// Options for configuring the data context and persistence unit factory.

@@ -11,7 +11,7 @@ public static class TypeExtensions
     /// <param name="type">The type to check.</param>
     /// <returns><c>true</c> if the type is a concrete aggregate root; otherwise, <c>false</c>.</returns>
     public static bool IsAggregateRootType(this Type type) =>
-        type.IsClass && !type.IsAbstract && type.GetInterface(typeof(IAggregateRoot<>).Name) != null;
+        type is { IsClass: true, IsAbstract: false } && type.GetInterface(typeof(IAggregateRoot<>).Name) is not null;
 
     /// <summary>
     /// Filters a sequence of types, returning only those that are aggregate root types.

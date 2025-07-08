@@ -1,10 +1,11 @@
-﻿using ECO.Data;
+﻿namespace ECO.Providers.EntityFramework;
+
+using ECO.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace ECO.Providers.EntityFramework;
-
-public class EntityFrameworkPersistenceManager<T, K>(IDataContext dataContext) : PersistenceManagerBase<T, K>(dataContext)
+public class EntityFrameworkPersistenceManager<T, K>(IDataContext dataContext)
+    : PersistenceManagerBase<T, K>(dataContext)
     where T : class, IAggregateRoot<K>
 {
     #region Properties

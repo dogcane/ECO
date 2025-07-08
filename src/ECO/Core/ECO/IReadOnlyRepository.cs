@@ -1,4 +1,5 @@
 using ECO.Data;
+using System.Threading.Tasks;
 
 namespace ECO;
 
@@ -23,8 +24,8 @@ public interface IReadOnlyRepository<T, K> : IQueryable<T>, IPersistenceManager<
     /// Asynchronously loads the entity from the repository by its identifier.
     /// </summary>
     /// <param name="identity">The identifier of the entity.</param>
-    /// <returns>A task representing the asynchronous operation, with the entity if found; otherwise, <c>null</c>.</returns>
-    Task<T?> LoadAsync(K identity);
+    /// <returns>A ValueTask representing the asynchronous operation, with the entity if found; otherwise, <c>null</c>.</returns>
+    ValueTask<T?> LoadAsync(K identity);
 
     #endregion
 }

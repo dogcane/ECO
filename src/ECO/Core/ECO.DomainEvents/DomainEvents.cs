@@ -1,6 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿namespace ECO.Events;
 
-namespace ECO.Events;
+using System.Collections.Concurrent;
 
 /// <summary>
 /// Provides a static manager for domain events, allowing subscription, unsubscription, and event raising.
@@ -40,10 +40,13 @@ public static class DomainEvents
         EventRaised?.Invoke(null, new DomainEventArgs<IDomainEvent>(args));
         if (_Subscribers.TryGetValue(typeof(T), out var subscribers))
         {
-            foreach (var act in subscribers.Values.OfType<EventAction<T>>())
+            foreach (var act in subscribers.Values)
             {
-                EventManaged?.Invoke(null, new DomainEventArgs<IDomainEvent, Delegate>(args, act));
-                act.Invoke(args);
+                if (act is EventAction<T> action)
+                {
+                    EventManaged?.Invoke(null, new DomainEventArgs<IDomainEvent, Delegate>(args, action));
+                    action(args);
+                }
             }
         }
     }
@@ -58,7 +61,6 @@ public static class DomainEvents
     {
         ArgumentNullException.ThrowIfNull(subscriber);
         ArgumentNullException.ThrowIfNull(callback);
-
         var type = typeof(T);
         var subscribers = _Subscribers.GetOrAdd(type, _ => new ConcurrentDictionary<object, Delegate>());
         subscribers[subscriber] = callback;
@@ -72,7 +74,6 @@ public static class DomainEvents
     public static void Unsubscribe<T>(object subscriber) where T : IDomainEvent
     {
         ArgumentNullException.ThrowIfNull(subscriber);
-
         var type = typeof(T);
         if (_Subscribers.TryGetValue(type, out var subscribers))
         {

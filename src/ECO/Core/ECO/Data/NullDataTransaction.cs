@@ -29,5 +29,5 @@ public sealed class NullDataTransaction(IPersistenceContext context) : IDataTran
     /// Since this is a no-op transaction, no actual cleanup is performed.
     /// </summary>
     /// <returns>A completed ValueTask</returns>
-    public ValueTask DisposeAsync() { return ValueTask.CompletedTask;} 
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
