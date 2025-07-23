@@ -1,49 +1,41 @@
+namespace ECO.Providers.NHibernate;
+
 using ECO.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ECO.Providers.NHibernate
+public class NHReadOnlyRepository<T, K>(IDataContext dataContext) : NHPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
+    where T : class, IAggregateRoot<K>
 {
-    public class NHReadOnlyRepository<T, K> : NHPersistenceManager<T, K>, IReadOnlyRepository<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region Ctor
-        public NHReadOnlyRepository(IDataContext dataContext) : base(dataContext)
-        {
-        }
+    #region IReadOnlyEntityManager<T,K> Members
 
-        #endregion
+    public virtual T? Load(K identity) => GetCurrentSession().Get<T>(identity);
 
-        #region IReadOnlyEntityManager<T,K> Members
+    public virtual async ValueTask<T?> LoadAsync(K identity) => await GetCurrentSession().GetAsync<T>(identity);
 
-        public virtual T? Load(K identity) => GetCurrentSession().Get<T>(identity);
+    #endregion
 
-        public virtual async Task<T?> LoadAsync(K identity) => await GetCurrentSession().GetAsync<T>(identity);
+    #region IEnumerable<T> Members
 
-        #endregion
+    public virtual IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
 
-        #region IEnumerable<T> Members
+    #endregion
 
-        public virtual IEnumerator<T> GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
+    #region IEnumerable Members
 
-        #endregion
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
 
-        #region IEnumerable Members
+    #endregion
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetCurrentSession().Query<T>().GetEnumerator();
+    #region IQueryable Members
 
-        #endregion
+    public virtual Type ElementType => GetCurrentSession().Query<T>().ElementType;
 
-        #region IQueryable Members
+    public virtual System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
 
-        public virtual Type ElementType => GetCurrentSession().Query<T>().ElementType;
+    public virtual IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
 
-        public virtual System.Linq.Expressions.Expression Expression => GetCurrentSession().Query<T>().Expression;
-
-        public virtual IQueryProvider Provider => GetCurrentSession().Query<T>().Provider;
-
-        #endregion
-    }
+    #endregion
 }

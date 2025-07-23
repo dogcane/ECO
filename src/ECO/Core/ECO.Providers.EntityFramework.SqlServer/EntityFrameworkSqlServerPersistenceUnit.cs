@@ -1,23 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace ECO.Providers.EntityFramework.SqlServer;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-namespace ECO.Providers.EntityFramework.SqlServer;
-
 public class EntityFrameworkSqlServerPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : EntityFrameworkPersistenceUnitBase(name, loggerFactory)
 {
     #region Consts
-
     protected static readonly string CONNECTIONSTRING_ATTRIBUTE = "connectionString";
-
     protected static readonly string CONNECTIONSTRINGNAME_ATTRIBUTE = "connectionStringName";
-
     #endregion
 
     #region Protected_Methods 
-
     protected override DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
     {
         string connectionString = string.Empty;
@@ -37,6 +33,5 @@ public class EntityFrameworkSqlServerPersistenceUnit(string name, ILoggerFactory
             .UseSqlServer(connectionString)
             .Options;
     }
-
     #endregion
 }

@@ -1,11 +1,11 @@
-﻿using ECO.Data;
-using Marten;
-using Microsoft.Extensions.Logging;
+﻿namespace ECO.Providers.Marten;
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace ECO.Providers.Marten;
+using ECO.Data;
+using global::Marten;
+using Microsoft.Extensions.Logging;
 
 public sealed class MartenPersistenceContext(IDocumentSession session, IPersistenceUnit persistenceUnit, ILogger<MartenPersistenceContext>? logger) : PersistenceContextBase<MartenPersistenceContext>(persistenceUnit, logger)
 {
@@ -17,7 +17,7 @@ public sealed class MartenPersistenceContext(IDocumentSession session, IPersiste
 
     #region Protected_Methods
 
-    protected override void OnSaveChanges() => Session.SaveChanges();
+    protected override void OnSaveChanges() => Session.SaveChangesAsync().RunSynchronously();
 
     protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Session.SaveChangesAsync(cancellationToken);
 

@@ -1,8 +1,8 @@
-﻿using ECO.Data;
+﻿namespace ECO.Providers.Marten;
+
+using ECO.Data;
 using System;
 using System.Threading.Tasks;
-
-namespace ECO.Providers.Marten;
 
 public class MartenRepository<T,K>(IDataContext dataContext) : MartenReadOnlyRepository<T, K>(dataContext), IRepository<T, K>
     where T : class, IAggregateRoot<K>

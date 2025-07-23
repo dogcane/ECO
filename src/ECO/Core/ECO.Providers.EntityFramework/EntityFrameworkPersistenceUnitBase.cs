@@ -1,6 +1,7 @@
 ﻿namespace ECO.Providers.EntityFramework;
 
 using ECO.Data;
+using ECO.Providers.EntityFramework.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -8,58 +9,96 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Abstract base class for Entity Framework persistence units that require configuration-based initialization.
+/// Provides common functionality for creating DbContext instances from configuration.
+/// </summary>
+/// <param name="name">The name of this persistence unit.</param>
+/// <param name="loggerFactory">Optional logger factory for creating loggers.</param>
 public abstract class EntityFrameworkPersistenceUnitBase(string name, ILoggerFactory? loggerFactory = null)
     : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>(name, loggerFactory)
 {
-    #region Consts
-    protected static readonly string DBCONTEXTTYPE_ATTRIBUTE = "dbContextType";
+    #region Consts    
+    /// <summary>
+    /// The configuration attribute name for specifying the DbContext type.
+    /// </summary>
+    protected static readonly string DBCONTEXTTYPE_ATTRIBUTE = "dbContextType";    
     #endregion
 
-    #region Private_Fields
-    protected Type? _DbContextType;
-    protected DbContextOptions? _DbContextOptions;
+    #region Protected_Fields    
+    /// <summary>
+    /// The Type of the DbContext to be instantiated.
+    /// </summary>
+    protected Type? _dbContextType;
+    
+    /// <summary>
+    /// The DbContext options for creating DbContext instances.
+    /// </summary>
+    protected DbContextOptions? _dbContextOptions;
     #endregion
 
     #region Protected_Methods
+    
+    /// <summary>
+    /// Creates the DbContext options from the provided configuration attributes.
+    /// This method must be implemented by derived classes to provide provider-specific options.
+    /// </summary>
+    /// <param name="extendedAttributes">The extended attributes from configuration.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <returns>The configured DbContextOptions.</returns>
     protected abstract DbContextOptions CreateDbContextOptions(IDictionary<string, string> extendedAttributes, IConfiguration configuration);
+    
     #endregion
 
     #region PersistenceUnitBase
+    
+    /// <inheritdoc />
     protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
     {
         base.OnInitialize(extendedAttributes, configuration);
-        if (extendedAttributes.TryGetValue(DBCONTEXTTYPE_ATTRIBUTE, out string? value))
+        
+        // Get the DbContext type from configuration
+        if (extendedAttributes.TryGetValue(DBCONTEXTTYPE_ATTRIBUTE, out string? dbContextTypeName))
         {
-            _DbContextType = Type.GetType(value);
+            _dbContextType = Type.GetType(dbContextTypeName) ??
+                throw new InvalidOperationException($"Could not resolve DbContext type: {dbContextTypeName}");
         }
         else
         {
-            throw new ApplicationException($"The attribute '{DBCONTEXTTYPE_ATTRIBUTE}' was not found in the persistent unit configuration");
+            throw new InvalidOperationException($"The required attribute '{DBCONTEXTTYPE_ATTRIBUTE}' was not found in the persistence unit configuration.");
         }
-        _DbContextOptions = CreateDbContextOptions(extendedAttributes, configuration);
-        var context = Activator.CreateInstance(_DbContextType!, _DbContextOptions) as DbContext;
-        if (context is null)
-            throw new InvalidCastException("Could not create DbContext instance");
-        using (context)
+        
+        // Create DbContext options
+        _dbContextOptions = CreateDbContextOptions(extendedAttributes, configuration);
+        
+        // Discover and register aggregate root types from the DbContext
+        foreach(var aggregate in DbContextFacade.GetAggregateTypesFromDBContext(_dbContextType))
         {
-            foreach (var entity in context.Model.GetEntityTypes())
-            {
-                var entityType = entity.ClrType;
-                if (entityType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
-                    _Classes.Add(entity.ClrType);
-            }
+            AddClass(aggregate);
         }
     }
 
-    protected override IPersistenceContext OnCreateContext() =>
-        Activator.CreateInstance(_DbContextType!, _DbContextOptions) is DbContext context
+    /// <inheritdoc />
+    protected override IPersistenceContext OnCreateContext()
+    {
+        if (_dbContextType is null || _dbContextOptions is null)
+        {
+            throw new InvalidOperationException($"Persistence unit '{Name}' has not been properly initialized. Call Initialize() first.");
+        }
+        
+        var context = Activator.CreateInstance(_dbContextType, _dbContextOptions) as DbContext;
+        return context is not null
             ? new EntityFrameworkPersistenceContext(context, this, _LoggerFactory?.CreateLogger<EntityFrameworkPersistenceContext>())
-            : throw new InvalidCastException(nameof(context));
+            : throw new InvalidOperationException($"Failed to create instance of {_dbContextType.Name}. Ensure it has a constructor that accepts {nameof(DbContextOptions)}.");
+    }
 
+    /// <inheritdoc />
     public override IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
         => new EntityFrameworkReadOnlyRepository<T, K>(dataContext);
 
+    /// <inheritdoc />
     public override IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
         => new EntityFrameworkRepository<T, K>(dataContext);
+
     #endregion
 }

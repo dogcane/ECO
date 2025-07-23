@@ -1,20 +1,19 @@
-﻿using Marten;
-using Marten.Schema;
+﻿namespace ECO.Providers.Marten;
+
 using System.Reflection;
+using global::Marten;
+using global::Marten.Schema;
 
-namespace ECO.Providers.Marten;
-
-public class ECODocumentPolicy : IDocumentPolicy
+public sealed class ECODocumentPolicy : IDocumentPolicy
 {
     #region IDocumentPolicy Members
 
     public void Apply(DocumentMapping mapping)
     {
-
-        var _idProperty = mapping.DocumentType.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public);
-        if (_idProperty != null)
+        var idProperty = mapping.DocumentType.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public);
+        if (idProperty is not null)
         {
-            mapping.IdMember = _idProperty;
+            mapping.IdMember = idProperty;
         }
     }
 

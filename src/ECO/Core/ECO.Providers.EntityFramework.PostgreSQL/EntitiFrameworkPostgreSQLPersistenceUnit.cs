@@ -1,19 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace ECO.Providers.EntityFramework.PostgreSQL;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-namespace ECO.Providers.EntityFramework.PostgreSQL;
-
-public class EntitiFrameworkPosgreSQLPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : EntityFrameworkPersistenceUnitBase(name, loggerFactory)
+public class EntityFrameworkPostgreSQLPersistenceUnit(string name, ILoggerFactory? loggerFactory = null) : EntityFrameworkPersistenceUnitBase(name, loggerFactory)
 {
     #region Consts
-
-    private static readonly string CONNECTIONSTRING_ATTRIBUTE = "connectionString";
-
-    private static readonly string CONNECTIONSTRINGNAME_ATTRIBUTE = "connectionStringName";
-
+    protected static readonly string CONNECTIONSTRING_ATTRIBUTE = "connectionString";
+    protected static readonly string CONNECTIONSTRINGNAME_ATTRIBUTE = "connectionStringName";
     #endregion
 
     #region Protected_Methods 

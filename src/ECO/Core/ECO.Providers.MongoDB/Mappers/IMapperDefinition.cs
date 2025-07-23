@@ -1,7 +1,6 @@
-﻿namespace ECO.Providers.MongoDB.Mappers
+﻿namespace ECO.Providers.MongoDB.Mappers;
+
+public interface IMapperDefinition
 {
-    public interface IMapperDefinition
-    {
-        void BuildMapperDefition();
-    }
+    void BuildMapperDefition();
 }

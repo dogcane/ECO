@@ -1,29 +1,14 @@
-﻿using ECO.Data;
-using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
+﻿namespace ECO.Providers.MongoDB;
+
 using System;
+using ECO.Data;
+using global::MongoDB.Driver;
+using Microsoft.Extensions.Logging;
 
-namespace ECO.Providers.MongoDB
+public class MongoPersistenceContext(IMongoDatabase database, IPersistenceUnit persistenceUnit, ILogger<MongoPersistenceContext>? logger) : PersistenceContextBase<MongoPersistenceContext>(persistenceUnit, logger)
 {
-    public class MongoPersistenceContext : PersistenceContextBase<MongoPersistenceContext>
-    {
-        #region Properties
-
-        public IMongoDatabase Database { get; private set; }
-
-        public MongoIdentityMap IdentityMap { get; private set; }
-
-        #endregion
-
-        #region Ctor
-
-        public MongoPersistenceContext(IMongoDatabase database, IPersistenceUnit persistenceUnit, ILogger<MongoPersistenceContext>? logger)
-            : base(persistenceUnit, logger)
-        {
-            Database = database ?? throw new ArgumentNullException(nameof(database));
-            IdentityMap = new MongoIdentityMap();
-        }
-
-        #endregion
-    }
+    #region Properties
+    public IMongoDatabase Database { get; } = database ?? throw new ArgumentNullException(nameof(database));
+    public MongoIdentityMap IdentityMap { get; } = new MongoIdentityMap();
+    #endregion
 }

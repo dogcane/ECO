@@ -14,9 +14,9 @@ public static class ECOServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(serviceCollection);
         ArgumentNullException.ThrowIfNull(optionsAction);
-        DataContextOptions options = new()
+        var options = new DataContextOptions
         {
-            PersistenceUnitFactoryOptions = (persistenceUnitFactory, loggerFactory) => { }
+            PersistenceUnitFactoryOptions = (_, _) => { }
         };
         optionsAction(options);
         serviceCollection.AddSingleton<IPersistenceUnitFactory, PersistenceUnitFactory>(fact =>
@@ -36,7 +36,7 @@ public static class ECOServiceCollectionExtensions
         return serviceCollection;
     }
 
-    public static IServiceCollection AddReadOnlyRepository<T,K>(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddReadOnlyRepository<T, K>(this IServiceCollection serviceCollection)
         where T : class, IAggregateRoot<K>
         where K : notnull
     {

@@ -1,28 +1,19 @@
-﻿
-using ECO.Data;
-using NHibernate;
+﻿namespace ECO.Providers.NHibernate;
+
 using System;
-using nh = NHibernate;
+using ECO.Data;
+using global::NHibernate;
 
-namespace ECO.Providers.NHibernate
+public class NHPersistenceManager<T, K>(IDataContext dataContext) : PersistenceManagerBase<T, K>(dataContext)
+    where T : class, IAggregateRoot<K>
 {
-    public class NHPersistenceManager<T, K> : PersistenceManagerBase<T, K>
-        where T : class, IAggregateRoot<K>
-    {
-        #region Ctor
+    #region Protected_Methods
 
-        public NHPersistenceManager(IDataContext dataContext) : base(dataContext)
-        {
-        }
+    protected ISession GetCurrentSession()
+        => (PersistenceContext as NHPersistenceContext ?? throw new InvalidCastException(nameof(NHPersistenceContext))).Session;
 
-        #endregion
+    protected ITransaction? GetCurrentTransaction()
+        => SessionExtensions.GetCurrentTransaction(GetCurrentSession());
 
-        #region Protected_Methods
-
-        protected nh.ISession GetCurrentSession() => (PersistenceContext as NHPersistenceContext ?? throw new InvalidCastException(nameof(NHPersistenceContext))).Session;
-
-        protected nh.ITransaction? GetCurrentTransaction() => GetCurrentSession().GetCurrentTransaction();
-
-        #endregion
-    }
+    #endregion
 }

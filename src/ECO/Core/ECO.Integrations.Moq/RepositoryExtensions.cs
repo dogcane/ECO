@@ -1,14 +1,16 @@
-﻿using Moq;
+﻿namespace ECO.Integrations.Moq;
+
+using Moq = global::Moq;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
-namespace ECO.Integrations.Moq;
+
 
 public static class RepositoryExtensions
 {
-    public static Mock<T> SetupQueryable<T, TItem>(this Mock<T> queryableMock, IEnumerable<TItem> source)
+    public static Moq.Mock<T> SetupQueryable<T, TItem>(this Moq.Mock<T> queryableMock, IEnumerable<TItem> source)
         where T : class, IEnumerable<TItem>
     {
 
@@ -22,34 +24,34 @@ public static class RepositoryExtensions
         return queryableMock;
     }
 
-    public static Mock<T> SetupRepository<T, TItem, TKey>(this Mock<T> repository, IList<TItem> source)
+    public static Moq.Mock<T> SetupRepository<T, TItem, TKey>(this Moq.Mock<T> repository, IList<TItem> source)
         where T : class, IRepository<TItem, TKey>
         where TItem : class, IAggregateRoot<TKey>
     {
         repository.SetupReadOnlyRepository<T, TItem, TKey>(source);
-        repository.Setup(obj => obj.Add(It.IsAny<TItem>())).Callback((TItem item) => {
+        repository.Setup(obj => obj.Add(Moq.It.IsAny<TItem>())).Callback((TItem item) => {
             source.Add(item);
             item.SetMockedIdentity<TItem, TKey>(source);
         });
-        repository.Setup(obj => obj.AddAsync(It.IsAny<TItem>())).Callback((TItem item) =>
+        repository.Setup(obj => obj.AddAsync(Moq.It.IsAny<TItem>())).Callback((TItem item) =>
         {
             source.Add(item);
             item.SetMockedIdentity<TItem, TKey>(source);
         }).Returns(Task.CompletedTask);
-        repository.Setup(obj => obj.Update(It.IsAny<TItem>())).Callback((TItem item) => { source.Remove(item); source.Add(item); });
-        repository.Setup(obj => obj.UpdateAsync(It.IsAny<TItem>())).Callback((TItem item) => { source.Remove(item); source.Add(item); }).Returns(Task.CompletedTask);
-        repository.Setup(obj => obj.Remove(It.IsAny<TItem>())).Callback((TItem item) => source.Remove(item));
-        repository.Setup(obj => obj.RemoveAsync(It.IsAny<TItem>())).Callback((TItem item) => source.Remove(item)).Returns(Task.CompletedTask);
+        repository.Setup(obj => obj.Update(Moq.It.IsAny<TItem>())).Callback((TItem item) => { source.Remove(item); source.Add(item); });
+        repository.Setup(obj => obj.UpdateAsync(Moq.It.IsAny<TItem>())).Callback((TItem item) => { source.Remove(item); source.Add(item); }).Returns(Task.CompletedTask);
+        repository.Setup(obj => obj.Remove(Moq.It.IsAny<TItem>())).Callback((TItem item) => source.Remove(item));
+        repository.Setup(obj => obj.RemoveAsync(Moq.It.IsAny<TItem>())).Callback((TItem item) => source.Remove(item)).Returns(Task.CompletedTask);
         return repository;
     }
 
-    public static Mock<T> SetupReadOnlyRepository<T, TItem, TKey>(this Mock<T> repository, IEnumerable<TItem> source)
+    public static Moq.Mock<T> SetupReadOnlyRepository<T, TItem, TKey>(this Moq.Mock<T> repository, IEnumerable<TItem> source)
         where T : class, IReadOnlyRepository<TItem, TKey>
         where TItem : class, IAggregateRoot<TKey>
     {
         repository.SetupQueryable(source);
-        repository.Setup(obj => obj.Load(It.IsAny<TKey>())).Returns((TKey id) => source.FirstOrDefault(obj => obj.Identity!.Equals(id)));
-        repository.Setup(obj => obj.LoadAsync(It.IsAny<TKey>())).Returns((TKey id) => Task.FromResult(source.FirstOrDefault(obj => obj.Identity!.Equals(id)))!);
+        repository.Setup(obj => obj.Load(Moq.It.IsAny<TKey>())).Returns((TKey id) => source.FirstOrDefault(obj => obj.Identity!.Equals(id)));
+        repository.Setup(obj => obj.LoadAsync(Moq.It.IsAny<TKey>())).Returns((TKey id) => Task.FromResult(source.FirstOrDefault(obj => obj.Identity!.Equals(id)))!);
         return repository;
     }
 

@@ -1,15 +1,15 @@
-﻿using ECO.Data;
-using Moq;
+﻿namespace ECO.Integrations.Moq;
+
+using ECO.Data;
 using System.Threading;
 using System.Threading.Tasks;
-
-namespace ECO.Integrations.Moq;
+using Moq = global::Moq;
 
 public static class DataContextExtensions
 {
-    public static Mock<IDataContext> SetupDataContext(this Mock<IDataContext> mock)
+    public static Moq.Mock<IDataContext> SetupDataContext(this Moq.Mock<IDataContext> mock)
     {
-        var transactionContext = new Mock<ITransactionContext>();
+        var transactionContext = new Moq.Mock<ITransactionContext>();
         transactionContext.Setup(obj => obj.Commit());
         transactionContext.Setup(obj => obj.CommitAsync(CancellationToken.None)).Returns(Task.CompletedTask);
         mock.Setup(obj => obj.BeginTransaction()).Returns(transactionContext.Object);
