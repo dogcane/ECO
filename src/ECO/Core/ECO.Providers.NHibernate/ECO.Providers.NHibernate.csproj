@@ -23,9 +23,6 @@
 		<PackageReference Include="NHibernate" Version="5.5.2" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Configuration\" />
-	</ItemGroup>
-	<ItemGroup>
 		<None Include="_images\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 </Project>

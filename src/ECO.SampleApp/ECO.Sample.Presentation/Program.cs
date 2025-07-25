@@ -1,47 +1,38 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using System.Text.Json.Serialization;
+using ECO.Configuration;
 using ECO.Integrations.Microsoft.DependencyInjection;
-using MediatR;
-using ECO.Sample.Domain;
-using ECO.Sample.Infrastructure.Repositories;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
+using ECO.Providers.EntityFramework.Configuration;
 using ECO.Providers.InMemory.Configuration;
 using ECO.Providers.Marten.Configuration;
-using Weasel.Core;
-using Marten;
-using Newtonsoft.Json;
-using System.Reflection;
-using JasperFx.Core;
-using Marten.Services.Json;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using System.Text.Json.Serialization;
+using ECO.Providers.NHibernate.Configuration;
+using ECO.Providers.NHibernate.Utils;
 using ECO.Providers.Marten.Utils;
-using ECO.Configuration;
-using ECO.Providers.EntityFramework.Configuration;
-using Weasel.Core.Migrations;
+using ECO.Sample.Domain;
 using ECO.Sample.Infrastructure.DAL.EntityFramework;
+using ECO.Sample.Infrastructure.Repositories;
+using JasperFx.Core;
+using Marten;
+using Marten.Services.Json;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Weasel.Core;
+using Weasel.Core.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#if INMEMORY
-    //builder.Configuration.AddJsonFile("ecosettings.inmemory.json"); => MOVED TO FLUENT "WAY"    
-#elif EFSQL
-    //builder.Configuration.AddJsonFile("ecosettings.efcore.sqlserver.json"); => MOVED TO FLUENT "WAY"    
-#elif EFMEMORY
-    //builder.Configuration.AddJsonFile("ecosettings.efcore.memory.json"); => MOVED TO FLUENT "WAY"    
-#elif EFPOSTGRE
-    //builder.Configuration.AddJsonFile("ecosettings.efcore.postgresql.json"); => MOVED TO FLUENT "WAY" 
-#elif NHSQL
-    builder.Configuration.AddJsonFile("ecosettings.nhibernate.sqlserver.json");
-#elif NHPOSTGRE
-    builder.Configuration.AddJsonFile("ecosettings.nhibernate.postgresql.json");
-#elif MONGODB
+ 
+
+#if MONGODB
     builder.Configuration.AddJsonFile("ecosettings.mongodb.json");
-#elif MARTEN
-//builder.Configuration.AddJsonFile("ecosettings.marten.json");  => NOT YET SUPPORTED!
+    MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
 #endif
 
 
@@ -76,7 +67,34 @@ builder.Services.AddDataContext(option =>
             .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
     });
 });
-
+#elif NHSQL
+builder.Services.AddDataContext(options =>
+{
+    options.UseNHibernate("ecosampleapp.nh.sqlserver", opt =>
+    {
+        opt.Configuration.DataBaseIntegration(config =>
+        {
+            config.ConnectionString = builder.Configuration.GetConnectionString("sqlserver");
+            config.Dialect<NHibernate.Dialect.MsSql2012Dialect>();
+            config.Driver<NHibernate.Driver.SqlClientDriver>();
+        }).AddAssemblyExtended(typeof(ECO.Sample.Infrastructure.DAL.NHibernate.AssemblyMarker).Assembly);
+    });
+});
+#elif NHPOSTGRE
+builder.Services.AddDataContext(options =>
+{
+    options.UseNHibernate("ecosampleapp.nh.postgresql", opt =>
+    {
+        opt.Configuration.DataBaseIntegration(config =>
+        {
+            config.ConnectionString = builder.Configuration.GetConnectionString("postgres");
+            config.Dialect<NHibernate.Dialect.PostgreSQL83Dialect>();
+            config.Driver<NHibernate.Driver.NpgsqlDriver>();
+        })
+        .AddAssemblyExtended(typeof(ECO.Sample.Infrastructure.DAL.NHibernate.AssemblyMarker).Assembly)
+        .SetProperty("default_schema", "public");
+    });
+});
 #elif MARTEN
 builder.Services.AddDataContext(options =>
 {
@@ -84,7 +102,7 @@ builder.Services.AddDataContext(options =>
     {
         opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
         opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));        
-        opt.StoreOptions.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+        opt.StoreOptions.AutoCreateSchemaObjects = JasperFx.AutoCreate.CreateOrUpdate;
         var serializer = new Marten.Services.SystemTextJsonSerializer
         {
             EnumStorage = EnumStorage.AsString
@@ -95,21 +113,6 @@ builder.Services.AddDataContext(options =>
             _.ReferenceHandler = ReferenceHandler.IgnoreCycles;            
         });
         opt.StoreOptions.Serializer(serializer);
-        /*
-        var serializer = new Marten.Services.JsonNetSerializer
-        {
-            EnumStorage = EnumStorage.AsString
-        };
-        serializer.Customize(_ =>
-        {
-            _.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
-            _.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
-            _.TypeNameHandling = TypeNameHandling.None;
-            _.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        });
-        serializer.NonPublicMembersStorage = NonPublicMembersStorage.NonPublicSetters;        
-        opt.StoreOptions.Serializer(serializer);
-        */
     });
 });
 #else

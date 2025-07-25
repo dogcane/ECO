@@ -9,8 +9,9 @@
 	  - NHSQL
 	  - NHPOSTGRE
 	  - MARTEN
+	  - MONGODB
 	  -->
-		<DefineConstants>EFSQL</DefineConstants>
+		<DefineConstants>MARTEN</DefineConstants>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 </Project>

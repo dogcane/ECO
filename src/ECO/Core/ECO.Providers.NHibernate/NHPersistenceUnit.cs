@@ -1,6 +1,8 @@
 namespace ECO.Providers.NHibernate;
 
 using ECO.Data;
+using ECO.Providers.NHibernate.Configuration;
+using ECO.Providers.NHibernate.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,66 +20,48 @@ public sealed class NHPersistenceUnit(string name, ILoggerFactory? loggerFactory
     #endregion
 
     #region Private_Fields
-    private Dictionary<string, string> _ConfigurationProperties = [];
     private Nh.ISessionFactory? _SessionFactory;
+    private NHibernateOptions? _Options;
+    #endregion
+
+    #region Internal_Methods
+
+    /// <summary>
+    /// Configures the persistence unit with the provided options.
+    /// This method is called by the configuration extension.
+    /// </summary>
+    /// <param name="options">The NHibernate configuration options.</param>
+    internal void ConfigureWith(NHibernateOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        _Options = options;
+
+        // Add listeners from options
+        foreach (var listener in options.Listeners)
+        {
+            AddUnitListener(listener);
+        }
+
+        BuildSessionFactory();
+    }
+
     #endregion
 
     #region Private_Methods
-    private void BuildSessionFactory(IConfiguration appConfiguration)
+
+    private void BuildSessionFactory()
     {
-        if (_SessionFactory == null)
+        if (_SessionFactory != null || _Options == null)
+            return;
+
+        _SessionFactory = _Options.Configuration.BuildSessionFactory();
+
+        // Auto-register aggregate types found in session factory metadata
+        foreach (var classMetadata in _SessionFactory.GetAllClassMetadata())
         {
-            var nhConfiguration = new NhCfg.Configuration();
-            //Fix for ConnectionStringName
-            if (_ConfigurationProperties.TryGetValue(NhCfg.Environment.ConnectionStringName, out var connectionStringName))
-            {
-                var connectionString = appConfiguration.GetConnectionString(connectionStringName);
-                if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException($"The connection string {connectionStringName} is not defined in the configuration file");
-                nhConfiguration.SetProperty(NhCfg.Environment.ConnectionString, connectionString);
-                _ConfigurationProperties.Remove(NhCfg.Environment.ConnectionStringName);
-            }
-            //Fix for generic connection strings
-            foreach (var (key,val) in _ConfigurationProperties)
-            {
-                if (val.StartsWith("connectionStringName.", StringComparison.OrdinalIgnoreCase))
-                {
-                    var connectionString = appConfiguration.GetConnectionString(val.Replace("connectionStringName.", ""));
-                    if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException($"The connection string {val} is not defined in the configuration file");
-                    _ConfigurationProperties[key] = connectionString;
-                }
-            }
-            nhConfiguration.AddProperties(_ConfigurationProperties);
-            if (_ConfigurationProperties.TryGetValue(SESSIONINTERCEPTOR_ATTRIBUTE, out var sessionInterceptor))
-            {
-                var interceptorType = Type.GetType(sessionInterceptor, false, true);
-                if (interceptorType != null && Activator.CreateInstance(interceptorType) is Nh.IInterceptor interceptor)
-                    nhConfiguration.SetInterceptor(interceptor);
-            }
-            if (_ConfigurationProperties.TryGetValue(MAPPINGASSEMBLIES_ATTRIBUTE, out string? value))
-            {
-                var mappingAssemblies = value.Split(";", StringSplitOptions.RemoveEmptyEntries);
-                //Hbm.xml
-                foreach (var mappingAssembly in mappingAssemblies)
-                {
-                    nhConfiguration.AddAssembly(mappingAssembly);
-                }
-                //ClassMapping
-                var mapper = new Nh.Mapping.ByCode.ModelMapper();
-                foreach (var mappingAssembly in mappingAssemblies)
-                {
-                    mapper.AddMappings(Assembly.Load(mappingAssembly).ExportedTypes);
-                }
-                NhCfg.MappingSchema.HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-                nhConfiguration.AddMapping(domainMapping);
-            }
-            _SessionFactory = nhConfiguration.BuildSessionFactory();
-            //Register class types
-            foreach (var classMetadata in _SessionFactory.GetAllClassMetadata())
-            {
-                var mappedClass = classMetadata.Value.MappedClass;
-                if (mappedClass.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
-                    _Classes.Add(classMetadata.Value.MappedClass);
-            }
+            var mappedClass = classMetadata.Value.MappedClass;
+            if (mappedClass.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAggregateRoot<>)))
+                _Classes.Add(mappedClass);
         }
     }
 
@@ -88,8 +72,43 @@ public sealed class NHPersistenceUnit(string name, ILoggerFactory? loggerFactory
     protected override void OnInitialize(IDictionary<string, string> extendedAttributes, IConfiguration configuration)
     {
         base.OnInitialize(extendedAttributes, configuration);
-        _ConfigurationProperties = new(extendedAttributes);
-        BuildSessionFactory(configuration);
+        _Options ??= new NHibernateOptions();
+
+        foreach (var (key, val) in extendedAttributes)
+        {
+            switch (key)
+            {
+                case var k when k == SESSIONINTERCEPTOR_ATTRIBUTE:
+                    if (Type.GetType(val, false, true) is { } interceptorType &&
+                        Activator.CreateInstance(interceptorType) is Nh.IInterceptor interceptor)
+                    {
+                        _Options.Configuration.SetInterceptor(interceptor);
+                    }
+                    break;
+
+                case var k when k == MAPPINGASSEMBLIES_ATTRIBUTE:
+                    var mappingAssemblies = val.Split(";", StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var assemblyName in mappingAssemblies.Where(a => !string.IsNullOrWhiteSpace(a)))
+                    {
+                        _Options.Configuration.AddAssemblyExtended(assemblyName);
+                    }
+                    break;
+
+                case var k when val.StartsWith("connectionStringName|", StringComparison.OrdinalIgnoreCase):
+                    var connectionStringName = val["connectionStringName|".Length..];
+                    var connectionString = configuration.GetConnectionString(connectionStringName);
+                    if (string.IsNullOrEmpty(connectionString))
+                        throw new ArgumentException($"The connection string {connectionStringName} is not defined in the configuration file");
+                    _Options.Configuration.SetProperty(key, connectionString);
+                    break;
+
+                default:
+                    _Options.Configuration.SetProperty(key, val);
+                    break;
+            }
+        }
+
+        BuildSessionFactory();
     }
 
     protected override IPersistenceContext OnCreateContext()

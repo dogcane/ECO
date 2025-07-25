@@ -1,10 +1,9 @@
 ﻿using ECO.Sample.Domain;
-using nh = NHibernate;
-using nhmapping = NHibernate.Mapping;
+using NhMapping = NHibernate.Mapping;
 
 namespace ECO.Sample.Infrastructure.DAL.NHibernate.Mapping
 {
-    public class SessionMapping : nhmapping.ByCode.Conformist.ClassMapping<Session>
+    public class SessionMapping : NhMapping.ByCode.Conformist.ClassMapping<Session>
     {
         public SessionMapping()
         {

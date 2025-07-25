@@ -14,19 +14,19 @@ public class MartenESRepository<T, K>(IDataContext dataContext) : MartenPersiste
 
     public T? Load(K identity) => LoadAsync(identity).GetAwaiter().GetResult();
 
-    public async ValueTask<T?> LoadAsync(K identity) => GetIdentityType(identity) switch
+    public async ValueTask<T?> LoadAsync(K identity) => identity switch
     {
-        IdentityType.String => await DocumentSession.Events.AggregateStreamAsync<T>(Convert.ToString(identity)!),
-        IdentityType.Guid => await DocumentSession.Events.AggregateStreamAsync<T>(Guid.Parse(Convert.ToString(identity)!)),
+        string stringId => await DocumentSession.Events.AggregateStreamAsync<T>(stringId),
+        Guid guidId => await DocumentSession.Events.AggregateStreamAsync<T>(guidId),
         _ => throw new ArgumentOutOfRangeException(nameof(identity), $"Unsupported identity type: {typeof(K).Name}")
     };
 
     public IEnumerable<dynamic> LoadEvents(K identity) => LoadEventsAsync(identity).GetAwaiter().GetResult();
 
-    public async Task<IEnumerable<dynamic>> LoadEventsAsync(K identity) => GetIdentityType(identity) switch
+    public async Task<IEnumerable<dynamic>> LoadEventsAsync(K identity) => identity switch
     {
-        IdentityType.String => (await DocumentSession.Events.FetchStreamAsync(Convert.ToString(identity)!)).Select(@event => @event.Data),
-        IdentityType.Guid => (await DocumentSession.Events.FetchStreamAsync(Guid.Parse(Convert.ToString(identity)!))).Select(@event => @event.Data),
+        string stringId => (await DocumentSession.Events.FetchStreamAsync(stringId)).Select(@event => @event.Data),
+        Guid guidId => (await DocumentSession.Events.FetchStreamAsync(guidId)).Select(@event => @event.Data),
         _ => throw new ArgumentOutOfRangeException(nameof(identity), $"Unsupported identity type: {typeof(K).Name}")
     };
 
@@ -38,13 +38,13 @@ public class MartenESRepository<T, K>(IDataContext dataContext) : MartenPersiste
         var events = aggregate.GetUncommittedEvents().ToArray();
         var session = DocumentSession;
 
-        switch (GetIdentityType(aggregate.Identity!))
+        switch (aggregate.Identity)
         {
-            case IdentityType.Guid:
-                session.Events.Append(Guid.Parse(Convert.ToString(aggregate.Identity)!), aggregate.Version, events);
+            case Guid guidId:
+                session.Events.Append(guidId, aggregate.Version, events);
                 break;
-            case IdentityType.String:
-                session.Events.Append(Convert.ToString(aggregate.Identity)!, aggregate.Version, events);
+            case string stringId:
+                session.Events.Append(stringId, aggregate.Version, events);
                 break;
             default:
                 throw new InvalidOperationException($"Unsupported identity type: {typeof(K).Name}");
@@ -62,13 +62,13 @@ public class MartenESRepository<T, K>(IDataContext dataContext) : MartenPersiste
         var events = aggregate.GetUncommittedEvents().ToArray();
         var session = DocumentSession;
         
-        switch (GetIdentityType(aggregate.Identity!))
+        switch (aggregate.Identity)
         {
-            case IdentityType.Guid:
-                session.Events.Append(Guid.Parse(Convert.ToString(aggregate.Identity)!), aggregate.Version, events);
+            case Guid guidId:
+                session.Events.Append(guidId, aggregate.Version, events);
                 break;
-            case IdentityType.String:
-                session.Events.Append(Convert.ToString(aggregate.Identity)!, aggregate.Version, events);
+            case string stringId:
+                session.Events.Append(stringId, aggregate.Version, events);
                 break;
             default:
                 throw new InvalidOperationException($"Unsupported identity type: {typeof(K).Name}");
@@ -76,29 +76,6 @@ public class MartenESRepository<T, K>(IDataContext dataContext) : MartenPersiste
         
         await PersistenceContext.SaveChangesAsync();
         aggregate.ClearUncommittedEvents();
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private static IdentityType GetIdentityType(K identity) => identity switch
-    {
-        string => IdentityType.String,
-        Guid => IdentityType.Guid,
-        _ => Type.GetTypeCode(typeof(K)) switch
-        {
-            TypeCode.String => IdentityType.String,
-            TypeCode.Object when typeof(K) == typeof(Guid) => IdentityType.Guid,
-            _ => IdentityType.Unsupported
-        }
-    };
-
-    private enum IdentityType
-    {
-        String,
-        Guid,
-        Unsupported
     }
 
     #endregion

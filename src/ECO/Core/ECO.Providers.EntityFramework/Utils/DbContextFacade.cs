@@ -12,42 +12,18 @@ using System.Linq;
 internal static class DbContextFacade<T>
     where T : DbContext
 {
-    #region AggregateTypeHelpers
+    #region Public_Methods
 
     /// <summary>
     /// Gets all aggregate root types from the specified DbContext type by examining its DbSet properties.
     /// </summary>
     /// <returns>An enumerable of aggregate root types found in the DbContext.</returns>
     public static IEnumerable<Type> GetAggregateTypesFromDBContext()
-        => DbContextFacade.GetAggregateTypesFromDBContext(typeof(T));
-
-    #endregion
-}
-
-internal static class DbContextFacade
-{
-    #region AggregateTypeHelpers
-
-    /// <summary>
-    /// Gets all aggregate root types from the specified DbContext type by examining its DbSet properties.
-    /// </summary>
-    /// <returns>An enumerable of aggregate root types found in the DbContext.</returns>
-    public static IEnumerable<Type> GetAggregateTypesFromDBContext(Type dbContextType)
-    {
-        if (dbContextType is null)
-        {
-            throw new ArgumentNullException(nameof(dbContextType), "DbContext type cannot be null.");
-        }
-        if (!typeof(DbContext).IsAssignableFrom(dbContextType))
-        {
-            throw new ArgumentException($"Type {dbContextType.Name} is not a valid DbContext type.", nameof(dbContextType));
-        }
-        return dbContextType
+        => typeof(T)
             .GetProperties()
             .Where(IsDbSetProperty)
             .Select(prop => prop.PropertyType.GetGenericArguments()[0])
             .Where(IsAggregateRootType);
-    }
 
     #endregion
 

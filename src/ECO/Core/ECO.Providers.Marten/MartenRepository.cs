@@ -11,15 +11,30 @@ public class MartenRepository<T,K>(IDataContext dataContext) : MartenReadOnlyRep
 
     public virtual void Add(T item) => DocumentSession.Store(item ?? throw new ArgumentNullException(nameof(item)));
 
-    public virtual async Task AddAsync(T item) => await Task.Run(() => Add(item ?? throw new ArgumentNullException(nameof(item))));
+    public virtual Task AddAsync(T item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        DocumentSession.Store(item);
+        return Task.CompletedTask;
+    }
 
     public virtual void Update(T item) => DocumentSession.Update(item ?? throw new ArgumentNullException(nameof(item)));
 
-    public virtual async Task UpdateAsync(T item) => await Task.Run(() => DocumentSession.Update(item ?? throw new ArgumentNullException(nameof(item))));
+    public virtual Task UpdateAsync(T item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        DocumentSession.Update(item);
+        return Task.CompletedTask;
+    }
 
     public virtual void Remove(T item) => DocumentSession.Delete(item ?? throw new ArgumentNullException(nameof(item)));
 
-    public virtual async Task RemoveAsync(T item) => await Task.Run(() => DocumentSession.Delete(item ?? throw new ArgumentNullException(nameof(item))));
+    public virtual Task RemoveAsync(T item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        DocumentSession.Delete(item);
+        return Task.CompletedTask;
+    }
 
     #endregion
 }

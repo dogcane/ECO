@@ -12,7 +12,7 @@ public class ECOIdentityMapConvention : IClassMapConvention
 
     public static void Register() => ConventionRegistry.Register(
             "ECO-Identity",
-            new ConventionPack() { new Conventions.ECOIdentityMapConvention() },
+            new ConventionPack() { new ECOIdentityMapConvention() },
             type => type.GetProperty("Identity", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly) != null
         );
 }

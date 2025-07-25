@@ -35,7 +35,18 @@ public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IRea
         }
     }
 
-    public virtual async ValueTask<T?> LoadAsync(K identity) => await Task.Run(() => Load(identity));
+    public virtual async ValueTask<T?> LoadAsync(K identity)
+    {
+        if (identity is null) throw new ArgumentNullException(nameof(identity));
+        if (IdentityMap.ContainsIdentity(identity))
+        {
+            return IdentityMap[identity] is T value ? value : null;
+        }
+        else
+        {
+            return await Collection.Find(Builders<T>.Filter.Eq("Identity", identity)).FirstOrDefaultAsync();
+        }
+    }
 
     #endregion
 

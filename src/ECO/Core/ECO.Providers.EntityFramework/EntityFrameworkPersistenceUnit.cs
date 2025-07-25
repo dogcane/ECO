@@ -17,7 +17,7 @@ public class EntityFrameworkPersistenceUnit<TDbContext>(
     string name, 
     DbContextOptions dbContextOptions, 
     ILoggerFactory? loggerFactory = null)
-    : PersistenceUnitBase<EntityFrameworkPersistenceUnitBase>(name, loggerFactory)
+    : PersistenceUnitBase<EntityFrameworkPersistenceUnit<TDbContext>>(name, loggerFactory)
     where TDbContext : DbContext
 {
     #region Protected_Fields    

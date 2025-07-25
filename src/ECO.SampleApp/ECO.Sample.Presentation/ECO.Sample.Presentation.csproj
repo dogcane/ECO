@@ -15,13 +15,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\ECO\Core\ECO.Integrations.Microsoft.DependencyInjection\ECO.Integrations.Microsoft.DependencyInjection.csproj" />
-		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.InMemory\ECO.Providers.EntityFramework.InMemory.csproj" />
-		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.PostgreSQL\ECO.Providers.EntityFramework.PostgreSQL.csproj" />
-		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework.SqlServer\ECO.Providers.EntityFramework.SqlServer.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.EntityFramework\ECO.Providers.EntityFramework.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
 		<ProjectReference Include="..\..\ECO\Core\ECO.Providers.Marten\ECO.Providers.Marten.csproj" />

@@ -13,13 +13,13 @@ public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPe
 
     public virtual T? Load(K identity) => LoadAsync(identity).GetAwaiter().GetResult();
 
-    public virtual ValueTask<T?> LoadAsync(K identity) => typeof(K).Name switch
+    public virtual ValueTask<T?> LoadAsync(K identity) => identity switch
     {
-        nameof(String) => new ValueTask<T?>(DocumentSession.LoadAsync<T>(Convert.ToString(identity)!)),
-        nameof(Int32) => new ValueTask<T?>(DocumentSession.LoadAsync<T>(Convert.ToInt32(identity))),
-        nameof(Int64) => new ValueTask<T?>(DocumentSession.LoadAsync<T>(Convert.ToInt64(identity))),
-        nameof(Guid) => new ValueTask<T?>(DocumentSession.LoadAsync<T>(Guid.Parse(Convert.ToString(identity)!))),
-        _ => throw new InvalidOperationException()
+        string stringId => new ValueTask<T?>(DocumentSession.LoadAsync<T>(stringId)),
+        int intId => new ValueTask<T?>(DocumentSession.LoadAsync<T>(intId)),
+        long longId => new ValueTask<T?>(DocumentSession.LoadAsync<T>(longId)),
+        Guid guidId => new ValueTask<T?>(DocumentSession.LoadAsync<T>(guidId)),
+        _ => throw new InvalidOperationException($"Unsupported identity type: {typeof(K).Name}")
     };
 
     #endregion

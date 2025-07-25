@@ -1,10 +1,9 @@
 ﻿using ECO.Sample.Domain;
-using nh = NHibernate;
-using nhmapping = NHibernate.Mapping;
+using NhMapping = NHibernate.Mapping;
 
 namespace ECO.Sample.Infrastructure.DAL.NHibernate.Mapping
 {
-    public class SpeakerMapping : nhmapping.ByCode.Conformist.ClassMapping<Speaker>
+    public class SpeakerMapping : NhMapping.ByCode.Conformist.ClassMapping<Speaker>
     {
         public SpeakerMapping()
         {

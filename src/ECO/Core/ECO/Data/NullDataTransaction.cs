@@ -19,10 +19,18 @@ public sealed class NullDataTransaction(IPersistenceContext context) : IDataTran
     public void Dispose() { /* No resources to dispose */ }
 
     /// <inheritdoc />
-    public Task CommitAsync(CancellationToken cancellationToken = default) => Task.Run(Commit, cancellationToken);
+    public Task CommitAsync(CancellationToken cancellationToken = default)
+    {
+        Commit();
+        return Task.CompletedTask;
+    }
 
     /// <inheritdoc />
-    public Task RollbackAsync(CancellationToken cancellationToken = default) => Task.Run(Rollback, cancellationToken);
+    public Task RollbackAsync(CancellationToken cancellationToken = default)
+    {
+        Rollback();
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Asynchronously releases all resources used by the NullDataTransaction.

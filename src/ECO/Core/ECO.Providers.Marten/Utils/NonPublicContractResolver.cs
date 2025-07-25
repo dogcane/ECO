@@ -1,9 +1,9 @@
-﻿using System;
+﻿namespace ECO.Providers.Marten.Utils;
+
+using System;
 using System.Reflection;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.Json;
-
-namespace ECO.Providers.Marten.Utils;
 
 public class NonPublicContractResolver : DefaultJsonTypeInfoResolver
 {
@@ -15,13 +15,13 @@ public class NonPublicContractResolver : DefaultJsonTypeInfoResolver
 
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
     {
-        JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
+        var jsonTypeInfo = base.GetTypeInfo(type, options);
         if (jsonTypeInfo.Kind == JsonTypeInfoKind.Object)
         {
             if (UseParameterlessCtor)
             {
                 //Default Parameterless Ctor
-                var ctor = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, Type.EmptyTypes);
+                var ctor = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, []);
                 if (ctor != null)
                 {
                     jsonTypeInfo.CreateObject = () => ctor.Invoke(null);
@@ -40,7 +40,7 @@ public class NonPublicContractResolver : DefaultJsonTypeInfoResolver
                     }
                     else if (UseFields)
                     {
-                        FieldInfo? fieldInfo = jsonTypeInfo.Type.GetField(string.Format(FieldNamingStragegy, prop.Name), BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                        var fieldInfo = jsonTypeInfo.Type.GetField(string.Format(FieldNamingStragegy, prop.Name), BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (fieldInfo != null)
                         {
                             prop.Set = (obj, value) => fieldInfo.SetValue(obj, value);

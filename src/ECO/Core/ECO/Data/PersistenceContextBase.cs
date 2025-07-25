@@ -90,7 +90,11 @@ public abstract class PersistenceContextBase<P>(IPersistenceUnit persistenceUnit
     /// Override this method to implement asynchronous persistence logic.
     /// The default implementation runs <see cref="OnSaveChanges"/> on a background thread.
     /// </remarks>
-    protected virtual async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Task.Run(OnSaveChanges, cancellationToken);
+    protected virtual Task OnSaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        OnSaveChanges();
+        return Task.CompletedTask;
+    }
 
     /// <summary>
     /// Called when an entity is attached to the context. Override to implement custom attach logic.

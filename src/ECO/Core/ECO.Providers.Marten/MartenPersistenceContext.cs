@@ -17,7 +17,7 @@ public sealed class MartenPersistenceContext(IDocumentSession session, IPersiste
 
     #region Protected_Methods
 
-    protected override void OnSaveChanges() => Session.SaveChangesAsync().RunSynchronously();
+    protected override void OnSaveChanges() => Session.SaveChangesAsync().GetAwaiter().GetResult();
 
     protected override async Task OnSaveChangesAsync(CancellationToken cancellationToken = default) => await Session.SaveChangesAsync(cancellationToken);
 
