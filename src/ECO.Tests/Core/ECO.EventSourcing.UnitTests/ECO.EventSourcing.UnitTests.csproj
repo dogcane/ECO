@@ -23,7 +23,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ECO\Core\ECO.DomainEvents\ECO.DomainEvents.csproj" />
+    <ProjectReference Include="..\..\..\ECO\Core\ECO.EventSourcing\ECO.EventSourcing.csproj" />
   </ItemGroup>
 
   <ItemGroup>
