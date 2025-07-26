@@ -100,6 +100,7 @@ jobs:
       - name: Pack        
         run: |
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.DomainEvents.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.EventSourcing.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Moq.csproj
@@ -112,6 +113,7 @@ jobs:
       - name: Push NuGet Feed ECO
         run: |
             dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.DomainEvents/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.EventSourcing/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Integrations.Moq/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY

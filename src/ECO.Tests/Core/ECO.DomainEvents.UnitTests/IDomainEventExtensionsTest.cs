@@ -20,7 +20,7 @@ public class IDomainEventExtensionsTest
         EventHandler<DomainEventArgs<IDomainEvent>>? handler = (sender, args) =>
         {
             eventRaised = true;
-            Assert.Equal(testEvent, args.Value);
+            Assert.Equivalent(testEvent, args.Value);
         };
 
         // Act
