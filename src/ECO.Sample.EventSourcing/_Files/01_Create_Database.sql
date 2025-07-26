@@ -1,44 +1,14 @@
-﻿--DB CREATION
-CREATE DATABASE "ECOSampleApp";
+-- Create the database
+CREATE DATABASE "ECOSampleES_MT";
 
---TABLE CREATION
-CREATE TABLE "Speakers" (
-	"Id" UUID CONSTRAINT Primary_Key_Speakers PRIMARY KEY,
-	"Name" VARCHAR(50) NOT NULL,
-	"Surname" VARCHAR(50) NOT NULL,
-	"Description" VARCHAR(1000) NOT NULL,
-	"Age" INT NOT NULL
-);
+-- Connect to the new database (you'll need to execute this manually or use \c in psql)
+-- \c "ECOSampleES_MT"
 
-CREATE TABLE "Events" (
-	"Id" UUID CONSTRAINT Primary_Key_Events PRIMARY KEY,
-	"Name" VARCHAR(50) NOT NULL,
-	"Description" VARCHAR(1000) NOT NULL,
-	"StartDate" TIMESTAMP(3) NOT NULL,
-	"EndDate" TIMESTAMP(3) NOT NULL
-);
-
-CREATE TABLE "Sessions" (
-	"Id" UUID CONSTRAINT Primary_Key_Sessions PRIMARY KEY,
-	"Title" VARCHAR(50) NOT NULL,
-	"Description" VARCHAR(1000) NOT NULL,
-	"Level" INT NOT NULL,
-	"FK_Event" UUID,
-	"FK_Speaker" UUID,
-	CONSTRAINT "Foreign_Key_Event" FOREIGN KEY("FK_Event") REFERENCES "Events"("Id"),
-	CONSTRAINT "Foreign_Key_Speaker" FOREIGN KEY("FK_Speaker") REFERENCES "Speakers"("Id")
-);
-
---CLEAN DATA
-TRUNCATE TABLE "Sessions" CASCADE;
-TRUNCATE TABLE "Events" CASCADE;
-TRUNCATE TABLE "Speakers" CASCADE;
-
--- Create the user with password
-CREATE USER ecosample WITH PASSWORD 'ecosample';
+-- Create the user with necessary privileges for MartenDB (without CREATEROLE)
+CREATE USER ecosample WITH PASSWORD 'ecosample' CREATEDB;
 
 -- Grant database-level privileges
-GRANT CONNECT ON DATABASE "ECOSampleApp" TO ecosample;
+GRANT CONNECT ON DATABASE "ECOSampleES_MT" TO ecosample;
 GRANT USAGE, CREATE ON SCHEMA public TO ecosample;
 
 -- Grant all privileges on existing objects
@@ -67,7 +37,7 @@ GRANT USAGE ON SCHEMA public TO ecosample;
 
 -- Grant specific privileges needed for MartenDB schema management
 -- Allow creating and dropping objects in the database
-GRANT CREATE ON DATABASE "ECOSampleApp" TO ecosample;
+GRANT CREATE ON DATABASE "ECOSampleES_MT" TO ecosample;
 
 -- If MartenDB needs to create temporary tables during operations
-GRANT TEMPORARY ON DATABASE "ECOSampleApp" TO ecosample;
+GRANT TEMPORARY ON DATABASE "ECOSampleES_MT" TO ecosample;

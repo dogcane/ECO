@@ -26,15 +26,11 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Weasel.Core;
 using Weasel.Core.Migrations;
+using NHibernate.Properties;
 
 var builder = WebApplication.CreateBuilder(args);
 
  
-
-#if MONGODB
-    MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
-#endif
-
 
 builder.Services.AddControllersWithViews().AddJsonOptions(jopt =>
 {
@@ -91,6 +87,7 @@ builder.Services.AddDataContext(options =>
             config.Dialect<NHibernate.Dialect.PostgreSQL83Dialect>();
             config.Driver<NHibernate.Driver.NpgsqlDriver>();
         })
+        .SetNamingStrategy(new ECO.Sample.Infrastructure.DAL.NHibernate.Utils.PostgreSQLNamingStrategy())
         .AddAssemblyExtended(typeof(ECO.Sample.Infrastructure.DAL.NHibernate.AssemblyMarker).Assembly)
         .SetProperty("default_schema", "public");
     });
@@ -116,11 +113,14 @@ builder.Services.AddDataContext(options =>
     });
 });
 #elif MONGODB
+MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(
+    new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard)
+);
 builder.Services.AddDataContext(options =>
 {
     options.UseMongoDB("ecosampleapp.mongodb", opt =>
     {
-        opt.ConnectionString = "mongodb://localhost:27017";
+        opt.ConnectionString = builder.Configuration.GetConnectionString("mongo");
         opt.DatabaseName = "ECOSampleApp";
         opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
         opt.MappingAssemblies = "ECO.Sample.Infrastructure.DAL.MongoDB";

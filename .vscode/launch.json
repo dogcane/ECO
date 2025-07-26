@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch ECO.Sample.Presentation (Web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-presentation",
+            "program": "${workspaceFolder}/src/ECO.SampleApp/ECO.Sample.Presentation/bin/Debug/net9.0/ECO.Sample.Presentation.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/ECO.SampleApp/ECO.Sample.Presentation",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:5001;http://localhost:5000"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/ECO.SampleApp/ECO.Sample.Presentation/Views"
+            }
+        },
+        {
+            "name": "Launch ECO.Sample.EventSourcing.Console",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-eventsourcing-console",
+            "program": "${workspaceFolder}/src/ECO.Sample.EventSourcing/ECO.Sample.EventSourcing.Console/bin/Debug/net9.0/ECO.Sample.EventSourcing.Console.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/ECO.Sample.EventSourcing/ECO.Sample.EventSourcing.Console",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "Attach to Process",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

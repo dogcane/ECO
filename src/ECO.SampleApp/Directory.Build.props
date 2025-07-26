@@ -11,7 +11,7 @@
 	  - MARTEN
 	  - MONGODB
 	  -->
-		<DefineConstants>MARTEN</DefineConstants>
+		<DefineConstants>NHPOSTGRE</DefineConstants>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 </Project>
