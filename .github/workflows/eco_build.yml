@@ -104,12 +104,9 @@ jobs:
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Moq.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.InMemory.csproj
-            #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.PostgreSQL.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.SqlServer.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.InMemory.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.Marten.csproj
-            #dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
+            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
             dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
 
       - name: Push NuGet Feed ECO
@@ -119,10 +116,7 @@ jobs:
             dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Integrations.Moq/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            #dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.PostgreSQL/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework.SqlServer/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.Marten/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            #dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
             dotnet nuget push ./src/ECO/Core/ECO.Providers.NHibernate/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
