@@ -7,6 +7,7 @@ namespace ECO;
 /// <typeparam name="K">The type of the identifier.</typeparam>
 public interface IRepository<T, K> : IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Methods
 

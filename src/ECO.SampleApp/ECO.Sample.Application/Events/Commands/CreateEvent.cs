@@ -30,7 +30,7 @@ namespace ECO.Sample.Application.Events.Commands
 
             public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken)
             {
-                using var transactionContext = await _DataContext.BeginTransactionAsync();
+                using var transactionContext = await _DataContext.BeginTransactionAsync(cancellationToken);
                 try
                 {
                     var eventResult = Event.Create(request.Name, request.Description, new Period(request.StartDate, request.EndDate));
@@ -39,13 +39,13 @@ namespace ECO.Sample.Application.Events.Commands
                         return OperationResult<Guid>.MakeFailure(eventResult.TranslateContext("Period.StartDate", "StartDate").TranslateContext("Period.EndDate", "EndDate").Errors);
                     }
                     await _EventRepository.AddAsync(eventResult.Value!);
-                    await _DataContext.SaveChangesAsync();
-                    await transactionContext.CommitAsync();
+                    await _DataContext.SaveChangesAsync(cancellationToken);
+                    await transactionContext.CommitAsync(cancellationToken);
                     return OperationResult<Guid>.MakeSuccess(eventResult.Value!.Identity);                    
                 }
                 catch (Exception ex)
                 {
-                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    _Logger.LogError(ex, "Error during the execution of the handler");
                     return OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message));
                 }
             }

@@ -6,7 +6,7 @@ namespace ECO.Providers.InMemory;
 public abstract class InMemoryPersistenceManager<T, K>(IDataContext dataContext)
     : PersistenceManagerBase<T, K>(dataContext)
     where T : class, IAggregateRoot<K>
-    where K : notnull
+    where K : notnull, IEquatable<K>
 {
     #region Fields - Memory Storage
 

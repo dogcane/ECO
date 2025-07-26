@@ -9,6 +9,7 @@ using global::MongoDB.Driver;
 
 public class MongoReadOnlyRepository<T, K> : MongoPersistenceManager<T, K>, IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Ctor
 

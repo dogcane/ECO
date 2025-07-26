@@ -9,6 +9,7 @@ using ECO.EventSourcing;
 
 public class MartenESRepository<T, K>(IDataContext dataContext) : MartenPersistenceManager<T, K>(dataContext), IESRepository<T, K>
     where T : class, IESAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IESRepository<T, K> Members
 

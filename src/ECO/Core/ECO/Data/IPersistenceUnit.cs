@@ -91,7 +91,7 @@ public interface IPersistenceUnit
     /// <returns>The read-only repository instance.</returns>
     IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
         where T : class, IAggregateRoot<K>
-        where K : notnull;
+        where K : notnull, IEquatable<K>;
 
     /// <summary>
     /// Builds a repository for the specified aggregate root type and identifier.
@@ -102,7 +102,7 @@ public interface IPersistenceUnit
     /// <returns>The repository instance.</returns>
     IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
         where T : class, IAggregateRoot<K>
-        where K : notnull;
+        where K : notnull, IEquatable<K>;
 
     #endregion
 }

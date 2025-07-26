@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 public class NHReadOnlyRepository<T, K>(IDataContext dataContext) : NHPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IReadOnlyEntityManager<T,K> Members
 

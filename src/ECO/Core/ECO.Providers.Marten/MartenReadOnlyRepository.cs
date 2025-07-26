@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IReadOnlyEntityManager<T,K> Members
 

@@ -1,10 +1,12 @@
 namespace ECO.Providers.NHibernate;
 
 using ECO.Data;
+using System;
 using System.Threading.Tasks;
 
 public class NHRepository<T, K>(IDataContext dataContext) : NHReadOnlyRepository<T, K>(dataContext), IRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IRepository<T> Membri di
 

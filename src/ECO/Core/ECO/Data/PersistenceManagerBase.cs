@@ -7,6 +7,7 @@ namespace ECO.Data;
 /// <typeparam name="K">The type of the aggregate root's identity.</typeparam>
 public abstract class PersistenceManagerBase<T, K>(IDataContext dataContext) : IPersistenceManager<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Protected_Fields
     /// <summary>

@@ -38,7 +38,7 @@ public static class ECOServiceCollectionExtensions
 
     public static IServiceCollection AddReadOnlyRepository<T, K>(this IServiceCollection serviceCollection)
         where T : class, IAggregateRoot<K>
-        where K : notnull
+        where K : notnull, IEquatable<K>
     {
         ArgumentNullException.ThrowIfNull(serviceCollection);
         serviceCollection.AddScoped(fact =>
@@ -53,7 +53,7 @@ public static class ECOServiceCollectionExtensions
 
     public static IServiceCollection AddRepository<T, K>(this IServiceCollection serviceCollection)
         where T : class, IAggregateRoot<K>
-        where K : notnull
+        where K : notnull, IEquatable<K>
     {
         ArgumentNullException.ThrowIfNull(serviceCollection);
         serviceCollection.AddScoped(fact =>

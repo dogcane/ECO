@@ -160,7 +160,7 @@ public async Task<OperationResult<Guid>> Handle(Command request, CancellationTok
     }
     catch (Exception ex)
     {
-        _Logger.LogError("Error during the execution of the handler : {0}", ex);
+        _Logger.LogError(ex, "Error during the execution of the handler");
         return OperationResult.MakeFailure().AppendError("Handle", ex.Message);
     }
 }

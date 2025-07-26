@@ -13,6 +13,7 @@ using System;
 public class EntityFrameworkPersistenceManager<T, K>(IDataContext dataContext)
     : PersistenceManagerBase<T, K>(dataContext)
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Properties
     

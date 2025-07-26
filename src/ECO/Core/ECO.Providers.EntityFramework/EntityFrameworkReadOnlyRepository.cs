@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 public class EntityFrameworkReadOnlyRepository<T, K>(IDataContext dataContext)
     : EntityFrameworkPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IReadOnlyRepository<T,K> Members
     

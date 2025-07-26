@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 
 public class MongoRepository<T, K> : MongoReadOnlyRepository<T, K>, IRepository<T, K>
-where T : class, IAggregateRoot<K>
+    where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Ctor
 

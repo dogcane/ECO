@@ -7,6 +7,7 @@ namespace ECO.Data;
 /// <typeparam name="K">The type of the aggregate root's identifier.</typeparam>
 public interface IPersistenceManager<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Properties
 

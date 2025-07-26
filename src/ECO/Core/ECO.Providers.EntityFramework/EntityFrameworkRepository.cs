@@ -15,6 +15,7 @@ namespace ECO.Providers.EntityFramework;
 public class EntityFrameworkRepository<T, K>(IDataContext dataContext)
     : EntityFrameworkReadOnlyRepository<T, K>(dataContext), IRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IRepository<T,K> Members
     

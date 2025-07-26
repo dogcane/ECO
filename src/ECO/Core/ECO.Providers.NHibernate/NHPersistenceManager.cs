@@ -6,6 +6,7 @@ using global::NHibernate;
 
 public class NHPersistenceManager<T, K>(IDataContext dataContext) : PersistenceManagerBase<T, K>(dataContext)
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Protected_Methods
 

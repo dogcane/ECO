@@ -37,7 +37,7 @@ namespace ECO.Sample.Application.Events.Queries
 
             public async Task<OperationResult<IEnumerable<EventItem>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                using var transactionContext = await _DataContext.BeginTransactionAsync();                
+                using var transactionContext = await _DataContext.BeginTransactionAsync(cancellationToken);                
                 try
                 {
                     var query = _EventRepository.AsQueryable();
@@ -62,7 +62,7 @@ namespace ECO.Sample.Application.Events.Queries
                 }
                 catch (Exception ex)
                 {
-                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    _Logger.LogError(ex, "Error during the execution of the handler");
                     return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message)));
                 }
             }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class MartenRepository<T,K>(IDataContext dataContext) : MartenReadOnlyRepository<T, K>(dataContext), IRepository<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region IRepository<T> Membri di
 

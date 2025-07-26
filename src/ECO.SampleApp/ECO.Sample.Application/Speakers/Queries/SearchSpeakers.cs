@@ -38,7 +38,7 @@ namespace ECO.Sample.Application.Speakers.Queries
 
             public async Task<OperationResult<IEnumerable<SpeakerItem>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                using var transactionContext = await _DataContext.BeginTransactionAsync();
+                using var transactionContext = await _DataContext.BeginTransactionAsync(cancellationToken);
                 try
                 {
                     var query = _SpeakerRepository.AsQueryable();
@@ -55,7 +55,7 @@ namespace ECO.Sample.Application.Speakers.Queries
                 }
                 catch (Exception ex)
                 {
-                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    _Logger.LogError(ex, "Error during the execution of the handler");
                     return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message)));
                 }
             }

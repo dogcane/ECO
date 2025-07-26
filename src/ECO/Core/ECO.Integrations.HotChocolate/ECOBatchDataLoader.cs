@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ECO.Integrations.HotChocolate;
 
-public class ECOBatchDataLoader<T, K>(IReadOnlyRepository<T, K> repository, IBatchScheduler batchScheduler, DataLoaderOptions? options = null) : BatchDataLoader<K, T>(batchScheduler, options)
+public class ECOBatchDataLoader<T, K>(IReadOnlyRepository<T, K> repository, IBatchScheduler batchScheduler, DataLoaderOptions options) : BatchDataLoader<K, T>(batchScheduler, options)
     where T : class, IAggregateRoot<K>
-    where K : IEquatable<K>
+    where K : notnull, IEquatable<K>
 {
     #region Fields
 
@@ -22,8 +22,8 @@ public class ECOBatchDataLoader<T, K>(IReadOnlyRepository<T, K> repository, IBat
 
     #region Methods
 
-    protected override async Task<IReadOnlyDictionary<K, T>> LoadBatchAsync(IReadOnlyList<K> keys, CancellationToken cancellationToken) 
-        => await Task.FromResult(repository.Where(agg => keys.Contains(agg.Identity)).ToDictionary(agg => agg.Identity, agg => agg));
+    protected override async Task<IReadOnlyDictionary<K, T>> LoadBatchAsync(IReadOnlyList<K> keys, CancellationToken cancellationToken)
+        => await Task.FromResult(repository.Where(agg => keys.Contains(agg.Identity)).ToDictionary(agg => agg.Identity!, agg => agg));
 
     #endregion
 }

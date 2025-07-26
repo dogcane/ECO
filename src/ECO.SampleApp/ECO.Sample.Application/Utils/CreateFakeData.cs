@@ -37,7 +37,7 @@ namespace ECO.Sample.Application.Utils
             {                
                 try
                 {
-                    using var transactionContext = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+                    using var transactionContext = await _DataContext.BeginTransactionAsync(cancellationToken);
 
                     //Speakers
                     var speaker01 = Speaker.Create("John", "Snow", ".Net & .Net Core Expert", 35).Value!;
@@ -50,13 +50,13 @@ namespace ECO.Sample.Application.Utils
                     event01.AddSession("Blazor", "Blazor full immersion", 300, speaker01);
                     event01.AddSession("Bootstrap", "Bootstrap full immersion", 100, speaker02);
                     await _EventRepository.AddAsync(event01);
-                    await _DataContext.SaveChangesAsync();
-                    transactionContext.Complete();
+                    await _DataContext.SaveChangesAsync(cancellationToken);
+                    await transactionContext.CommitAsync(cancellationToken);
                     return await Task.FromResult(OperationResult.MakeSuccess());
                 }
                 catch (Exception ex)
                 {
-                    _Logger.LogError("Error during the execution of the handler : {0}", ex);
+                    _Logger.LogError(ex, "Error during the execution of the handler");
                     return await Task.FromResult(OperationResult.MakeFailure(ErrorMessage.Create("Handle", ex.Message)));
                 }
             }

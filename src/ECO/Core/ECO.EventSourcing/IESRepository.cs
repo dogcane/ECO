@@ -10,6 +10,7 @@ using ECO.Data;
 /// <typeparam name="K">The type of the aggregate root's identity.</typeparam>
 public interface IESRepository<T, K> : IPersistenceManager<T, K>
     where T : class, IESAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     /// <summary>
     /// Loads an aggregate by its identity.

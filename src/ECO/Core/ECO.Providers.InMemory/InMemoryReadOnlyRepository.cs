@@ -5,7 +5,7 @@ using ECO.Data;
 public class InMemoryReadOnlyRepository<T, K>(IDataContext dataContext)
     : InMemoryPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
     where T : class, IAggregateRoot<K>
-    where K : notnull
+    where K : notnull, IEquatable<K>
 {
     #region IReadOnlyRepository<T,K> Membri di
 

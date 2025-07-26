@@ -186,12 +186,12 @@ public abstract class PersistenceUnitBase<P>(string name, ILoggerFactory? logger
     /// <inheritdoc/>
     public abstract IReadOnlyRepository<T, K> BuildReadOnlyRepository<T, K>(IDataContext dataContext)
         where T : class, IAggregateRoot<K>
-        where K : notnull;
+        where K : notnull, IEquatable<K>;
 
     /// <inheritdoc/>
     public abstract IRepository<T, K> BuildRepository<T, K>(IDataContext dataContext)
         where T : class, IAggregateRoot<K>
-        where K : notnull;
+        where K : notnull, IEquatable<K>;
 
     #endregion
 }

@@ -6,6 +6,7 @@ using System;
 
 public abstract class MongoPersistenceManager<T, K> : PersistenceManagerBase<T, K>
     where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
 {
     #region Ctor
     protected MongoPersistenceManager(IDataContext dataContext) : this(typeof(T).Name, dataContext) { }
