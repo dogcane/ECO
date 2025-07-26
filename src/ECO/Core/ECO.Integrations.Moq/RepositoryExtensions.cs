@@ -11,7 +11,7 @@ using System;
 public static class RepositoryExtensions
 {
     public static Moq.Mock<T> SetupQueryable<T, TItem>(this Moq.Mock<T> queryableMock, IEnumerable<TItem> source)
-        where T : class, IEnumerable<TItem>
+        where T : class, IEnumerable<TItem>        
     {
 
         var queryableList = source.AsQueryable();
@@ -26,6 +26,7 @@ public static class RepositoryExtensions
 
     public static Moq.Mock<T> SetupRepository<T, TItem, TKey>(this Moq.Mock<T> repository, IList<TItem> source)
         where T : class, IRepository<TItem, TKey>
+        where TKey : notnull, IEquatable<TKey>
         where TItem : class, IAggregateRoot<TKey>
     {
         repository.SetupReadOnlyRepository<T, TItem, TKey>(source);
@@ -47,6 +48,7 @@ public static class RepositoryExtensions
 
     public static Moq.Mock<T> SetupReadOnlyRepository<T, TItem, TKey>(this Moq.Mock<T> repository, IEnumerable<TItem> source)
         where T : class, IReadOnlyRepository<TItem, TKey>
+        where TKey : notnull, IEquatable<TKey>
         where TItem : class, IAggregateRoot<TKey>
     {
         repository.SetupQueryable(source);
