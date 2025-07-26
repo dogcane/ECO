@@ -5,6 +5,7 @@ using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.EntityFramework.Configuration;
 using ECO.Providers.InMemory.Configuration;
 using ECO.Providers.Marten.Configuration;
+using ECO.Providers.MongoDB.Configuration;
 using ECO.Providers.NHibernate.Configuration;
 using ECO.Providers.NHibernate.Utils;
 using ECO.Providers.Marten.Utils;
@@ -31,7 +32,6 @@ var builder = WebApplication.CreateBuilder(args);
  
 
 #if MONGODB
-    builder.Configuration.AddJsonFile("ecosettings.mongodb.json");
     MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(MongoDB.Bson.GuidRepresentation.Standard));
 #endif
 
@@ -113,6 +113,17 @@ builder.Services.AddDataContext(options =>
             _.ReferenceHandler = ReferenceHandler.IgnoreCycles;            
         });
         opt.StoreOptions.Serializer(serializer);
+    });
+});
+#elif MONGODB
+builder.Services.AddDataContext(options =>
+{
+    options.UseMongoDB("ecosampleapp.mongodb", opt =>
+    {
+        opt.ConnectionString = "mongodb://localhost:27017";
+        opt.DatabaseName = "ECOSampleApp";
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
+        opt.MappingAssemblies = "ECO.Sample.Infrastructure.DAL.MongoDB";
     });
 });
 #else
