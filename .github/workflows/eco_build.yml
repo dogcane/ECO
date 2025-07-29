@@ -57,6 +57,12 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          config: |
+            paths-ignore:
+              - 'src/ECO.Tests/**'
+              - 'src/ECO.Sample*/**'              
+            paths:
+              - 'src/ECO/Core/**'
       - name: Install dependencies
         run: dotnet restore
       - name: Build
