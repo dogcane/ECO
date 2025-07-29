@@ -56,17 +56,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      # Download build artifacts from build job
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: .
-      
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+          
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
@@ -78,7 +72,13 @@ jobs:
             paths:
               - 'src/ECO/Core/**'
       
-      # No need to restore/build again, use existing artifacts
+      # CodeQL needs to observe the build process
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build for CodeQL
+        run: dotnet build --configuration Release --no-restore
+      
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
