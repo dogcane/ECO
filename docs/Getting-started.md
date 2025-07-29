@@ -55,8 +55,8 @@ public class Event : AggregateRoot<Guid>
 
 On the other side, the "Session" entity :
 
-- It's a POCO class
 - It's a "nested" entity
+- It contains properties and its behaviour
 
 From a "c#" perspective:
 
@@ -87,7 +87,7 @@ public interface IEventRepository : IRepository<Event, Guid>
 }
 ~~~
 
-After that it's important to define the provider that we want to use for ECO and import the relate package. In our case we decided to use the "InMemory" provider (only for tests!!!). The next step is to implement our repository interface:
+After that it's important to define the provider that we want to use for ECO and import the related package. In our case we decided to use the "InMemory" provider (perfect for testing and development). The next step is to implement our repository interface:
 
 ~~~ c#
 public class EventMemoryRepository : InMemoryRepository<Event, Guid>, IEventRepository
@@ -100,45 +100,74 @@ public class EventMemoryRepository : InMemoryRepository<Event, Guid>, IEventRepo
 }
 ~~~
 
-In the appsettings.json now we need to configure ECO and our persistence context:
-
-~~~ json
-...
-"eco": {
-    "persistenceUnits": [
-    {
-        "name": "ecosampleapp.inmemory",
-        "type": "ECO.Providers.InMemory.InMemoryPersistenceUnit, ECO.Providers.InMemory",
-        "classes": [
-        "ECO.Sample.Domain.Event, ECO.Sample.Domain",
-        "ECO.Sample.Domain.Speaker, ECO.Sample.Domain"
-        ]
-    }
-    ]
-}
-...
-~~~
-
-And the last step is to configure ECO services into AspNet startup:
+Now we configure ECO services using the modern fluent configuration approach in your `Program.cs`:
 
 ~~~ c#
-public void ConfigureServices(IServiceCollection services)
+using ECO.Providers.InMemory.Configuration;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure ECO with InMemory provider using fluent API
+builder.Services.AddDataContext(options =>
 {
-    ...
-    services.AddDataContext(options =>
-    {
-        options.UsingConfiguration(Configuration);
-    });
-    services.AddScoped<IEventRepository, EventMemoryRepository>();
-    ...
-}
+    options.UseInMemory("ecosampleapp.inmemory", opt => 
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>());
+});
+
+// Register repositories
+builder.Services.AddScoped<IEventRepository, EventMemoryRepository>();
+builder.Services.AddScoped<ISpeakerRepository, SpeakerMemoryRepository>();
+
+// Add other services (MediatR, AutoMapper, etc.)
+builder.Services.AddMediatR(conf =>
+{
+    conf.RegisterServicesFromAssemblyContaining<ECO.Sample.Application.AssemblyMarker>();
+});
+
+var app = builder.Build();
 ~~~
 
-With these commands we:
+With this fluent configuration we:
 
-- Setup all ECO environment
-- A "Scoped" DataContext it's created on every request
+- Setup the ECO environment with the InMemory provider
+- Automatically discover aggregate types from the specified assembly
+- Register repositories in the DI container
+- A "Scoped" DataContext is created on every request
 - We can "inject" a DataContext and our Repositories into our controllers or our services
+
+### Alternative Providers
+
+You can easily switch to other providers by changing the configuration:
+
+~~~ c#
+// Entity Framework with SQL Server
+builder.Services.AddDataContext(options =>
+{
+    options.UseEntityFramework<YourDbContext>("ecosampleapp.efcore.sqlserver", opt => 
+        opt.DbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("sqlserver")));
+});
+
+// MongoDB
+builder.Services.AddDataContext(options =>
+{
+    options.UseMongoDB("ecosampleapp.mongodb", opt =>
+    {
+        opt.ConnectionString = builder.Configuration.GetConnectionString("mongo");
+        opt.DatabaseName = "ECOSampleApp";
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
+    });
+});
+
+// Marten (PostgreSQL document database)
+builder.Services.AddDataContext(options =>
+{
+    options.UseMarten("ecosampleapp.marten", opt =>
+    {
+        opt.AddAssemblyFromType<ECO.Sample.Domain.AssemblyMarker>();
+        opt.StoreOptions.Connection(builder.Configuration.GetConnectionString("marten"));
+    });
+});
+~~~
 
 In our example we use MediatR to manage Commands/Queries Handlers and from a specific handler we can have:
 
@@ -167,5 +196,44 @@ public async Task<OperationResult<Guid>> Handle(Command request, CancellationTok
 ~~~
 
 Our persistence stack is up & running!
+
+## Advanced Features
+
+### Event Sourcing
+
+ECO also supports event sourcing through the `ESAggregateRoot<T>` base class. Event sourcing captures state changes as a sequence of events, providing full audit trails and temporal queries.
+
+~~~ c#
+public class Order : ESAggregateRoot<string>
+{
+    public static Order CreateNew(string id, string customerName)
+    {
+        var order = new Order();
+        var @event = new OrderCreated(id, customerName);
+        order.OnApply(@event, order.Apply);
+        return order;
+    }
+
+    public void AddItem(string productId, int quantity)
+    {
+        var @event = new ItemAdded(Identity, productId, quantity);
+        OnApply(@event, Apply);
+    }
+
+    private void Apply(OrderCreated @event) => /* Update state */;
+    private void Apply(ItemAdded @event) => /* Update state */;
+}
+~~~
+
+For more details on event sourcing, see the [Event Sourcing documentation](https://github.com/dogcane/ECO/blob/master/docs/Event-Sourcing.md).
+
+### Multiple Providers
+
+ECO supports various persistence providers:
+- **Entity Framework Core** - For relational databases
+- **NHibernate** - Mature ORM with advanced features  
+- **In-Memory** - For testing and development
+- **MongoDB** - Document database support
+- **Marten** - PostgreSQL document database with event sourcing
 
 Go to the [Summary](https://github.com/dogcane/ECO/blob/master/docs/Summary.md) of the docs.
