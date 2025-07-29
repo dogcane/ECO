@@ -14,12 +14,7 @@ env:
 
 jobs:
   build:
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-         os: [ ubuntu-latest ]         
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -33,6 +28,17 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+    
+    # Upload build artifacts to share with other jobs
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          src/
+          !src/**/obj/
+          !src/**/bin/Debug/
+        retention-days: 1
 
   codeql-analysis:
     name: CodeQL Analysis
@@ -49,6 +55,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      # Download build artifacts from build job
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
+      
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -63,10 +77,8 @@ jobs:
               - 'src/ECO.Sample*/**'              
             paths:
               - 'src/ECO/Core/**'
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      
+      # No need to restore/build again, use existing artifacts
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
@@ -86,7 +98,7 @@ jobs:
 #        continue-on-error: true
   
   deploy:
-    needs: build
+    needs: codeql-analysis
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     env:      
@@ -94,27 +106,31 @@ jobs:
       NUGET_KEY: ${{ secrets.NUGET_KEY }}      
     steps:
       - uses: actions/checkout@v4
+      
+      # Download build artifacts from build job
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: .
+      
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      - name: Install dependencies
-        run: dotnet restore      
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
 
       - name: Pack        
         run: |
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.DomainEvents.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.EventSourcing.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Moq.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.InMemory.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.Marten.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
-            dotnet pack -v normal -c Release --no-restore --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.DomainEvents.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.EventSourcing.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Microsoft.DependencyInjection.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Integrations.Moq.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.EntityFramework.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.InMemory.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.Marten.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
+            dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
 
       - name: Push NuGet Feed ECO
         run: |
