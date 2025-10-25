@@ -14,6 +14,7 @@ env:
 
 jobs:
   build:
+    name: Build and Test
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
     
@@ -87,6 +88,8 @@ jobs:
           category: '/language:${{matrix.language}}'
 
   deploy:
+    needs: build
+    name: Deploy to NuGet
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     env:      
