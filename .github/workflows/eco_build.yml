@@ -15,7 +15,6 @@ env:
 jobs:
   build:
     name: Build and Test
-    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     
     steps:
@@ -114,7 +113,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release 
+        run: dotnet build -c Release --no-restore
 
       - name: Pack        
         run: |
