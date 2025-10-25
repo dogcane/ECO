@@ -53,7 +53,7 @@ public static class RepositoryExtensions
     {
         repository.SetupQueryable(source);
         repository.Setup(obj => obj.Load(Moq.It.IsAny<TKey>())).Returns((TKey id) => source.FirstOrDefault(obj => obj.Identity!.Equals(id)));
-        repository.Setup(obj => obj.LoadAsync(Moq.It.IsAny<TKey>())).Returns((TKey id) => Task.FromResult(source.FirstOrDefault(obj => obj.Identity!.Equals(id)))!);
+        repository.Setup(obj => obj.LoadAsync(Moq.It.IsAny<TKey>())).Returns((TKey id) => ValueTask.FromResult(source.FirstOrDefault(obj => obj.Identity!.Equals(id)))!);
         return repository;
     }
 
