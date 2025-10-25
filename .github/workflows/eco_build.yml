@@ -14,6 +14,7 @@ env:
 
 jobs:
   build:
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     
     steps:
@@ -41,6 +42,7 @@ jobs:
         retention-days: 1
 
   codeql-analysis:
+    if: github.event_name != 'release'
     name: CodeQL Analysis
     runs-on: ubuntu-latest
     needs: build
@@ -85,7 +87,6 @@ jobs:
           category: '/language:${{matrix.language}}'
 
   deploy:
-    needs: codeql-analysis
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     env:      
@@ -108,6 +109,9 @@ jobs:
 
       - name: Restore dependencies for packaging
         run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release 
 
       - name: Pack        
         run: |
