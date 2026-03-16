@@ -15,7 +15,7 @@
 		<ProjectReference Include="..\ECO.Sample.Domain\ECO.Sample.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="14.0.0" />
+		<PackageReference Include="AutoMapper" Version="15.1.1" />
 		<PackageReference Include="MediatR" Version="12.4.1" />
 		<PackageReference Include="Resulz" Version="1.5.3" />
 	</ItemGroup>
