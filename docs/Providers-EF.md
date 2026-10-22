@@ -4,8 +4,8 @@ The Entity Framework Core (EF Core) provider integrates ECO with Microsoft's mod
 
 ## Features
 
-- **Modern ORM**: Built on EF Core's latest features and performance improvements
-- **Cross-Platform**: Works on .NET Core, .NET 5+, and .NET Framework
+- **Modern ORM**: Built on EF Core 10
+- **Cross-Platform**: Runs on Windows, Linux, and macOS with .NET 10 (`net10.0`)
 - **Code-First**: Define your model in code with migrations support
 - **LINQ Support**: Full LINQ-to-SQL capabilities with IntelliSense
 - **Multiple Databases**: SQL Server, PostgreSQL, MySQL, SQLite, Oracle, and more
@@ -15,24 +15,33 @@ The Entity Framework Core (EF Core) provider integrates ECO with Microsoft's mod
 
 ## Installation
 
-Install the Entity Framework provider package:
+Install the Entity Framework provider package and the EF Core database provider you need:
 
 ```bash
-dotnet add package ECO.Providers.EntityFramework
+dotnet add package ECO.Core.Providers.EntityFramework
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+# OR, for PostgreSQL:
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.EntityFramework" Version="3.0.0" />
+<PackageReference Include="ECO.Core.Providers.EntityFramework" Version="4.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
 ```
+
+The provider targets .NET 10 (`net10.0`) and EF Core 10.
 
 ## Configuration
 
 ### Fluent Configuration
 
+The snippets below also require `using Microsoft.EntityFrameworkCore;` for the `UseSqlServer`, `UseNpgsql` and `UseInMemoryDatabase` extension methods.
+
 Configure Entity Framework provider using the fluent API in your startup:
 
 #### SQL Server
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.EntityFramework.Configuration;
 
 builder.Services.AddDataContext(options =>
@@ -48,6 +57,7 @@ builder.Services.AddScoped<ISpeakerRepository, SpeakerEFRepository>();
 
 #### PostgreSQL
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.EntityFramework.Configuration;
 
 builder.Services.AddDataContext(options =>
@@ -62,7 +72,9 @@ builder.Services.AddScoped<ISpeakerRepository, SpeakerEFRepository>();
 ~~~
 
 #### In-Memory Database
+Requires the `Microsoft.EntityFrameworkCore.InMemory` package.
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.EntityFramework.Configuration;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -233,23 +245,27 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
 ## Testing with In-Memory Provider
 
 ~~~ c#
+using ECO.Providers.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+
 public class EventServiceTests
 {
     private IPersistenceUnitFactory CreateTestFactory()
     {
+        var dbContextOptions = new DbContextOptionsBuilder<ECODbContext>()
+            .UseInMemoryDatabase("TestDb")
+            .Options;
+
         var factory = new PersistenceUnitFactory();
-        
-        var persistenceUnit = new EntityFrameworkInMemoryPersistenceUnit("TestUnit");
+
+        var persistenceUnit = new EntityFrameworkPersistenceUnit<ECODbContext>(
+            "TestUnit",
+            dbContextOptions);
+
         persistenceUnit
             .AddClass<Event, Guid>()
             .AddClass<Speaker, Guid>();
-        
-        var attributes = new Dictionary<string, string>
-        {
-            { "databaseName", "TestDb" }
-        };
-        persistenceUnit.Initialize(attributes, new ConfigurationBuilder().Build());
-        
+
         factory.AddPersistenceUnit(persistenceUnit);
         return factory;
     }

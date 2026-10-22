@@ -6,6 +6,15 @@
 
 ECO is a comprehensive .NET library designed to simplify Domain-Driven Design (DDD) development by providing robust infrastructure components for persistence, repository patterns, and event sourcing. It eliminates the need to create boilerplate classes for entities, aggregate roots, and value objects, allowing developers to focus on business logic.
 
+> **Requirements:** ECO 4.x targets **.NET 10 (`net10.0`)** and requires the .NET 10 SDK. Package versions are aligned with the .NET 10 wave: Microsoft.Extensions/EF Core 10.0.x, Npgsql 10.0.x, Marten 9.x and HotChocolate 16.x.
+
+### Upgrading from ECO 3.x
+
+- Retarget your projects to `net10.0`.
+- Update Microsoft.Extensions, EF Core and ASP.NET Core packages to `10.0.x`, and Npgsql packages to `10.0.x`.
+- The Marten provider now uses Marten 9.x. If you use the Newtonsoft.Json serializer, add the `Marten.Newtonsoft` package.
+- The HotChocolate integration uses HotChocolate 16.x.
+
 ## Key Features
 
 - **🏗️ DDD Building Blocks**: Ready-to-use base classes for entities, aggregate roots, and value objects
@@ -22,15 +31,25 @@ ECO is a comprehensive .NET library designed to simplify Domain-Driven Design (D
 ### 1. Install ECO
 
 ```bash
-# Core library
-dotnet add package ECO
+# Core library and Microsoft DI integration
+dotnet add package ECO.Core
+dotnet add package ECO.Core.Integrations.Microsoft.DependencyInjection
 
-# Choose your provider
-dotnet add package ECO.Providers.EntityFramework.SqlServer
-# OR
-dotnet add package ECO.Providers.InMemory
-# OR
-dotnet add package ECO.Providers.NHibernate
+# Entity Framework Core provider plus a database provider
+dotnet add package ECO.Core.Providers.EntityFramework
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+# OR In-Memory
+dotnet add package ECO.Core.Providers.InMemory
+
+# OR NHibernate
+dotnet add package ECO.Core.Providers.NHibernate
+
+# OR Marten
+dotnet add package ECO.Core.Providers.Marten
+
+# OR MongoDB
+dotnet add package ECO.Providers.MongoDB
 ```
 
 ### 2. Define Your Domain Model
@@ -71,30 +90,23 @@ public interface IEventRepository : IRepository<Event, Guid>
 ### 4. Configure Services
 
 ```c#
+using ECO.Integrations.Microsoft.DependencyInjection;
+using ECO.Providers.EntityFramework.Configuration;
+using Microsoft.EntityFrameworkCore;
+
 public void ConfigureServices(IServiceCollection services)
 {
-    // Register persistence unit factory
-    services.AddSingleton<IPersistenceUnitFactory>(serviceProvider =>
+    services.AddDataContext(options =>
     {
-        var factory = new PersistenceUnitFactory(loggerFactory);
-        
-        var persistenceUnit = new EntityFrameworkSqlServerPersistenceUnit("MainUnit", loggerFactory);
-        persistenceUnit.AddClass<Event, Guid>();
-        
-        var attributes = new Dictionary<string, string>
+        options.UseEntityFramework<ECODbContext>("MainUnit", opt =>
         {
-            { "connectionString", connectionString }
-        };
-        persistenceUnit.Initialize(attributes, Configuration);
-        
-        factory.AddPersistenceUnit(persistenceUnit);
-        return factory;
+            opt.DbContextOptions.UseSqlServer(
+                Configuration.GetConnectionString("sqlserver"));
+        });
     });
 
-    // Register repositories and data context
+    // Register repositories. AddDataContext also registers IDataContext as scoped.
     services.AddScoped<IEventRepository, EventEFRepository>();
-    services.AddScoped<IDataContext>(provider => 
-        provider.GetRequiredService<IPersistenceUnitFactory>().OpenDataContext());
 }
 ```
 
@@ -153,11 +165,13 @@ public class Order : ESAggregateRoot<string>
 
 | Provider | Package | Description |
 |----------|---------|-------------|
-| **Entity Framework Core** | `ECO.Providers.EntityFramework.SqlServer` | Production-ready EF Core with SQL Server |
-| **In-Memory** | `ECO.Providers.InMemory` | Fast in-memory storage for testing |
-| **NHibernate** | `ECO.Providers.NHibernate` | Mature ORM with advanced features |
+| **Entity Framework Core** | `ECO.Core.Providers.EntityFramework` | Generic EF Core provider; pair it with `Microsoft.EntityFrameworkCore.SqlServer` or `Npgsql.EntityFrameworkCore.PostgreSQL` |
+| **In-Memory** | `ECO.Core.Providers.InMemory` | Fast in-memory storage for testing |
+| **NHibernate** | `ECO.Core.Providers.NHibernate` | Mature ORM with advanced features |
 | **MongoDB** | `ECO.Providers.MongoDB` | Document database support |
-| **Marten** | `ECO.Providers.Marten` | PostgreSQL document DB + Event Store |
+| **Marten** | `ECO.Core.Providers.Marten` | Marten 9.x / PostgreSQL document DB and event store |
+
+The core abstractions ship in `ECO.Core`, DI integration in `ECO.Core.Integrations.Microsoft.DependencyInjection`, and event-sourcing abstractions in `ECO.Core.EventSourcing`.
 
 ## Architecture Benefits
 
@@ -166,7 +180,7 @@ public class Order : ESAggregateRoot<string>
 - **📈 Scalable Design**: Support for multiple persistence units and contexts
 - **🧪 Testable**: Built-in support for testing with in-memory providers
 - **📐 SOLID Principles**: Clean separation of concerns and dependency inversion
-- **🌐 Cross-Platform**: Works with .NET Core, .NET 5+, and .NET Framework
+- **🌐 Cross-Platform**: Runs on Windows, Linux, and macOS with .NET 10
 
 ## Documentation
 

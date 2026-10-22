@@ -4,6 +4,7 @@ using ECO.Sample.EventSourcing.Domain;
 using ECO.Sample.EventSourcing.Infrastructure.Marten;
 using JasperFx;
 using JasperFx.Events;
+using JasperFx.Events.Projections;
 using Marten;
 using Marten.Events;
 using Marten.Events.Projections;

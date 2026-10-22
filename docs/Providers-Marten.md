@@ -16,14 +16,16 @@ The Marten provider integrates ECO with Marten, a .NET document database and eve
 Add the Marten provider package to your project:
 
 ```bash
-dotnet add package ECO.Providers.Marten
+dotnet add package ECO.Core.Providers.Marten
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.Marten" Version="3.0.0" />
+<PackageReference Include="ECO.Core.Providers.Marten" Version="4.0.0" />
 ```
 
-NB: Also ensure you have PostgreSQL connectivity:
+The provider targets .NET 10 (`net10.0`) and uses Marten 9.x. Marten 9 serializes documents with `System.Text.Json` by default; add the `Marten.Newtonsoft` package only if you need the Newtonsoft.Json serializer.
+
+NB: Also ensure you have PostgreSQL connectivity (Marten brings the required Npgsql dependency).
 
 ## Configuration
 
@@ -32,6 +34,7 @@ NB: Also ensure you have PostgreSQL connectivity:
 Configure Marten using the fluent API:
 
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.Marten.Configuration;
 
 builder.Services.AddDataContext(options =>

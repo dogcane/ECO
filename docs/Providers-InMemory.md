@@ -16,12 +16,14 @@ The In Memory provider is a simple, lightweight persistence provider that stores
 Install the InMemory provider package:
 
 ```bash
-dotnet add package ECO.Providers.EntityFramework
+dotnet add package ECO.Core.Providers.InMemory
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.InMemory" Version="3.0.0" />
+<PackageReference Include="ECO.Core.Providers.InMemory" Version="4.0.0" />
 ```
+
+The provider targets .NET 10 (`net10.0`).
 
 ## Configuration
 
@@ -30,6 +32,7 @@ dotnet add package ECO.Providers.EntityFramework
 Configure In-Memory provider using the fluent API in your startup:
 
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.InMemory.Configuration;
 
 builder.Services.AddDataContext(options =>
@@ -123,7 +126,7 @@ This means:
 1. **No Persistence**: Data is lost on application restart
 2. **Memory Usage**: All data is kept in memory
 3. **No Relationships**: No foreign key constraints or relationship management
-5. **No Concurrency Control**: Basic optimistic concurrency handling
+4. **No Concurrency Control**: Basic optimistic concurrency handling
 
 ## Best Use Cases
 
