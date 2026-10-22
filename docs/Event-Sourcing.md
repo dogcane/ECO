@@ -2,6 +2,8 @@
 
 ECO provides built-in support for Event Sourcing through the `ECO.EventSourcing` namespace. Event Sourcing is a pattern where state changes are captured as a sequence of events, allowing you to rebuild the current state by replaying these events.
 
+The event-sourcing abstractions are shipped in the `ECO.Core.EventSourcing` package. For PostgreSQL persistence, use `ECO.Core.Providers.Marten` (Marten 9.x).
+
 ## Key Concepts
 
 ### ESAggregateRoot
@@ -305,16 +307,17 @@ await repository.SaveAsync(aggregate);
 ECO includes a Marten provider for PostgreSQL event sourcing:
 
 ~~~ c#
-var persistenceUnit = new MartenPersistenceUnit("EventStoreUnit", loggerFactory);
-persistenceUnit.AddClass<Order, string>();
+using JasperFx.Events.Projections;
 
-// Configure Marten document store
 var documentStore = DocumentStore.For(options =>
 {
     options.Connection(connectionString);
     options.Events.StreamIdentity = StreamIdentity.AsString;
     options.Projections.Snapshot<Order>(SnapshotLifecycle.Inline);
 });
+
+var persistenceUnit = new MartenPersistenceUnit("EventStoreUnit", loggerFactory, documentStore);
+persistenceUnit.AddClass<Order, string>();
 ~~~
 
 ### Custom Provider Implementation

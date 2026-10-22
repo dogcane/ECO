@@ -17,14 +17,14 @@ The NHibernate provider integrates ECO with NHibernate ORM, providing a mature a
 Install the NHibernate provider package:
 
 ```bash
-dotnet add package ECO.Providers.NHibernate
+dotnet add package ECO.Core.Providers.NHibernate
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.NHibernate" Version="2.0.0" />
+<PackageReference Include="ECO.Core.Providers.NHibernate" Version="4.0.0" />
 ```
 
-## Configuration
+The provider targets .NET 10 (`net10.0`).
 
 ## Configuration
 
@@ -34,6 +34,7 @@ Configure NHibernate provider using the fluent API in your startup:
 
 #### SQL Server
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.NHibernate.Configuration;
 using ECO.Providers.NHibernate.Utils;
 
@@ -57,6 +58,7 @@ builder.Services.AddScoped<ISpeakerRepository, SpeakerNHRepository>();
 
 #### PostgreSQL
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.NHibernate.Configuration;
 using ECO.Providers.NHibernate.Utils;
 

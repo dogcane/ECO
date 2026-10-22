@@ -1,17 +1,19 @@
 # ECO Providers
 
 ECO is built with a "provider model" in mind. It's possible to define your own persistence context and configure the desired provider.
+ECO 4.x targets **.NET 10 (`net10.0`)**. All fluent examples require `ECO.Core.Integrations.Microsoft.DependencyInjection` plus the package of the selected provider.
+
 ECO supports multiple persistence providers to accommodate different storage requirements:
 
-- [In Memory](https://github.com/dogcane/ECO/blob/master/docs/Providers-InMemory.md) - Lightweight in-memory storage for testing and development
-- [Entity Framework Core](https://github.com/dogcane/ECO/blob/master/docs/Providers-EF.md) - Relational database support via EF Core
-- [NHibernate](https://github.com/dogcane/ECO/blob/master/docs/Providers-NHibernate.md) - Advanced ORM features with NHibernate
-- [MongoDB](https://github.com/dogcane/ECO/blob/master/docs/Providers-MongoDB.md) - Document-based storage with MongoDB
-- [Marten](https://github.com/dogcane/ECO/blob/master/docs/Providers-Marten.md) - PostgreSQL document database and event store
+- [In Memory](https://github.com/dogcane/ECO/blob/master/docs/Providers-InMemory.md) - `ECO.Core.Providers.InMemory`
+- [Entity Framework Core](https://github.com/dogcane/ECO/blob/master/docs/Providers-EF.md) - `ECO.Core.Providers.EntityFramework` plus an EF Core database provider such as `Microsoft.EntityFrameworkCore.SqlServer` or `Npgsql.EntityFrameworkCore.PostgreSQL`
+- [NHibernate](https://github.com/dogcane/ECO/blob/master/docs/Providers-NHibernate.md) - `ECO.Core.Providers.NHibernate`
+- [MongoDB](https://github.com/dogcane/ECO/blob/master/docs/Providers-MongoDB.md) - `ECO.Providers.MongoDB`
+- [Marten](https://github.com/dogcane/ECO/blob/master/docs/Providers-Marten.md) - `ECO.Core.Providers.Marten` (Marten 9.x)
 
 ## Microsoft DI Container Configuration Examples
 
-ECO integrates seamlessly with Microsoft's Dependency Injection container. Below are examples showing how to configure each provider using the `ServiceCollection` in your `Program.cs` or `Startup.cs`:
+ECO integrates seamlessly with Microsoft's Dependency Injection container. Below are examples showing how to configure each provider using the `ServiceCollection` in your `Program.cs` or `Startup.cs`. The EF Core examples also require `using Microsoft.EntityFrameworkCore;` for the database-provider extension methods.
 
 ### In-Memory Provider
 
@@ -195,6 +197,8 @@ builder.Services.AddDataContext(options =>
 builder.Services.AddScoped<IEventRepository, EventMartenRepository>();
 builder.Services.AddScoped<ISpeakerRepository, SpeakerMartenRepository>();
 ~~~
+
+Marten 9 uses `System.Text.Json` by default. If you need the Newtonsoft.Json serializer, add the `Marten.Newtonsoft` package and use `Marten.Services.JsonNetSerializer`.
 
 ### Configuration File Approach
 

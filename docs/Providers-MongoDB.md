@@ -20,8 +20,10 @@ dotnet add package ECO.Providers.MongoDB
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.MongoDB" Version="3.0.0" />
+<PackageReference Include="ECO.Providers.MongoDB" Version="4.0.0" />
 ```
+
+The provider targets .NET 10 (`net10.0`).
 
 ## Configuration
 
@@ -30,6 +32,7 @@ dotnet add package ECO.Providers.MongoDB
 Configure MongoDB using the fluent API in your startup:
 
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.MongoDB.Configuration;
 
 builder.Services.AddDataContext(options =>

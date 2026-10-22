@@ -5,6 +5,20 @@
 The task of creating "base repositories" or the management of a generic data context (es EFCore) is always a recurring and tedius task.
 The main goal of ECO is to simplify all the "infrastructure" of this management and allows the developer to work faster in a DDD perspective.
 
+## Requirements
+
+ECO 4.x targets **.NET 10 (`net10.0`)** and requires the .NET 10 SDK. Install the core package, the Microsoft DI integration and at least one provider.
+
+If you are upgrading from ECO 3.x, retarget your projects to `net10.0` and update the Microsoft.Extensions/EF Core/Npgsql packages to their 10.0.x versions. Marten 9.x and HotChocolate 16.x are the versions used by the 4.x packages.
+
+Install the core, DI integration and InMemory provider used in this guide:
+
+```bash
+dotnet add package ECO.Core
+dotnet add package ECO.Core.Integrations.Microsoft.DependencyInjection
+dotnet add package ECO.Core.Providers.InMemory
+```
+
 ## How do I use ECO?
 
 The first step to work with ECO is the definition of the model (entities, aggregates and so on).
@@ -103,6 +117,7 @@ public class EventMemoryRepository : InMemoryRepository<Event, Guid>, IEventRepo
 Now we configure ECO services using the modern fluent configuration approach in your `Program.cs`:
 
 ~~~ c#
+using ECO.Integrations.Microsoft.DependencyInjection;
 using ECO.Providers.InMemory.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -141,6 +156,7 @@ You can easily switch to other providers by changing the configuration:
 
 ~~~ c#
 // Entity Framework with SQL Server
+// Packages: ECO.Core.Providers.EntityFramework + Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDataContext(options =>
 {
     options.UseEntityFramework<YourDbContext>("ecosampleapp.efcore.sqlserver", opt => 
@@ -148,6 +164,7 @@ builder.Services.AddDataContext(options =>
 });
 
 // MongoDB
+// Package: ECO.Providers.MongoDB
 builder.Services.AddDataContext(options =>
 {
     options.UseMongoDB("ecosampleapp.mongodb", opt =>
@@ -158,7 +175,8 @@ builder.Services.AddDataContext(options =>
     });
 });
 
-// Marten (PostgreSQL document database)
+// Marten 9.x (PostgreSQL document database)
+// Package: ECO.Core.Providers.Marten
 builder.Services.AddDataContext(options =>
 {
     options.UseMarten("ecosampleapp.marten", opt =>
@@ -201,7 +219,7 @@ Our persistence stack is up & running!
 
 ### Event Sourcing
 
-ECO also supports event sourcing through the `ESAggregateRoot<T>` base class. Event sourcing captures state changes as a sequence of events, providing full audit trails and temporal queries.
+ECO also supports event sourcing through the `ESAggregateRoot<T>` base class. Event sourcing captures state changes as a sequence of events, providing full audit trails and temporal queries. The event-sourcing abstractions are available in the `ECO.Core.EventSourcing` package; the Marten provider supplies the PostgreSQL event-store implementation.
 
 ~~~ c#
 public class Order : ESAggregateRoot<string>
