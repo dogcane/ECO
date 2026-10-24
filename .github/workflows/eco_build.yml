@@ -91,9 +91,11 @@ jobs:
     name: Deploy to NuGet
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    env:      
+    permissions:
+      contents: read
+      id-token: write   # GitHub OIDC token for NuGet Trusted Publishing
+    env:
       NUGET_FEED: https://api.nuget.org/v3/index.json
-      NUGET_KEY: ${{ secrets.NUGET_KEY }}      
     steps:
       - uses: actions/checkout@v4
       
@@ -128,15 +130,22 @@ jobs:
             dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.MongoDB.csproj
             dotnet pack -v normal -c Release --no-build --include-symbols --include-source ./src/ECO/Core/**/ECO.Providers.NHibernate.csproj
 
+      - name: NuGet login (OIDC to temporary API key)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          # nuget.org profile name (not the email address), configured as a repository secret
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Push NuGet Feed ECO
         run: |
-            dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.DomainEvents/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.EventSourcing/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Moq/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.Marten/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
-            dotnet nuget push ./src/ECO/Core/ECO.Providers.NHibernate/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+            dotnet nuget push ./src/ECO/Core/ECO/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.DomainEvents/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.EventSourcing/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Microsoft.DependencyInjection/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Integrations.Moq/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.EntityFramework/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.InMemory/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.Marten/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.MongoDB/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+            dotnet nuget push ./src/ECO/Core/ECO.Providers.NHibernate/bin/Release/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"

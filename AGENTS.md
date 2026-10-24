@@ -34,7 +34,7 @@ dotnet test src/ECO.Tests/Core/ECO.UnitTests/ECO.UnitTests.csproj -c Release --f
 - The CastleWindsor/StructureMap projects are legacy .NET Framework 4.5.2 projects referencing a gitignored `packages/` folder.
 - Package version is centralized in `src/ECO/Core/Directory.Build.props`; bump it there, not in individual csproj files.
 - Package IDs differ from project/assembly names (e.g. `ECO` → `ECO.Core`, most others `ECO.Core.*`, but `ECO.Providers.MongoDB` is unprefixed). Check `<PackageId>` before referencing the package name.
-- NuGet publishing happens only on GitHub Release. CI packs the projects explicitly listed in the `dotnet pack` steps; new packages must be added there to ship.
+- NuGet publishing happens only on GitHub Release, through NuGet Trusted Publishing (GitHub OIDC, `NuGet/login@v1`); no long-lived `NUGET_KEY` secret is used. The `deploy` job needs `id-token: write` and the repository secret `NUGET_USER` (nuget.org profile name). CI packs the projects explicitly listed in the `dotnet pack` steps; new packages must be added there to ship.
 
 ## Sample apps
 
