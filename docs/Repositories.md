@@ -67,6 +67,103 @@ It defines the following methods :
 - Update/UpdateAsync => method for updating a single aggregate/entity
 - Remove/RemoveAsync => method for removing a single aggregate/entity
 
+## Async streaming
+
+Starting from ECO 4.1 every repository can stream aggregate roots asynchronously, so large result sets can be consumed without materializing the whole collection:
+
+~~~ c#
+await foreach (var evt in _EventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    // process the aggregate
+}
+~~~
+
+`ToAsyncEnumerable` is an extension method defined in `ReadOnlyRepositoryExtensions`, available to both `IReadOnlyRepository<T, K>` and `IRepository<T, K>`:
+
+~~~ c#
+public static IAsyncEnumerable<T> ToAsyncEnumerable<T, K>(
+    this IReadOnlyRepository<T, K> repository,
+    CancellationToken cancellationToken = default)
+    where T : class, IAggregateRoot<K>
+    where K : notnull, IEquatable<K>
+~~~
+
+The repository interfaces are unchanged: the stream is provided by the capability interface `IAsyncEnumerableSource<T>`, which ECO providers implement:
+
+~~~ c#
+public interface IAsyncEnumerableSource<T>
+{
+    IAsyncEnumerable<T> ToAsyncEnumerable(CancellationToken cancellationToken = default);
+}
+~~~
+
+`ToAsyncEnumerable` dispatches to the capability when the repository implements it, and otherwise falls back to a synchronous enumeration of the repository wrapped in an asynchronous iterator. This keeps custom repositories written against ECO 4.0 source-compatible, and it means a custom repository automatically gets the API even without implementing the capability.
+
+### Provider support
+
+| Provider | Implementation | Notes |
+|---|---|---|
+| Entity Framework Core | `AsAsyncEnumerable` | True streaming, server-side cursor; change tracking applies as configured |
+| Marten | `QueryableExtensions.ToAsyncEnumerable` | True streaming |
+| MongoDB | `MongoQueryable.ToCursorAsync` + `MoveNextAsync` | Streams one cursor batch at a time; the cursor is disposed when the enumeration ends or is cancelled |
+| NHibernate | `ToListAsync` + `yield` | NHibernate has no native async streaming: the full result is materialized before the first item is returned |
+| In Memory | snapshot of the static dictionary | Enumeration works on a snapshot: items added after the stream starts are not included |
+
+### Composed queries
+
+`ToAsyncEnumerable` streams the whole aggregate set of the repository. Query operators such as `Where`, `Select` or `OrderBy` return an `IQueryable<T>`, so for filtered or projected results you can either filter before materializing or use the provider native API:
+
+~~~ c#
+// Entity Framework Core
+await foreach (var evt in _EventRepository
+    .Where(e => e.Period.StartDate >= from)
+    .AsAsyncEnumerable()
+    .WithCancellation(cancellationToken))
+{
+    ...
+}
+
+// Marten
+await foreach (var evt in DocumentSession.Query<Event>()
+    .Where(e => e.Period.StartDate >= from)
+    .ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+
+// MongoDB
+using var cursor = await _EventRepository
+    .Where(e => e.Period.StartDate >= from)
+    .ToCursorAsync(cancellationToken);
+~~~
+
+For NHibernate use `ToListAsync(cancellationToken)` on the filtered query.
+
+### Lifetime and correctness
+
+- The stream is lazy: the query runs when enumeration starts, and the persistence context (EF Core `DbContext`, NHibernate `ISession`, Marten `IDocumentSession`, Mongo collection) must stay alive for the whole enumeration.
+- Never return an `IAsyncEnumerable<T>` from a method that owns a scoped `DbContext`/session: the context is disposed when the method returns, and the consumer enumerates a dead stream. Enumerate inside the scope or materialize with `ToListAsync` before returning.
+- A streaming EF Core query keeps the `DbContext` busy: do not start other operations on the same context while enumerating. Use a no-tracking query if change tracking is not needed.
+- Always pass a `CancellationToken`: it is observed by every provider implementation and by the synchronous fallback, and it also disposes the MongoDB cursor.
+- Enumeration is not thread-safe; do not consume the same stream from multiple tasks.
+
+### Testing with mocks
+
+`SetupReadOnlyRepository` and `SetupRepository` in `ECO.Integrations.Moq` also configure `IAsyncEnumerableSource<T>`, so a mocked repository streams the configured list:
+
+~~~ c#
+var repository = new Mock<IEventRepository>();
+repository.SetupRepository<Event, Guid>(events);
+await foreach (var evt in repository.Object.ToAsyncEnumerable())
+{
+    ...
+}
+~~~
+
+If the mock only sets up `IQueryable<T>` (for example with `SetupQueryable`), the extension transparently uses the synchronous fallback.
+
+> **.NET 10 note:** `System.Linq.AsyncEnumerable` is part of the framework, so the `System.Linq.Async` package is no longer required for LINQ operators over `IAsyncEnumerable<T>`. Remove it (or update it) to avoid duplicate extension methods.
+
 ## Implementation of a repository in applications
 
 In your applications you have two ways of implementing a repository with ECO :

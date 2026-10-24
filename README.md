@@ -15,11 +15,18 @@ ECO is a comprehensive .NET library designed to simplify Domain-Driven Design (D
 - The Marten provider now uses Marten 9.x. If you use the Newtonsoft.Json serializer, add the `Marten.Newtonsoft` package.
 - The HotChocolate integration uses HotChocolate 16.x.
 
+### Upgrading from ECO 4.0
+
+- Repositories now expose async streaming through `ToAsyncEnumerable(cancellationToken)` (see [Async streaming](https://github.com/dogcane/ECO/blob/master/docs/Repositories.md#async-streaming)). The repository interfaces are unchanged, so existing custom repositories and mocks keep compiling.
+- With .NET 10, `System.Linq.AsyncEnumerable` is part of the framework: remove the `System.Linq.Async` package to avoid duplicated extension methods.
+- The NHibernate provider has no native async streaming, so its `ToAsyncEnumerable` materializes the result set before yielding.
+
 ## Key Features
 
 - **🏗️ DDD Building Blocks**: Ready-to-use base classes for entities, aggregate roots, and value objects
 - **🔄 Multiple Persistence Providers**: Support for Entity Framework Core, NHibernate, In-Memory, MongoDB, and Marten
 - **📦 Repository Pattern**: Generic and typed repositories with full CRUD operations and LINQ support
+- **🌊 Async Streaming**: Provider-native `IAsyncEnumerable<T>` streaming through `ToAsyncEnumerable(cancellationToken)`
 - **⚡ Event Sourcing**: Built-in event sourcing capabilities with versioning and event tracking
 - **🏢 Persistence Units**: Flexible architecture for managing multiple data contexts
 - **🔧 Dependency Injection**: Easy integration with .NET's built-in DI container
@@ -134,6 +141,32 @@ public class EventService
     }
 }
 ```
+
+## Async Streaming
+
+Repositories can stream aggregates without loading the whole result set:
+
+```c#
+public class EventStreamer
+{
+    private readonly IEventRepository _eventRepository;
+
+    public async IAsyncEnumerable<Event> StreamEventsAsync(
+        DateTime from,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        await foreach (var evt in _eventRepository
+            .Where(e => e.Period.StartDate >= from)
+            .AsAsyncEnumerable()
+            .WithCancellation(cancellationToken))
+        {
+            yield return evt;
+        }
+    }
+}
+```
+
+`_eventRepository.ToAsyncEnumerable(cancellationToken)` streams the whole aggregate set with the provider-native implementation (EF Core, Marten, MongoDB), with a synchronous fallback for custom providers and NHibernate materialization. See [Async streaming](https://github.com/dogcane/ECO/blob/master/docs/Repositories.md#async-streaming) for the API, per-provider behavior and lifetime warnings: the persistence context must stay alive while the stream is enumerated.
 
 ## Event Sourcing Support
 

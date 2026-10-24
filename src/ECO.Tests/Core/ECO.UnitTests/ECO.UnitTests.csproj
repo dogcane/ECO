@@ -23,6 +23,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\ECO\Core\ECO\ECO.csproj" />
+		<ProjectReference Include="..\..\..\ECO\Core\ECO.Providers.InMemory\ECO.Providers.InMemory.csproj" />
+		<ProjectReference Include="..\..\..\ECO\Core\ECO.Integrations.Moq\ECO.Integrations.Moq.csproj" />
 	</ItemGroup>
 
 </Project>

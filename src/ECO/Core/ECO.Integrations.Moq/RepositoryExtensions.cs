@@ -3,6 +3,8 @@
 using Moq = global::Moq;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System;
 
@@ -54,7 +56,21 @@ public static class RepositoryExtensions
         repository.SetupQueryable(source);
         repository.Setup(obj => obj.Load(Moq.It.IsAny<TKey>())).Returns((TKey id) => source.FirstOrDefault(obj => obj.Identity!.Equals(id)));
         repository.Setup(obj => obj.LoadAsync(Moq.It.IsAny<TKey>())).Returns((TKey id) => ValueTask.FromResult(source.FirstOrDefault(obj => obj.Identity!.Equals(id)))!);
+        repository.As<IAsyncEnumerableSource<TItem>>()
+            .Setup(obj => obj.ToAsyncEnumerable(Moq.It.IsAny<CancellationToken>()))
+            .Returns((CancellationToken cancellationToken) => ToAsyncEnumerable(source, cancellationToken));
         return repository;
+    }
+
+    private static async IAsyncEnumerable<TItem> ToAsyncEnumerable<TItem>(IEnumerable<TItem> source, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        foreach (var item in source)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            yield return item;
+        }
+
+        await Task.CompletedTask.ConfigureAwait(false);
     }
 
     private static void SetMockedIdentity<TItem, TKey>(this TItem item, IEnumerable<TItem> source)

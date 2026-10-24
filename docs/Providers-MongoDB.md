@@ -20,7 +20,7 @@ dotnet add package ECO.Providers.MongoDB
 ```
 
 ```xml
-<PackageReference Include="ECO.Providers.MongoDB" Version="4.0.0" />
+<PackageReference Include="ECO.Providers.MongoDB" Version="4.1.0" />
 ```
 
 The provider targets .NET 10 (`net10.0`).
@@ -230,6 +230,35 @@ public class EventMongoRepository : MongoRepository<Event, Guid>, IEventMongoRep
     }
 }
 ~~~
+
+## Async Streaming
+
+The MongoDB provider streams query results through an asynchronous cursor: batches are fetched on demand and the cursor is disposed when the enumeration completes, fails or is cancelled.
+
+~~~ c#
+await foreach (var evt in _eventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+~~~
+
+Since `IReadOnlyRepository<T, K>` is an `IQueryable<T>`, filtered queries can compose directly:
+
+~~~ c#
+using var cursor = await _eventRepository
+    .Where(e => e.Location == "Rome")
+    .ToCursorAsync(cancellationToken);
+
+while (await cursor.MoveNextAsync(cancellationToken))
+{
+    foreach (var evt in cursor.Current)
+    {
+        ...
+    }
+}
+~~~
+
+See [Repositories](Repositories.md#async-streaming) for details.
 
 ## See Also
 

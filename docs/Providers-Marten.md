@@ -20,7 +20,7 @@ dotnet add package ECO.Core.Providers.Marten
 ```
 
 ```xml
-<PackageReference Include="ECO.Core.Providers.Marten" Version="4.0.0" />
+<PackageReference Include="ECO.Core.Providers.Marten" Version="4.1.0" />
 ```
 
 The provider targets .NET 10 (`net10.0`) and uses Marten 9.x. Marten 9 serializes documents with `System.Text.Json` by default; add the `Marten.Newtonsoft` package only if you need the Newtonsoft.Json serializer.
@@ -272,6 +272,27 @@ public class EventMartenRepository : MartenRepository<Event, Guid>, IEventReposi
     }
 }
 ~~~
+
+## Async Streaming
+
+Marten supports native asynchronous streaming through `QueryableExtensions.ToAsyncEnumerable`, used by the repository implementation:
+
+~~~ c#
+await foreach (var evt in _eventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+
+// Filtered query with the native Marten API
+await foreach (var evt in DocumentSession.Query<Event>()
+    .Where(e => e.Period.StartDate >= from)
+    .ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+~~~
+
+The `IDocumentSession` must stay alive for the whole enumeration. See [Repositories](Repositories.md#async-streaming) for details.
 
 ## See Also
 

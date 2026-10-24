@@ -21,7 +21,7 @@ dotnet add package ECO.Core.Providers.NHibernate
 ```
 
 ```xml
-<PackageReference Include="ECO.Core.Providers.NHibernate" Version="4.0.0" />
+<PackageReference Include="ECO.Core.Providers.NHibernate" Version="4.1.0" />
 ```
 
 The provider targets .NET 10 (`net10.0`).
@@ -118,6 +118,19 @@ public class EventNHRepository : NHRepository<Event, Guid>, IEventRepository
     }
 }
 ~~~
+
+## Async Streaming
+
+NHibernate does not expose native asynchronous streaming, so `ToAsyncEnumerable` materializes the query with `ToListAsync(cancellationToken)` and then yields the items. The API is the same as the other providers, but memory usage is equivalent to loading the full result set.
+
+~~~ c#
+await foreach (var evt in _eventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+~~~
+
+For filtered queries use `GetCurrentSession().Query<Event>().Where(...).ToListAsync(cancellationToken)`. See [Repositories](Repositories.md#async-streaming) for details.
 
 ## Database Support
 

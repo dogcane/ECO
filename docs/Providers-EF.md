@@ -25,7 +25,7 @@ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 ```
 
 ```xml
-<PackageReference Include="ECO.Core.Providers.EntityFramework" Version="4.0.0" />
+<PackageReference Include="ECO.Core.Providers.EntityFramework" Version="4.1.0" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
 ```
 
@@ -241,6 +241,28 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
     }
 }
 ~~~
+
+## Async Streaming
+
+EF Core is a true streaming provider: `ToAsyncEnumerable` uses `AsAsyncEnumerable`, so rows are read from the server as the stream is consumed, without loading the entire result set into memory.
+
+~~~ c#
+await foreach (var evt in _eventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+
+// Composed queries keep using the native EF Core API
+await foreach (var evt in _eventRepository
+    .Where(e => e.Period.StartDate >= from)
+    .AsAsyncEnumerable()
+    .WithCancellation(cancellationToken))
+{
+    ...
+}
+~~~
+
+The `DbContext` must stay alive for the whole enumeration: do not return the stream from a method that disposes the scoped context. See [Repositories](Repositories.md#async-streaming) for details and lifetime warnings.
 
 ## Testing with In-Memory Provider
 

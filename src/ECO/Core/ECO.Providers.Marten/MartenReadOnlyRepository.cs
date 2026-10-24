@@ -4,9 +4,10 @@ using ECO.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>
+public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPersistenceManager<T, K>(dataContext), IReadOnlyRepository<T, K>, IAsyncEnumerableSource<T>
     where T : class, IAggregateRoot<K>
     where K : notnull, IEquatable<K>
 {
@@ -22,6 +23,14 @@ public class MartenReadOnlyRepository<T, K>(IDataContext dataContext) : MartenPe
         Guid guidId => new ValueTask<T?>(DocumentSession.LoadAsync<T>(guidId)),
         _ => throw new InvalidOperationException($"Unsupported identity type: {typeof(K).Name}")
     };
+
+    #endregion
+
+    #region IAsyncEnumerableSource<T> Members
+
+    /// <inheritdoc />
+    public virtual IAsyncEnumerable<T> ToAsyncEnumerable(CancellationToken cancellationToken = default)
+        => global::Marten.QueryableExtensions.ToAsyncEnumerable(DocumentSession.Query<T>(), cancellationToken);
 
     #endregion
 

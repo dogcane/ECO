@@ -20,7 +20,7 @@ dotnet add package ECO.Core.Providers.InMemory
 ```
 
 ```xml
-<PackageReference Include="ECO.Core.Providers.InMemory" Version="4.0.0" />
+<PackageReference Include="ECO.Core.Providers.InMemory" Version="4.1.0" />
 ```
 
 The provider targets .NET 10 (`net10.0`).
@@ -107,6 +107,19 @@ public class EventService
     }
 }
 ~~~
+
+## Async Streaming
+
+The In Memory provider supports async streaming through the same API as the database providers:
+
+~~~ c#
+await foreach (var evt in _eventRepository.ToAsyncEnumerable(cancellationToken))
+{
+    ...
+}
+~~~
+
+Enumeration works on a snapshot taken when the stream starts: aggregates added or removed while enumerating are not reflected in the current stream. This mirrors the behavior of `GetEnumerator()`, which also enumerates a copy of the internal dictionary. See [Repositories](Repositories.md#async-streaming) for details.
 
 ## Data Storage
 

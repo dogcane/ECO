@@ -126,6 +126,20 @@ public class IRepositoryTest
     }
 
     [Fact]
+    public void Should_async_enumerable_source_have_toasyncenumerable_method()
+    {
+        // Act
+        var method = typeof(IAsyncEnumerableSource<AggregateRootFooOfInt>).GetMethod("ToAsyncEnumerable");
+
+        // Assert
+        Assert.NotNull(method);
+        Assert.Equal(typeof(IAsyncEnumerable<AggregateRootFooOfInt>), method.ReturnType);
+        var parameter = Assert.Single(method.GetParameters());
+        Assert.Equal(typeof(CancellationToken), parameter.ParameterType);
+        Assert.True(parameter.IsOptional);
+    }
+
+    [Fact]
     public void Should_repository_interfaces_have_generic_constraints()
     {
         // Act
